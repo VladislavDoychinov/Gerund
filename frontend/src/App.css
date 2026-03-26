@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .App {
   text-align: center;
 }
@@ -36,8 +35,4 @@
   to {
     transform: rotate(360deg);
   }
-=======
-body {
-  font-family: Arial, Helvetica, sans-serif;
->>>>>>> 0308edc6d3cda4c501d32d96c0039ea70e0a4bbb
 }
