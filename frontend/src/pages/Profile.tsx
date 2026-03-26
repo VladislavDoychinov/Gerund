@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api";
+import "./Profile.css";
 
 interface UserInfo {
   username: string;
@@ -36,65 +37,66 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
-      <header className="flex items-center justify-between p-4 bg-white shadow">
-        <h1 className="text-xl font-semibold">Profile</h1>
-        <Link to="/main" className="border px-3 py-1 rounded">
-          Back
-        </Link>
-      </header>
+    <div className="profile-container">
+      <div className="profile-card">
+        <header className="profile-header">
+          <h1>Profile</h1>
+          <Link to="/main" className="back-button">
+            ← Back
+          </Link>
+        </header>
 
-      <main className="flex-1 p-4">
-        <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow">
+        <main className="profile-content">
           {loading && (
-            <div className="text-center py-8">
-              <p className="text-gray-500">Loading...</p>
+            <div className="loading-state">
+              <p>Loading...</p>
             </div>
           )}
 
           {!loading && (
             <>
               {!isLoggedIn && (
-                <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded text-yellow-800 text-sm">
+                <div className="debug-banner">
                   ℹ️ You're not logged in. Showing example user for debugging.
                 </div>
               )}
 
-              <div className="flex items-center gap-6 mb-8">
-                <div>
-                  <h2 className="text-2xl font-semibold">{userInfo.username}</h2>
-                    <p className="text-gray-600">{userInfo.email}</p>
+              <div className="user-info-section">
+                <div className="user-avatar">
+                  <span>{userInfo.username[0].toUpperCase()}</span>
+                </div>
+                <div className="user-details">
+                  <h2>{userInfo.username}</h2>
+                  <p>{userInfo.email}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="border p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">Account Type</h3>
-                  <p className="text-gray-600">Customer</p>
-                </div>
+              <div className="account-type-card">
+                <h3>Account Type</h3>
+                <p>Customer</p>
               </div>
 
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold mb-4">Settings</h3>
-                <div className="space-y-3">
-                  <button className="w-full border p-3 rounded hover:bg-gray-50">
+              <div className="settings-section">
+                <h3>Settings</h3>
+                <div className="settings-buttons">
+                  <button className="settings-button">
                     Edit Profile
                   </button>
-                  <button className="w-full border p-3 rounded hover:bg-gray-50">
+                  <button className="settings-button">
                     Change Password
                   </button>
-                  <button className="w-full border p-3 rounded hover:bg-gray-50">
+                  <button className="settings-button">
                     Privacy Settings
                   </button>
-                  <button className="w-full border p-3 rounded text-red-600 hover:bg-red-50">
+                  <button className="settings-button logout-button">
                     Logout
                   </button>
                 </div>
               </div>
             </>
           )}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
