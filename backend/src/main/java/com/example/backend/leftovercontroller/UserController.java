@@ -1,6 +1,6 @@
-package com.asp5640.fullstack_backend.controller;
+package com.example.backend.leftovercontroller;
 
-import com.asp5640.fullstack_backend.exception.UserNotFoundException;
+import com.example.backend.leftoverexception.UserNotFoundException;
 import com.asp5640.fullstack_backend.model.User;
 import com.asp5640.fullstack_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
