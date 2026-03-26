@@ -6,46 +6,46 @@ body {
     top: 50%;
     left: 50%;
     display: flex;
-    padding: 40px;
-    border-radius: 16px;
-    width: 20vw;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    width: 20rem;
     background: white;
     position: absolute;
     flex-direction: column;
-    box-shadow: 0 10px 40px cornflowerblue;
-    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    box-shadow: 0 0.625rem 2.5rem cornflowerblue;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     transform: translate(-50%, -50%);
 }
 
 .acc_modal h1 {
-    margin: 0 0 8px 0;
-    font-size: 28px;
+    margin: 0 0 2rem 0;
+    font-size: 1.75rem;
     font-weight: 600;
     text-align: center;
     color: black;
 }
 
 .acc_modal form {
-    margin-top: 24px;
+    margin-top: 1.5rem;
 }
 
 .acc_modal input {
     display: block;
     width: 100%;
     background-color: white;
-    margin-bottom: 16px;
-    padding: 10px;
-    border: 2px solid darkgray;
-    border-radius: 8px;
-    font-size: 15px;
+    margin-bottom: 1rem;
+    padding: 0.625rem;
+    border: 0.125rem solid darkgray;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
     transition: all 0.2s ease;
     box-sizing: border-box;
 }
 
 .acc_modal input:focus {
     outline: none;
-    border: 2px solid cornflowerblue;
-    box-shadow: 0 0 0 1px cornflowerblue;
+    border: 0.125rem solid cornflowerblue;
+    box-shadow: 0 0 0 0.0625rem cornflowerblue;
 }
 
 .acc_modal input::placeholder {
@@ -54,22 +54,21 @@ body {
 
 .acc_modal button {
     width: 100%;
-    padding: 12px;
+    padding: 0.75rem;
     background: cornflowerblue;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
+    border-radius: 0.5rem;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    margin-top: 8px;
-    transition: 0.5s;
+    margin-top: 0.5rem;
 }
 
 .acc_modal button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 10px cornflowerblue;
+    transform: translateY(-0.0625rem);
+    box-shadow: 0 0.3125rem 0.625rem cornflowerblue;
 }
 
 .acc_modal button:active {
@@ -77,10 +76,10 @@ body {
 }
 
 .acc_modal p {
-    margin-top: 24px;
+    margin-top: 1.5rem;
     text-align: center;
     color: #ccc;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .acc_modal a {
@@ -97,7 +96,7 @@ body {
 .password-field {
     position: relative;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 1rem;
 }
 
 .password-field input {
@@ -107,12 +106,12 @@ body {
 
 .eye {
     position: absolute;
-    right: 14px;
+    right: 0.875rem;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     user-select: none;
-    font-size: 20px;
+    font-size: 1.25rem;
     transition: opacity 0.2s ease;
 }
 
