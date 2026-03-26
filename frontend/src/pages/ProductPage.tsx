@@ -1,11 +1,25 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ProductPage.css";
-import strawberryImg from "../image/strawberry.jpg";
-import bananaImg from "../image/banana.png";
-import appleImg from "../image/apple.png";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
+import ProductDetails from "./Components/ProductDetails";
+import RelatedProducts from "./Components/RelatedProducts";
+import strawberryImg from "./image/strawberry.jpg";
+import bananaImg from "./image/banana.png";
+import appleImg from "./image/apple.png";
 
-const products = [
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+  quantity: number;
+  category: string;
+}
+
+const products: Product[] = [
   { id: 1, name: "Tank", price: 1.5, image: appleImg, description: "Fresh red apples, perfect for snacking and baking.", quantity: 1, category: "weapon" },
   { id: 2, name: "Banana", price: 0.8, image: bananaImg, description: "Sweet yellow bananas full of potassium and energy.", quantity: 1, category: "weapon" },
   { id: 3, name: "Carrot", price: 1.2, image: "https://via.placeholder.com/400x300?text=Carrot", description: "Organic carrots, crunchy and nutritious.", quantity: 1, category: "weapon" },
@@ -36,37 +50,10 @@ export default function ProductPage() {
 
   return (
     <div className="product-page">
-      <div className="product-card-container">
-        <div className="product-image">
-          <img src={product.image} alt={product.name} />
-        </div>
-
-        <div className="product-details">
-          <h1>{product.name}</h1>
-          <span className="category">{product.category}</span>
-          <p className="quantity">Quantity: {product.quantity}</p>
-          <p className="price">${product.price.toFixed(2)}</p>
-          <p className="description">{product.description}</p>
-
-          <div className="product-buttons">
-            <button>Add to Cart</button>
-            <Link to="/store">Back to Store</Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="related-products">
-        <h2>Related Products</h2>
-        <div className="related-grid">
-          {relatedProducts.map((p) => (
-            <Link key={p.id} to={`/product/${p.id}`} className="related-card">
-              <img src={p.image} alt={p.name} />
-              <h3>{p.name}</h3>
-              <p className="price">${p.price.toFixed(2)}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <Header />
+      <ProductDetails product={product} />
+      <RelatedProducts products={relatedProducts} />
+      <Footer />
     </div>
   );
 }

@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PinRepository extends JpaRepository<Pin, Long> {
+    
 }

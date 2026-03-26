@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import MapView from "./MapView";
 import SideBar from "./SideBar";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 import "./Map.css";
 
 export default function Map() {
