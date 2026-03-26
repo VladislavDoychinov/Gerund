@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./Register.css";
 
-export default function Register() {
+function Register() {
   useEffect(() => {
     document.title = "Create Account";
   }, []);
@@ -13,32 +14,32 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/register",
+        {
           email,
           password,
-        }),
-      });
+          username,
+        },
+      );
 
-      if (response.ok) {
-        const data = await response.text();
-        setMessage("Success: " + data);
-        setEmail("");
-        setPassword("");
+      setMessage("Success: " + response.data);
+      setEmail("");
+      setPassword("");
+      setUsername("");
+    } catch (err: any) {
+      if (err.response) {
+        setMessage("Error: " + err.response.data);
       } else {
-        const error = await response.text();
-        setMessage("Error: " + error);
+        setMessage("Could not connect to the server.");
+        console.error("Axios error:", err);
       }
-    } catch (err) {
-      setMessage("Could not connect to the server.");
-      console.error("Fetch error:", err);
     }
   };
 
@@ -48,7 +49,12 @@ export default function Register() {
 
       {message && <p className="status-message">{message}</p>}
       <form onSubmit={handleRegister}>
-        <input type="text" placeholder="Username (Optional)" />
+        <input
+          type="text"
+          placeholder="Username (Optional)"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
         <input
           type="email"
@@ -81,3 +87,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Register;
