@@ -4,6 +4,8 @@ import "./StorePage.css";
 import strawberryImg from "../image/strawberry.jpg";
 import bananaImg from "../image/banana.png";
 import appleImg from "../image/apple.png"
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 
 interface Product {
   id: number;
@@ -24,9 +26,7 @@ const products: Product[] = [
 export default function StorePage() {
   return (
   <div className="store-page">
-    <header className="store-header">
-      <h1>Marketplace</h1>
-    </header>
+    <Header />
 
     <div className="product-grid">
       {products.map((product) => (
@@ -39,6 +39,8 @@ export default function StorePage() {
         </Link>
       ))}
     </div>
+
+    <Footer />
   </div>
 );
 }

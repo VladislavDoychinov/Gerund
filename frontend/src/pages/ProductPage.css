@@ -52,6 +52,7 @@
   margin-bottom: 1rem;
   color: #064e3b;
 }
+
 .category {
   display: inline-block;
 
@@ -74,7 +75,7 @@
 .quantity {
   font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin: 1rem;
 }
 
 .price {
