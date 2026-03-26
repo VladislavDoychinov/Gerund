@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./StorePage.css";
-import ProductPage from "./StorePage";
 import strawberryImg from "../image/strawberry.jpg";
 import bananaImg from "../image/banana.png";
 
@@ -24,7 +23,7 @@ const products: Product[] = [
 export default function StorePage() {
   return (
     <div className="store-page">
-      <h1>Fruits & Vegetables Store</h1>
+      <h1>Marketplace</h1>
       <div className="product-grid">
         {products.map((product) => (
             <Link to={`/product/${product.id}`} key={product.id}>

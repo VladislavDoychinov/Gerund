@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function Login() {
   useEffect(() => {
-    document.title = "Log in Your profile";
+    document.title = "Log in to your profile";
   }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,7 +55,7 @@ export default function Login() {
       <p>
         Don't have an account? 
         <Link to="/register">Click here to sign up</Link>
-        <Link to="/store" className="text-blue-500 underline">Fruits & Vegetables Store</Link>
+        <Link to="/store" className="text-blue-500 underline"></Link>
       </p>
     </div>
   );
