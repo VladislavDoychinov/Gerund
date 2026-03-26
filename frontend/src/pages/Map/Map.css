@@ -20,19 +20,28 @@
   --transition: 0.2s ease;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(160deg, var(--sky-100) 0%, var(--sky-50) 60%, #f8fbff 100%);
+  background: linear-gradient(
+    160deg,
+    var(--sky-100) 0%,
+    var(--sky-50) 60%,
+    #f8fbff 100%
+  );
   color: var(--text-primary);
 }
 
@@ -141,7 +150,9 @@ body {
   z-index: 1;
 }
 
-.leaflet-container { z-index: 1 !important; }
+.leaflet-container {
+  z-index: 1 !important;
+}
 
 .mp-map-header {
   display: flex;
@@ -151,7 +162,10 @@ body {
   border-bottom: 0.094rem solid var(--sky-100);
 }
 
-.mp-map-title { font-size: 0.9375rem; font-weight: 700; }
+.mp-map-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
 
 .mp-map-badge {
   font-size: 0.75rem;
@@ -160,13 +174,32 @@ body {
   padding: 0.1875rem 0.625rem;
 }
 
-.mp-badge-online { color: #22c55e; background: #f0fdf4; border: 0.0625rem solid #bbf7d0; }
-.mp-badge-offline { color: #ef4444; background: #fef2f2; border: 0.0625rem solid #fecaca; }
+.mp-badge-online {
+  color: #22c55e;
+  background: #f0fdf4;
+  border: 0.0625rem solid #bbf7d0;
+}
+.mp-badge-offline {
+  color: #ef4444;
+  background: #fef2f2;
+  border: 0.0625rem solid #fecaca;
+}
 
 /* ── Navigation Components ── */
-.mp-logo { display: flex; align-items: center; gap: 0.625rem; }
-.mp-logo-icon { color: var(--sky-500); font-size: 1.375rem; }
-.mp-logo-text { font-size: 1.125rem; font-weight: 700; color: var(--sky-700); }
+.mp-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.mp-logo-icon {
+  color: var(--sky-500);
+  font-size: 1.375rem;
+}
+.mp-logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--sky-700);
+}
 
 .mp-nav {
   display: flex;
@@ -186,14 +219,7 @@ body {
   cursor: pointer;
 }
 
-.mp-nav-btn--active { background: var(--sky-500); color: var(--white); }
-
-/* ── Footer ── */
-.mp-footer {
-  background: var(--white);
-  padding: 1.5rem;
-  text-align: center;
-  border-top: 0.094rem solid var(--sky-100);
-  color: var(--text-muted);
-  font-size: 0.8125rem;
+.mp-nav-btn--active {
+  background: var(--sky-500);
+  color: var(--white);
 }
