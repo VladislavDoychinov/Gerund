@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./StorePage.css";
 import ProductPage from "./StorePage";
+import strawberryImg from "../image/strawberry.jpg";
+import bananaImg from "../image/banana.png";
 
 interface Product {
   id: number;
@@ -12,10 +14,10 @@ interface Product {
 
 const products: Product[] = [
   { id: 1, name: "Apple", price: 1.5, image: "https://via.placeholder.com/150?text=Apple" },
-  { id: 2, name: "Banana", price: 0.8, image: "https://via.placeholder.com/150?text=Banana" },
+  { id: 2, name: "Banana", price: 0.8, image: bananaImg },
   { id: 3, name: "Carrot", price: 1.2, image: "https://via.placeholder.com/150?text=Carrot" },
   { id: 4, name: "Broccoli", price: 2.0, image: "https://via.placeholder.com/150?text=Broccoli" },
-  { id: 5, name: "Strawberry", price: 3.5, image: "https://via.placeholder.com/150?text=Strawberry" },
+  { id: 5, name: "Strawberry", price: 3.5, image: strawberryImg },
   { id: 6, name: "Tomato", price: 1.8, image: "https://via.placeholder.com/150?text=Tomato" },
 ];
 
