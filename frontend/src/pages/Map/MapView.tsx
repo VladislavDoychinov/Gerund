@@ -14,7 +14,14 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-type Pin = { id: number; lat: number; lng: number };
+type Pin = { 
+  id: number; 
+  lat: number; 
+  lng: number; 
+  userId: string;
+  headline: string;
+  description: string;
+};
 
 function RecenterMap({ position }: { position: LatLngExpression }) {
   const map = useMap();
@@ -32,70 +39,109 @@ function MapClickHandler({ onMapClick }: { onMapClick: (pos: LatLng) => void }) 
 }
 
 export default function MapView({ position }: { position: LatLngExpression | null }) {
-  const [pins, setPins] = useState<Pin[]>(() => {
-    const saved = localStorage.getItem("mp-saved-pins");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [pins, setPins] = useState<Pin[]>([]);
+  const [draftPin, setDraftPin] = useState<{lat: number, lng: number} | null>(null);
+  const [formData, setFormData] = useState({ headline: "", description: "" });
 
   useEffect(() => {
-    localStorage.setItem("mp-saved-pins", JSON.stringify(pins));
+    const currentUser = localStorage.getItem("username") || "Anonymous";
+    fetch(`http://localhost:8080/api/pins/user/${currentUser}`)
+      .then((res) => res.json())
+      .then((data) => setPins(data))
+      .catch((err) => console.error("Error loading pins:", err));
+  }, []);
 
-    window.dispatchEvent(new Event("storage-update"));
-  }, [pins]);
-
-  const addPin = (latlng: LatLng) => {
-    setPins((prev) => [...prev, { id: Date.now(), lat: latlng.lat, lng: latlng.lng }]);
+  const handleMapClick = (latlng: LatLng) => {
+    setDraftPin({ lat: latlng.lat, lng: latlng.lng });
+    setFormData({ headline: "", description: "" });
   };
 
-  const removePin = (id: number) => {
-    setPins((prev) => prev.filter(p => p.id !== id));
+  const savePin = async () => {
+    if (!draftPin) return;
+    const currentUser = localStorage.getItem("username") || "Anonymous";
+
+    try {
+      const response = await fetch("http://localhost:8080/api/pins", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lat: draftPin.lat,
+          lng: draftPin.lng,
+          userId: currentUser,
+          headline: formData.headline,
+          description: formData.description
+        }),
+      });
+
+      if (response.ok) {
+        const savedPin = await response.json();
+        setPins((prev) => [...prev, savedPin]);
+        setDraftPin(null);
+        window.dispatchEvent(new Event("storage-update"));
+      }
+    } catch (error) {
+      console.error("Failed to save pin:", error);
+    }
+  };
+
+  const removePin = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/pins/${id}`, { method: "DELETE" });
+      if (response.ok) {
+        setPins((prev) => prev.filter(p => p.id !== id));
+        window.dispatchEvent(new Event("storage-update"));
+      }
+    } catch (error) {
+      console.error("Failed to delete pin:", error);
+    }
   };
 
   return (
     <div className="mp-map-wrapper">
       <MapHeader pinCount={pins.length} />
-      
-      <MapContainer
-        center={position || [0, 0]} 
-        zoom={position ? 13 : 2}
-        scrollWheelZoom={true}
-        className="mp-map"
-      >
+      <MapContainer center={position || [0, 0]} zoom={position ? 13 : 2} className="mp-map">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        
         {position && (
           <>
             <Marker position={position}><Popup>Your Location</Popup></Marker>
             <RecenterMap position={position} />
           </>
         )}
+        <MapClickHandler onMapClick={handleMapClick} />
 
-        <MapClickHandler onMapClick={addPin} />
+        {draftPin && (
+          <Marker position={[draftPin.lat, draftPin.lng]}>
+            <Popup closeButton={false} closeOnClick={false}>
+              <div className="mp-popup-form">
+                <strong>Add Details</strong>
+                <input 
+                  className="mp-input" 
+                  placeholder="Headline" 
+                  value={formData.headline}
+                  onChange={(e) => setFormData({...formData, headline: e.target.value})}
+                />
+                <textarea 
+                  className="mp-input" 
+                  placeholder="Description" 
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                />
+                <div style={{ display: 'flex', gap: '5px' }}>
+                  <button className="mp-save-btn" onClick={savePin}>Save</button>
+                  <button className="mp-cancel-btn" onClick={() => setDraftPin(null)}>Cancel</button>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        )}
 
         {pins.map((pin) => (
           <Marker key={pin.id} position={[pin.lat, pin.lng]}>
             <Popup>
               <div style={{ textAlign: 'center' }}>
-                <strong style={{ color: 'var(--sky-700)' }}>Pinned Location</strong><br />
-                {pin.lat.toFixed(4)}, {pin.lng.toFixed(4)}<br />
-                
-                <button 
-                  onClick={(e) => {
-                
-                    e.stopPropagation(); 
-                    removePin(pin.id);
-                  }}
-                  style={{ 
-                    color: '#ef4444', 
-                    border: 'none', 
-                    background: 'none', 
-                    cursor: 'pointer', 
-                    marginTop: '5px', 
-                    fontWeight: 'bold' 
-                  }}
-                >
-                  Remove Pin
-                </button>
+                <h4 style={{ color: 'var(--sky-700)', margin: 0 }}>{pin.headline}</h4>
+                <p style={{ fontSize: '0.85rem' }}>{pin.description}</p>
+                <button onClick={() => removePin(pin.id)} className="mp-remove-link">Remove</button>
               </div>
             </Popup>
           </Marker>

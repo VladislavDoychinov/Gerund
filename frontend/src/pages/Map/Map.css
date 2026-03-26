@@ -132,7 +132,6 @@ body {
   background: var(--sky-300);
 }
 
-/* ── Map ── */
 .mp-map-wrapper {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -185,7 +184,6 @@ body {
   border: 0.0625rem solid #fecaca;
 }
 
-/* ── Navigation Components ── */
 .mp-logo {
   display: flex;
   align-items: center;
@@ -222,4 +220,93 @@ body {
 .mp-nav-btn--active {
   background: var(--sky-500);
   color: var(--white);
+}
+
+.mp-popup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+  padding: 5px;
+}
+
+.mp-popup-form strong {
+  font-size: 1rem;
+  color: var(--sky-800);
+  margin-bottom: 4px;
+}
+
+.mp-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--sky-200);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.mp-input:focus {
+  outline: none;
+  border-color: var(--sky-500);
+  box-shadow: 0 0 0 3px var(--sky-100);
+}
+
+textarea.mp-input {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.mp-button-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.mp-save-btn {
+  flex: 2;
+  background: var(--sky-500);
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.mp-save-btn:hover {
+  background: var(--sky-600);
+}
+
+.mp-cancel-btn {
+  flex: 1;
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mp-cancel-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.mp-remove-link {
+  display: inline-block;
+  color: #ef4444;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.75rem;
+  margin-top: 8px;
+  text-decoration: underline;
+}
+
+.mp-remove-link:hover {
+  color: #b91c1c;
 }

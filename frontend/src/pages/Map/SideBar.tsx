@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LatLngExpression } from "leaflet";
 
-const SIDE_ITEMS = ["My Location", "Saved Places", "Settings"];
+const SIDE_ITEMS = ["My Locations", "Saved Places", "Settings"];
 
 export default function SideBar({ position }: { position: LatLngExpression | null }) {
   const [active, setActive] = useState("My Location");
