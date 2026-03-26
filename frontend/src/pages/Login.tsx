@@ -35,7 +35,7 @@ export default function Login() {
       setEmail("");
       setPassword("");
 
-      navigate("/store");
+      navigate("/main");
     } catch (error: any) {
       if (error.response) {
         if (typeof error.response.data === "string") {
