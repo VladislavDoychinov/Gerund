@@ -37,7 +37,7 @@
 }
 
 .add-product-form button {
-  background-color: #16a34a;
+  background-color: #22c55e;
   color: white;
   border: none;
   cursor: pointer;
@@ -46,7 +46,7 @@
 }
 
 .add-product-form button:hover {
-  background-color: #15803d;
+  background-color: #16a34a;
 }
 
 .image-upload {

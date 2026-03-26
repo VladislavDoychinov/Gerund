@@ -106,7 +106,7 @@
   padding: 0.75rem 2rem;
   border-radius: 1rem;
   font-weight: 600;
-  background-color: #10b981;
+  background-color: #22c55e;
   color: white;
   border: none;
   cursor: pointer;
@@ -114,7 +114,7 @@
 }
 
 .product-buttons button:hover {
-  background-color: #059669;
+  background-color: #16a34a;
 }
 
 .product-buttons a {
