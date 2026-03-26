@@ -1,9 +1,11 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
+import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 
 export default function MainPage() {
+  const navigate = useNavigate();
   const position: LatLngExpression = [42.6977, 23.3219];
 
   return (
@@ -15,7 +17,12 @@ export default function MainPage() {
         <nav className="flex gap-4">
           <button className="border px-3 py-1 rounded">Home</button>
           <button className="border px-3 py-1 rounded">Map</button>
-          <button className="border px-3 py-1 rounded">Profile</button>
+          <button 
+            onClick={() => navigate("/profile")}
+            className="border px-3 py-1 rounded"
+          >
+            Profile
+          </button>
         </nav>
       </header>
 

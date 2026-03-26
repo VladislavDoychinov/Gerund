@@ -4,8 +4,8 @@ import "./Register.css";
 import { Link } from "react-router-dom";
 
 export default function Login() {
-    useEffect(() => {
-          document.title = "Log in Your profile";
+  useEffect(() => {
+    document.title = "Log in Your profile";
   }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
