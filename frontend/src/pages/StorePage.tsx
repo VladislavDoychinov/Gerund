@@ -24,7 +24,7 @@ const products: Product[] = [
 export default function StorePage() {
   return (
     <div className="store-page">
-      <h1>Fruits & Vegetables Store</h1>
+      <h1>Marketplace</h1>
       <div className="product-grid">
         {products.map((product) => (
             <Link to={`/product/${product.id}`} key={product.id}>
