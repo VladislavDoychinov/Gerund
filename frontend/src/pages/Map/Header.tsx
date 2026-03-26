@@ -26,7 +26,7 @@ export default function Header() {
         >
           Map
         </button>
-        <button className="mp-nav-btn" onClick={() => navigate("/marketplace")}>
+        <button className="mp-nav-btn" onClick={() => navigate("/store")}>
           Marketplace
         </button>
       </nav>

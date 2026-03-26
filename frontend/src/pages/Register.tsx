@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "./Register.css";
 
 function Register() {
@@ -14,32 +13,32 @@ function Register() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
-  const [username, setUsername] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
-        {
+      const response = await fetch("http://localhost:8080/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           email,
           password,
-          username,
-        },
-      );
+        }),
+      });
 
-      setMessage("Success: " + response.data);
-      setEmail("");
-      setPassword("");
-      setUsername("");
-    } catch (err: any) {
-      if (err.response) {
-        setMessage("Error: " + err.response.data);
+      const text = await response.text();
+
+      if (response.ok) {
+        setMessage("Success: " + text);
+        setEmail("");
+        setPassword("");
       } else {
-        setMessage("Could not connect to the server.");
-        console.error("Axios error:", err);
+        setMessage("Error: " + text);
       }
+    } catch (err) {
+      setMessage("Could not connect to the server.");
+      console.error("Fetch error:", err);
     }
   };
 
@@ -48,13 +47,9 @@ function Register() {
       <h1>Create an account</h1>
 
       {message && <p className="status-message">{message}</p>}
+
       <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          placeholder="Username (Optional)"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <input type="text" placeholder="Username (Optional)" />
 
         <input
           type="email"
@@ -82,7 +77,7 @@ function Register() {
       </form>
 
       <p>
-        Already have an account? <Link to="/login">Click here to login</Link>
+        Already have an account? <Link to="/login">Click here to log in</Link>
       </p>
     </div>
   );
