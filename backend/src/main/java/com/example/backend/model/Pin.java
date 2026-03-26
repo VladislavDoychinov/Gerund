@@ -20,7 +20,11 @@ public class Pin {
     private String userId;
 
     private String headline;
+
     private String description;
+
+    @Column(nullable = false)
+    private Boolean favourite = false;
 
     public Pin() {}
 
@@ -41,4 +45,7 @@ public class Pin {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Boolean getFavourite() { return favourite; }
+    public void setFavourite(Boolean favourite) { this.favourite = favourite; }
 }

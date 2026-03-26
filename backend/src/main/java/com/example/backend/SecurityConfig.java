@@ -25,16 +25,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-<<<<<<< HEAD
                         .requestMatchers("/api/pins/**").permitAll()
-=======
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/products/create").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/products/*/accept").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/notifications").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/notifications/**").permitAll()
->>>>>>> 055804d54ce9ab6ee75adbfb6afc8ea2ac224b6e
                         .anyRequest().authenticated()
                 );
 
