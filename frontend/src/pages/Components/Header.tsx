@@ -1,12 +1,17 @@
 ﻿import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMap } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const username = localStorage.getItem("username");
+
+  const getButtonClass = (path: string) => {
+    return location.pathname === path
+      ? "mp-nav-btn mp-nav-btn--active"
+      : "mp-nav-btn";
+  };
 
   return (
     <header className="mp-header">
@@ -18,16 +23,22 @@ export default function Header() {
       </div>
 
       <nav className="mp-nav">
-        <button className="mp-nav-btn" onClick={() => navigate("/home")}>
+        <button
+          className={getButtonClass("/home")}
+          onClick={() => navigate("/home")}
+        >
           Home
         </button>
         <button
-          className="mp-nav-btn mp-nav-btn--active"
+          className={getButtonClass("/map")}
           onClick={() => navigate("/map")}
         >
           Map
         </button>
-        <button className="mp-nav-btn" onClick={() => navigate("/store")}>
+        <button
+          className={getButtonClass("/store")}
+          onClick={() => navigate("/store")}
+        >
           Marketplace
         </button>
       </nav>
