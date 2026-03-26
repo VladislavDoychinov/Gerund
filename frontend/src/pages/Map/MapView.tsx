@@ -4,7 +4,6 @@ import { LatLngExpression, LatLng } from "leaflet";
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 
-// --- Leaflet Icon Fix ---
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 let DefaultIcon = L.icon({
@@ -17,7 +16,6 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 type Pin = { id: number; lat: number; lng: number };
 
-// Automatically centers map when user location is found
 function RecenterMap({ position }: { position: LatLngExpression }) {
   const map = useMap();
   useEffect(() => {
@@ -26,7 +24,6 @@ function RecenterMap({ position }: { position: LatLngExpression }) {
   return null;
 }
 
-// Handles user clicks on the map to add pins
 function MapClickHandler({ onMapClick }: { onMapClick: (pos: LatLng) => void }) {
   useMapEvents({
     click(e) { onMapClick(e.latlng); },
@@ -42,7 +39,7 @@ export default function MapView({ position }: { position: LatLngExpression | nul
 
   useEffect(() => {
     localStorage.setItem("mp-saved-pins", JSON.stringify(pins));
-    // Tell the Sidebar to update its pin count
+
     window.dispatchEvent(new Event("storage-update"));
   }, [pins]);
 
@@ -84,6 +81,7 @@ export default function MapView({ position }: { position: LatLngExpression | nul
                 
                 <button 
                   onClick={(e) => {
+                
                     e.stopPropagation(); 
                     removePin(pin.id);
                   }}
