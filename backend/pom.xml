@@ -75,13 +75,19 @@
             <scope>test</scope>
         </dependency>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 1c89767ce03367e321fde2d9df02e5eb2a8f9992
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+<<<<<<< HEAD
 >>>>>>> 82e6d44df6d511ec60346e480c0f3f9f54c2b015
+=======
+>>>>>>> 1c89767ce03367e321fde2d9df02e5eb2a8f9992
 
     </dependencies>
 
