@@ -1,4 +1,4 @@
-﻿import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
 
 export default function Header() {
