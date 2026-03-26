@@ -6,6 +6,7 @@ import Main from "./Pages/Main";
 import StorePage from "./Pages/StorePage";
 import ProductPage from "./Pages/ProductPage";
 import Profile from "./Pages/Profile";
+import AddProduct from "./Pages/AddProduct";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/store" element={<StorePage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/addproduct" element={<AddProduct />} />
       </Routes>
     </BrowserRouter>
   );
