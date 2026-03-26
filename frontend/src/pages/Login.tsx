@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import "./Register.css";
+<<<<<<< HEAD
+import { Link } from "react-router-dom";
+=======
+>>>>>>> 82e6d44df6d511ec60346e480c0f3f9f54c2b015
 
 export default function Login() {
     useEffect(() => {
@@ -20,7 +24,15 @@ export default function Login() {
 
       alert(response.data);
     } catch (error: any) {
+<<<<<<< HEAD
+      if (error.response) {
+        alert("Error: " + error.response.data);
+      } else {
+        alert("Error: " + error.message);
+      }
+=======
       alert(error);
+>>>>>>> 82e6d44df6d511ec60346e480c0f3f9f54c2b015
     }
   };
 
@@ -45,6 +57,13 @@ export default function Login() {
 
         <button type="submit">Login</button>
       </form>
+<<<<<<< HEAD
+
+      <p>
+        Don't have an account? <Link to="/signup">Click here to sign up</Link>
+      </p>
+=======
+>>>>>>> 82e6d44df6d511ec60346e480c0f3f9f54c2b015
     </div>
   );
 }
