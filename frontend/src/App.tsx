@@ -6,7 +6,7 @@ import StorePage from "./pages/StorePage";
 import ProductPage from "./pages/ProductPage";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
-import MainPage from "./pages/Main";
+import MainPage from "./pages/MainPage";
 
 function App() {
   return (

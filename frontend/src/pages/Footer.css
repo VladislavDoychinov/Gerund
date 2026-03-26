@@ -1,0 +1,8 @@
+.mp-footer {
+  background: var(--white, #ffffff);
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 0.094rem solid var(--sky-100, #dcfce7);
+  color: var(--text-muted, #7fb3a0);
+  font-size: 0.8125rem;
+}
