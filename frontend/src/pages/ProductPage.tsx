@@ -2,10 +2,11 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ProductPage.css";
 import strawberryImg from "../image/strawberry.jpg";
+import bananaImg from "../image/banana.png";
 
 const products = [
   { id: 1, name: "Apple", price: 1.5, image: "https://via.placeholder.com/400x300?text=Apple", description: "Fresh red apples, perfect for snacking and baking." },
-  { id: 2, name: "Banana", price: 0.8, image: "https://via.placeholder.com/400x300?text=Banana", description: "Sweet yellow bananas full of potassium and energy." },
+  { id: 2, name: "Banana", price: 0.8, image: bananaImg, description: "Sweet yellow bananas full of potassium and energy." },
   { id: 3, name: "Carrot", price: 1.2, image: "https://via.placeholder.com/400x300?text=Carrot", description: "Organic carrots, crunchy and nutritious." },
   { id: 4, name: "Broccoli", price: 2.0, image: "https://via.placeholder.com/400x300?text=Broccoli", description: "Fresh broccoli, great for cooking or salads." },
   { id: 5, name: "Strawberry", price: 3.5, image: strawberryImg, description: "Juicy strawberries, sweet and fresh from the farm." },

@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Main from "./pages/Main";
-import StorePage from "./pages/StorePage";
-import ProductPage from "./pages/ProductPage";
-import Profile from "./pages/Profile";
+
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
+import Main from "./Pages/Main";
+import StorePage from "./Pages/StorePage";
+import ProductPage from "./Pages/ProductPage";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (

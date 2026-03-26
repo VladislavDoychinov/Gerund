@@ -54,7 +54,7 @@ export default function Login() {
 
       <p>
         Don't have an account? 
-        <Link to="/signup">Click here to sign up</Link>
+        <Link to="/register">Click here to sign up</Link>
         <Link to="/store" className="text-blue-500 underline">Fruits & Vegetables Store</Link>
       </p>
     </div>
