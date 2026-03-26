@@ -1,4 +1,4 @@
-package com.asp5640.fullstack_backend.exception;
+package com.example.backend.leftoverexception;
 
 
 public class UserNotFoundException extends RuntimeException{

@@ -1,4 +1,4 @@
-package com.asp5640.fullstack_backend.exception;
+package com.example.backend.leftoverexception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
