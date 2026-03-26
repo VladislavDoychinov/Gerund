@@ -4,7 +4,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import "./Register.css";
 
-function Register() {
+export default function Register() {
   useEffect(() => {
     document.title = "Create Account";
   }, []);
@@ -81,5 +81,3 @@ function Register() {
     </div>
   );
 }
-
-export default Register;
