@@ -6,10 +6,7 @@ import StorePage from "./pages/StorePage";
 import ProductPage from "./pages/ProductPage";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
-<<<<<<< HEAD
-=======
 import MainPage from "./pages/Home";
->>>>>>> 04a683131bfc9c15232dcec188e52a2637d57e0a
 
 function App() {
   return (
