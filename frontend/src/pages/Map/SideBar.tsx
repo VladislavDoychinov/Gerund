@@ -14,7 +14,6 @@ export default function SideBar({ position }: { position: LatLngExpression | nul
 
   useEffect(() => {
     updateCount();
-    // Listen for the event dispatched by MapView.tsx
     window.addEventListener("storage-update", updateCount);
     return () => window.removeEventListener("storage-update", updateCount);
   }, []);
