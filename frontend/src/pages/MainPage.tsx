@@ -28,7 +28,7 @@ export default function MainPage() {
       setCurrentUser(result.data);
     } catch (error) {
       console.error("Failed to load current user:", error);
-      navigate("/login");
+      setCurrentUser(null);
     }
   };
 
@@ -57,9 +57,7 @@ export default function MainPage() {
 
           <ul className="space-y-2">
             <li>
-              <button className="w-full border p-2 rounded">
-                My Location
-              </button>
+              <button className="w-full border p-2 rounded">My Location</button>
             </li>
             <li>
               <button className="w-full border p-2 rounded">
@@ -67,9 +65,7 @@ export default function MainPage() {
               </button>
             </li>
             <li>
-              <button className="w-full border p-2 rounded">
-                Settings
-              </button>
+              <button className="w-full border p-2 rounded">Settings</button>
             </li>
           </ul>
         </div>
@@ -91,7 +87,7 @@ export default function MainPage() {
       </main>
 
       <footer className="p-4 text-center text-sm text-gray-500">
-        © 2026 Map App
+        Â© 2026 Map App
       </footer>
     </div>
   );
