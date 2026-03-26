@@ -113,6 +113,19 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 3.125rem;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.mp-user-pill:hover {
+  background: var(--sky-100);
+  color: var(--sky-700);
 }
 
 /* Original styles for the buttons */
