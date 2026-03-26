@@ -23,19 +23,22 @@ const products: Product[] = [
 
 export default function StorePage() {
   return (
-    <div className="store-page">
+  <div className="store-page">
+    <header className="store-header">
       <h1>Marketplace</h1>
-      <div className="product-grid">
-        {products.map((product) => (
-            <Link to={`/product/${product.id}`} key={product.id}>
-                <div className="product-card">
-                <img src={product.image} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p>${product.price.toFixed(2)}</p>
-                </div>
-            </Link>
-        ))}
-      </div>
+    </header>
+
+    <div className="product-grid">
+      {products.map((product) => (
+        <Link to={`/product/${product.id}`} key={product.id}>
+          <div className="product-card">
+            <img src={product.image} alt={product.name} />
+            <h3>{product.name}</h3>
+            <p>${product.price.toFixed(2)}</p>
+          </div>
+        </Link>
+      ))}
     </div>
-  );
+  </div>
+);
 }

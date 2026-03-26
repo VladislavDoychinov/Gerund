@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ProductPage.css";
 import strawberryImg from "../image/strawberry.jpg";
@@ -16,6 +16,11 @@ const products = [
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
+
   const product = products.find((p) => p.id === Number(id));
 
   if (!product) {
