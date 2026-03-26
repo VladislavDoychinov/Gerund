@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
 import pulsePointLogo from "../image/pulsepoint.png";
@@ -7,7 +8,11 @@ export default function Header() {
   const location = useLocation();
   const username = localStorage.getItem("username");
 
-  const isActive = (path: string) => location.pathname === path;
+  const getButtonClass = (path: string) => {
+    return location.pathname === path
+      ? "mp-nav-btn mp-nav-btn--active"
+      : "mp-nav-btn";
+  };
 
   return (
     <header className="mp-header">
@@ -25,19 +30,19 @@ export default function Header() {
 
       <nav className="mp-nav">
         <button
-          className={`mp-nav-btn ${isActive("/home") ? "mp-nav-btn--active" : ""}`}
+          className={getButtonClass("/home")}
           onClick={() => navigate("/home")}
         >
           Home
         </button>
         <button
-          className={`mp-nav-btn ${isActive("/map") ? "mp-nav-btn--active" : ""}`}
+          className={getButtonClass("/map")}
           onClick={() => navigate("/map")}
         >
           Map
         </button>
         <button
-          className={`mp-nav-btn ${isActive("/store") ? "mp-nav-btn--active" : ""}`}
+          className={getButtonClass("/store")}
           onClick={() => navigate("/store")}
         >
           Marketplace
