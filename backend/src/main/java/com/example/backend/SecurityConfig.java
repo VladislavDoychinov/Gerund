@@ -26,6 +26,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/create").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/*/accept").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/notifications").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/notifications/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
