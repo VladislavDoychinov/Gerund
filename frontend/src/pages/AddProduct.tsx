@@ -5,9 +5,12 @@ export default function AddProduct() {
   const [title, setTitle] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [price, setPrice] = useState("0");
+  const [categories, setCategories] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+
+  const categoryOptions = ["fruit", "vegetable", "weapon", "meat", "dairy"];
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -16,10 +19,18 @@ export default function AddProduct() {
     }
   };
 
+  const handleCategoryChange = (category: string) => {
+    if (categories.includes(category)) {
+      setCategories(categories.filter((c) => c !== category));
+    } else {
+      setCategories([...categories, category]);
+    }
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!title || !description || !image) {
-      alert("Please fill all fields and select an image.");
+    if (!title || !description || !image || categories.length === 0) {
+      alert("Please fill all fields, select an image, and choose at least one category.");
       return;
     }
 
@@ -27,6 +38,7 @@ export default function AddProduct() {
       title,
       quantity: Number(quantity),
       price: Number(price),
+      categories,
       description,
       image,
     };
@@ -37,6 +49,7 @@ export default function AddProduct() {
     setTitle("");
     setQuantity("1");
     setPrice("0");
+    setCategories([]);
     setDescription("");
     setImage(null);
     setPreview("");
@@ -56,7 +69,7 @@ export default function AddProduct() {
         </label>
 
         <div>
-          <p>Title</p>
+          <p className="section-text">Title</p>
           <input
             type="text"
             placeholder="Product Title"
@@ -67,26 +80,45 @@ export default function AddProduct() {
         </div>
 
         <div>
-          <p>Quantity</p>
+          <p className="section-text">Categories</p>
+          <div className="checkbox-group">
+            {categoryOptions.map((category) => (
+              <label
+                key={category}
+                className={`checkbox-label ${category}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={categories.includes(category)}
+                  onChange={() => handleCategoryChange(category)}
+                />
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="section-text">Quantity</p>
           <input
             type="number"
             placeholder="Quantity"
             value={quantity}
             min={1}
-            onChange={(e) => setQuantity(e.target.value)} // store as string
+            onChange={(e) => setQuantity(e.target.value)}
             required
           />
         </div>
 
         <div>
-          <p>Price</p>
+          <p className="section-text">Price</p>
           <input
             type="number"
             placeholder="Price ($)"
             value={price}
             min={0}
             step={0.01}
-            onChange={(e) => setPrice(e.target.value)} // store as string
+            onChange={(e) => setPrice(e.target.value)}
             required
           />
         </div>
@@ -96,6 +128,7 @@ export default function AddProduct() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
+          className="description"
         ></textarea>
 
         <button type="submit">Add Product</button>
