@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { LatLngExpression } from "leaflet";
 import { useNavigate } from "react-router-dom";
-import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import "./Home.css";
 
 type CurrentUser = {
@@ -15,7 +13,6 @@ type CurrentUser = {
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const navigate = useNavigate();
-  const position: LatLngExpression = [42.6977, 23.3219];
 
   useEffect(() => {
     loadCurrentUser();
@@ -38,40 +35,79 @@ export default function HomePage() {
     <div className="home-page">
       <Header />
 
-      <main className="home-main-layout">
-        <section className="home-sidebar-card">
-          <h2 className="home-section-title">Navigation</h2>
+      <main className="home-content">
+        <section className="home-hero">
+          <p className="home-kicker">...</p>
+          <h1 className="home-title">
+            Welcome{currentUser ? `, ${currentUser.email}` : " to PulsePoint"}
+          </h1>
+          <p className="home-subtitle">...</p>
 
-          <ul className="home-nav-list">
-            <li>
-              <button className="home-side-btn">My Location</button>
-            </li>
-            <li>
-              <button className="home-side-btn">Saved Places</button>
-            </li>
-            <li>
-              <button className="home-side-btn">Settings</button>
-            </li>
-          </ul>
+          <div className="home-hero-actions">
+            <button
+              className="home-primary-btn"
+              type="button"
+              onClick={() => navigate("/store")}
+            >
+              Explore Marketplace
+            </button>
+            <button
+              className="home-secondary-btn"
+              type="button"
+              onClick={() => navigate("/map")}
+            >
+              Open Map
+            </button>
+          </div>
         </section>
 
-        <section className="home-map-card">
-          <MapContainer
-            center={position}
-            zoom={13}
-            scrollWheelZoom={true}
-            className="home-map"
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <section className="home-links" aria-label="Website navigation">
+          <article className="home-link-card">
+            <h2>Map</h2>
+            <p>...</p>
+            <button type="button" onClick={() => navigate("/map")}>
+              Go to Map
+            </button>
+          </article>
 
-            <Marker position={position}>
-              <Popup>You are here</Popup>
-            </Marker>
-          </MapContainer>
+          <article className="home-link-card">
+            <h2>Marketplace</h2>
+            <p>...</p>
+            <button type="button" onClick={() => navigate("/store")}>
+              Go to Store
+            </button>
+          </article>
+
+          <article className="home-link-card">
+            <h2>Profile</h2>
+            <p>...</p>
+            <button type="button" onClick={() => navigate("/profile")}>
+              Go to Profile
+            </button>
+          </article>
+
+          <article className="home-link-card">
+            <h2>Add Product</h2>
+            <p>Create a new listing so others can discover what you offer.</p>
+            <button type="button" onClick={() => navigate("/addproduct")}>
+              Create Listing
+            </button>
+          </article>
+        </section>
+
+        <section className="home-about">
+          <h2>About this website</h2>
+          <p>...</p>
+          <ol>
+            <li>...</li>
+            <li>...</li>
+            <li>...</li>
+            <li>...</li>
+          </ol>
         </section>
       </main>
 
-      <footer className="home-footer">© 2026 Map App</footer>
+      <Footer />
     </div>
   );
 }

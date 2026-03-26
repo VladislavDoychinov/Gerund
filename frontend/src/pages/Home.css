@@ -2,88 +2,187 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background:
+    radial-gradient(
+      75rem 50rem at -10% -10%,
+      rgba(34, 197, 94, 0.22),
+      transparent 65%
+    ),
+    radial-gradient(
+      62rem 40rem at 110% 10%,
+      rgba(22, 163, 74, 0.17),
+      transparent 62%
+    ),
+    linear-gradient(160deg, #f4fff8 0%, #ecfdf3 46%, #e8fef0 100%);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
-.home-main-layout {
+.home-content {
   flex: 1;
-  display: grid;
-  grid-template-columns: minmax(14rem, 18rem) 1fr;
+  width: min(72rem, 94vw);
+  margin: 1.5rem auto 2rem;
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  padding: 1.25rem;
 }
 
-.home-sidebar-card,
-.home-map-card {
+.home-hero,
+.home-links,
+.home-about {
   background: #ffffff;
   border-radius: 1rem;
-  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0.875rem 2.4rem rgba(34, 197, 94, 0.11);
+  border: 0.0625rem solid rgba(187, 247, 208, 0.95);
 }
 
-.home-sidebar-card {
+.home-hero {
+  padding: 2rem;
+}
+
+.home-kicker {
+  margin: 0;
+  color: #15803d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.home-title {
+  margin: 0.45rem 0 0;
+  color: #0f4e2e;
+  font-size: clamp(1.7rem, 2vw + 1rem, 2.5rem);
+  line-height: 1.15;
+}
+
+.home-subtitle {
+  margin: 0.8rem 0 0;
+  color: #3f6f56;
+  max-width: 40rem;
+  line-height: 1.55;
+}
+
+.home-hero-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.home-primary-btn,
+.home-secondary-btn,
+.home-link-card button {
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.home-primary-btn,
+.home-secondary-btn {
+  padding: 0.7rem 1.2rem;
+}
+
+.home-primary-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #ffffff;
+  box-shadow: 0 0.5rem 1.3rem rgba(34, 197, 94, 0.3);
+}
+
+.home-secondary-btn {
+  background: #f0fdf4;
+  color: #166534;
+  border: 0.0625rem solid #bbf7d0;
+}
+
+.home-primary-btn:hover,
+.home-secondary-btn:hover,
+.home-link-card button:hover {
+  transform: translateY(-0.0625rem);
+}
+
+.home-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
   padding: 1rem;
 }
 
-.home-section-title {
-  margin: 0 0 0.75rem;
-  font-size: 1.1rem;
+.home-link-card {
+  border-radius: 0.85rem;
+  padding: 1rem;
+  background: #fbfffd;
+  border: 0.0625rem solid #dcfce7;
+}
+
+.home-link-card h2 {
+  margin: 0;
+  font-size: 1.05rem;
   color: #14532d;
 }
 
-.home-nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
+.home-link-card p {
+  margin: 0.5rem 0 0.9rem;
+  color: #486f5a;
+  line-height: 1.5;
 }
 
-.home-side-btn {
-  width: 100%;
-  border: 0.094rem solid #bbf7d0;
-  background: #f0fdf4;
-  color: #166534;
-  border-radius: 0.75rem;
-  padding: 0.65rem 0.8rem;
-  text-align: left;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.home-side-btn:hover {
-  background: #22c55e;
+.home-link-card button {
+  background: #166534;
   color: #ffffff;
+  padding: 0.55rem 0.9rem;
 }
 
-.home-map-card {
-  overflow: hidden;
+.home-about {
+  padding: 1.25rem 1.35rem;
 }
 
-.home-map {
-  width: 100%;
-  height: 31.25rem;
+.home-about h2 {
+  margin: 0;
+  color: #14532d;
 }
 
-.home-footer {
-  padding: 1rem;
-  text-align: center;
-  color: #4b5563;
-  font-size: 0.9rem;
+.home-about p {
+  margin: 0.6rem 0 0;
+  color: #3f6f56;
+  line-height: 1.55;
+}
+
+.home-about ol {
+  margin: 0.85rem 0 0;
+  padding: 0;
+  padding-left: 1.2rem;
+  color: #14532d;
+  line-height: 1.7;
 }
 
 @media (max-width: 900px) {
-  .home-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .home-content {
+    width: min(40rem, 92vw);
   }
 
-  .home-main-layout {
+  .home-links {
     grid-template-columns: 1fr;
   }
+}
 
-  .home-map {
-    height: 24rem;
+@media (max-width: 640px) {
+  .home-hero,
+  .home-about {
+    padding: 1rem;
+  }
+
+  .home-links {
+    padding: 0.75rem;
   }
 }
