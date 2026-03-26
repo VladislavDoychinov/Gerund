@@ -42,6 +42,7 @@ export default function Login() {
         />
 
         <input
+          className="password-field"
           type="password"
           placeholder="Password"
           value={password}
@@ -52,7 +53,9 @@ export default function Login() {
       </form>
 
       <p>
-        Don't have an account? <Link to="/signup">Click here to sign up</Link>
+        Don't have an account? 
+        <Link to="/signup">Click here to sign up</Link>
+        <Link to="/store" className="text-blue-500 underline">Fruits & Vegetables Store</Link>
       </p>
     </div>
   );
