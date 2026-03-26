@@ -128,13 +128,13 @@
   color: #0369a1;
 }
 
+.checkbox-label:hover {
+  filter: brightness(1.2);
+}
+
 .checkbox-label input[type="checkbox"] {
   cursor: pointer;
   accent-color: #16a34a;
-}
-
-.checkbox-label:hover {
-  filter: brightness(1.2);
 }
 
 .description {
