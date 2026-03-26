@@ -1,4 +1,4 @@
-package com.example.backend.leftoverexception;
+package com.example.backend.exception;
 
 
 public class UserNotFoundException extends RuntimeException{
