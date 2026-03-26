@@ -1,10 +1,14 @@
 ﻿
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const username = localStorage.getItem("username");
+
+  const getNavClass = (path: string) =>
+    `mp-nav-btn ${location.pathname === path ? "mp-nav-btn--active" : ""}`.trim();
 
   return (
     <header className="mp-header">
@@ -16,16 +20,13 @@ export default function Header() {
       </div>
 
       <nav className="mp-nav">
-        <button className="mp-nav-btn" onClick={() => navigate("/home")}>
+        <button className={getNavClass("/home")} onClick={() => navigate("/home")}> 
           Home
         </button>
-        <button
-          className="mp-nav-btn mp-nav-btn--active"
-          onClick={() => navigate("/map")}
-        >
+        <button className={getNavClass("/map")} onClick={() => navigate("/map")}> 
           Map
         </button>
-        <button className="mp-nav-btn" onClick={() => navigate("/store")}>
+        <button className={getNavClass("/store")} onClick={() => navigate("/store")}> 
           Marketplace
         </button>
       </nav>

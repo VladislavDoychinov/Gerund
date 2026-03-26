@@ -16,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/map" element={<Map />} />
         <Route path="/store" element={<StorePage />} />
+        <Route path="/marketplace" element={<Navigate to="/store" replace />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/addproduct" element={<AddProduct />} />
