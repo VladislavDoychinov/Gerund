@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   useEffect(() => {
-    document.title = "Log in to your profile";
+    document.title = "Log in Your profile";
   }, []);
 
   const navigate = useNavigate();

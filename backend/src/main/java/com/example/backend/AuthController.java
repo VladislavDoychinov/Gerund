@@ -47,11 +47,25 @@ public class AuthController {
         }
         httpSession.setAttribute("userId", user.getId());
         httpSession.setAttribute("userEmail", user.getEmail());
-
         return ResponseEntity.ok(Map.of(
                 "message", "Login successful",
                 "userId", user.getId(),
                 "email", user.getEmail()
+        ));
+
+    }
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpSession httpSession) {
+        Object userId = httpSession.getAttribute("userId");
+        Object userEmail = httpSession.getAttribute("userEmail");
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "Not logged in"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "userId", userId,
+                "email", userEmail
         ));
     }
 }
