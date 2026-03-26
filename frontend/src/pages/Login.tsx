@@ -52,7 +52,7 @@ export default function Login() {
   return (
     <div className="acc_modal">
       <form onSubmit={handleSubmit}>
-        <h1>Log in Your profile</h1>
+        <h1>Log in to Your profile</h1>
 
         {message && <p className="status-message">{message}</p>}
 
