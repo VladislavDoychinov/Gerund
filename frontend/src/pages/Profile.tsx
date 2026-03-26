@@ -41,7 +41,7 @@ export default function Profile() {
       <div className="profile-card">
         <header className="profile-header">
           <h1>Profile</h1>
-          <Link to="/main" className="back-button">
+          <Link to="/home" className="back-button">
             ← Back
           </Link>
         </header>

@@ -72,3 +72,71 @@
   height: 100%;
   object-fit: cover;
 }
+
+.section-text {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ccc;
+  transition: 0.2s;
+  font-weight: 600;
+  width: fit-content;
+
+  color: #2563eb;
+  background-color: #dbeafe;
+
+  border-radius: 999px;
+}
+
+.checkbox-label.fruit {
+  background-color: #eb6990;
+  color: #ffffff;
+}
+
+.checkbox-label.vegetable {
+  background-color: #11d22e;
+  color: #166534;
+}
+
+.checkbox-label.weapon {
+  background-color: #6e1313;
+  color: #991b1b;
+}
+
+.checkbox-label.meat {
+  background-color: #bc001f;
+  color: #7f1d1d;
+}
+
+.checkbox-label.dairy {
+  background-color: #bac0c5;
+  color: #0369a1;
+}
+
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: #16a34a;
+}
+
+.checkbox-label:hover {
+  filter: brightness(1.2);
+}
+
+.description {
+  margin-top: 1rem;
+}
