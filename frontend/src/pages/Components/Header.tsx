@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
+import pulsePointLogo from "../image/pulsepoint.png";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -10,12 +11,17 @@ export default function Header() {
 
   return (
     <header className="mp-header">
-      <div className="mp-logo">
+      <button
+        type="button"
+        className="mp-logo"
+        onClick={() => navigate("/store")}
+        aria-label="Go to marketplace"
+      >
         <div className="mp-logo-icon">
-          <img alt="PulsePoint Logo" className="mp-logo-img" />
+          <img src={pulsePointLogo} alt="PulsePoint Logo" className="mp-logo-img" />
         </div>
         <span className="mp-logo-text">PulsePoint</span>
-      </div>
+      </button>
 
       <nav className="mp-nav">
         <button
