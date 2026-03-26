@@ -4,14 +4,13 @@ import { LatLngExpression } from "leaflet";
 import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
-import "./Home.css";
 
 type CurrentUser = {
   userId: number;
   email: string;
 };
 
-export default function HomePage() {
+export default function MainPage() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const navigate = useNavigate();
   const position: LatLngExpression = [42.6977, 23.3219];
@@ -34,47 +33,49 @@ export default function HomePage() {
   };
 
   return (
-    <div className="home-page">
-      <header className="home-header">
-        <h1 className="home-welcome">
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <header className="flex items-center justify-between p-4 bg-white shadow">
+        <h1 className="text-xl font-semibold">
           Welcome, {currentUser?.email || "Guest"}
         </h1>
 
-        <nav className="home-top-nav">
-          <button className="home-top-nav-btn">Home</button>
-          <button className="home-top-nav-btn">Map</button>
+        <nav className="flex gap-4">
+          <button className="border px-3 py-1 rounded">Home</button>
+          <button className="border px-3 py-1 rounded">Map</button>
           <button
             onClick={() => navigate("/profile")}
-            className="home-top-nav-btn"
+            className="border px-3 py-1 rounded"
           >
             Profile
           </button>
         </nav>
       </header>
 
-      <main className="home-main-layout">
-        <section className="home-sidebar-card">
-          <h2 className="home-section-title">Navigation</h2>
+      <main className="flex-1 p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded-2xl shadow md:col-span-1">
+          <h2 className="text-lg font-medium mb-2">Navigation</h2>
 
-          <ul className="home-nav-list">
+          <ul className="space-y-2">
             <li>
-              <button className="home-side-btn">My Location</button>
+              <button className="w-full border p-2 rounded">My Location</button>
             </li>
             <li>
-              <button className="home-side-btn">Saved Places</button>
+              <button className="w-full border p-2 rounded">
+                Saved Places
+              </button>
             </li>
             <li>
-              <button className="home-side-btn">Settings</button>
+              <button className="w-full border p-2 rounded">Settings</button>
             </li>
           </ul>
-        </section>
+        </div>
 
-        <section className="home-map-card">
+        <div className="md:col-span-3 rounded-2xl overflow-hidden shadow">
           <MapContainer
             center={position}
             zoom={13}
             scrollWheelZoom={true}
-            className="home-map"
+            className="h-[500px] w-full"
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
@@ -82,10 +83,12 @@ export default function HomePage() {
               <Popup>You are here</Popup>
             </Marker>
           </MapContainer>
-        </section>
+        </div>
       </main>
 
-      <footer className="home-footer">© 2026 Map App</footer>
+      <footer className="p-4 text-center text-sm text-gray-500">
+        Â© 2026 Map App
+      </footer>
     </div>
   );
 }
