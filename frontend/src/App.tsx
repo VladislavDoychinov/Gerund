@@ -7,7 +7,7 @@ import ProductPage from "./pages/ProductPage";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
 import HomePage from "./pages/Home";
-
+import CreateProduct from "./pages/CreateProduct";
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/addproduct" element={<AddProduct />} />
+        <Route path="/create-product" element={<CreateProduct />} />
       </Routes>
     </BrowserRouter>
   );
