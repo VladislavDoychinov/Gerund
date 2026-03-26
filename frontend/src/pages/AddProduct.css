@@ -37,7 +37,7 @@
 }
 
 .add-product-form button {
-  background-color: #16a34a;
+  background-color: #22c55e;
   color: white;
   border: none;
   cursor: pointer;
@@ -46,7 +46,7 @@
 }
 
 .add-product-form button:hover {
-  background-color: #15803d;
+  background-color: #16a34a;
 }
 
 .image-upload {
@@ -104,37 +104,37 @@
 }
 
 .checkbox-label.fruit {
-  background-color: #eb6990;
+  background-color: #ed8eab;
   color: #ffffff;
 }
 
 .checkbox-label.vegetable {
-  background-color: #11d22e;
-  color: #166534;
+  background-color: #62ed77;
+  color: #ffffff;
 }
 
 .checkbox-label.weapon {
   background-color: #6e1313;
-  color: #991b1b;
+  color: #ffffff;
 }
 
 .checkbox-label.meat {
   background-color: #bc001f;
-  color: #7f1d1d;
+  color: #ffffff;
 }
 
 .checkbox-label.dairy {
   background-color: #bac0c5;
-  color: #0369a1;
+  color: #4a4a4a;
+}
+
+.checkbox-label:hover {
+  filter: brightness(1.2);
 }
 
 .checkbox-label input[type="checkbox"] {
   cursor: pointer;
   accent-color: #16a34a;
-}
-
-.checkbox-label:hover {
-  filter: brightness(1.2);
 }
 
 .description {

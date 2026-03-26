@@ -1,4 +1,5 @@
 import React from "react";
+import { products } from "./data/products";
 import "./StorePage.css";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";

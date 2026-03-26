@@ -4,6 +4,7 @@ import { LatLngExpression } from "leaflet";
 import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import Header from "./Components/Header";
 import "./Home.css";
 
 type CurrentUser = {
@@ -35,22 +36,7 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      <header className="home-header">
-        <h1 className="home-welcome">
-          Welcome, {currentUser?.email || "Guest"}
-        </h1>
-
-        <nav className="home-top-nav">
-          <button className="home-top-nav-btn">Home</button>
-          <button className="home-top-nav-btn">Map</button>
-          <button
-            onClick={() => navigate("/profile")}
-            className="home-top-nav-btn"
-          >
-            Profile
-          </button>
-        </nav>
-      </header>
+      <Header />
 
       <main className="home-main-layout">
         <section className="home-sidebar-card">

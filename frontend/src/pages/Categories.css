@@ -1,0 +1,28 @@
+.checkbox-label.fruit {
+  background-color: #eb6990;
+  color: #ffffff;
+}
+
+.checkbox-label.vegetable {
+  background-color: #11d22e;
+  color: #166534;
+}
+
+.checkbox-label.weapon {
+  background-color: #6e1313;
+  color: #991b1b;
+}
+
+.checkbox-label.meat {
+  background-color: #bc001f;
+  color: #7f1d1d;
+}
+
+.checkbox-label.dairy {
+  background-color: #bac0c5;
+  color: #0369a1;
+}
+
+.checkbox-label:hover {
+  filter: brightness(1.2);
+}

@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { products, Product } from "./data/products"
 import "./ProductPage.css";
+import "./Categories.css";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import ProductDetails from "./Components/ProductDetails";
@@ -8,25 +10,6 @@ import RelatedProducts from "./Components/RelatedProducts";
 import strawberryImg from "./image/strawberry.jpg";
 import bananaImg from "./image/banana.png";
 import appleImg from "./image/apple.png";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-  quantity: number;
-  category: string;
-}
-
-const products: Product[] = [
-  { id: 1, name: "Tank", price: 1.5, image: appleImg, description: "Fresh red apples, perfect for snacking and baking.", quantity: 1, category: "weapon" },
-  { id: 2, name: "Banana", price: 0.8, image: bananaImg, description: "Sweet yellow bananas full of potassium and energy.", quantity: 1, category: "weapon" },
-  { id: 3, name: "Carrot", price: 1.2, image: "https://via.placeholder.com/400x300?text=Carrot", description: "Organic carrots, crunchy and nutritious.", quantity: 1, category: "weapon" },
-  { id: 4, name: "Broccoli", price: 2.0, image: "https://via.placeholder.com/400x300?text=Broccoli", description: "Fresh broccoli, great for cooking or salads.", quantity: 1, category: "weapon" },
-  { id: 5, name: "Strawberry", price: 3.5, image: strawberryImg, description: "Juicy strawberries, sweet and fresh from the farm.", quantity: 1, category: "weapon" },
-  { id: 6, name: "Tomato", price: 1.8, image: "https://via.placeholder.com/400x300?text=Tomato", description: "Ripe tomatoes, perfect for salads and sauces.", quantity: 1, category: "weapon" },
-];
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();

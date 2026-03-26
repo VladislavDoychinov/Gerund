@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../ProductPage.css";
+import "../Categories.css";
 
 export default function ProductDetails({ product }: { product: any }) {
   return (
@@ -10,7 +11,9 @@ export default function ProductDetails({ product }: { product: any }) {
       </div>
       <div className="product-details">
         <h1>{product.name}</h1>
-        <span className="category">{product.category}</span>
+        <span className={`checkbox-label ${product.category}`}>
+          {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
+        </span>
         <p className="quantity">Quantity: {product.quantity}</p>
         <p className="price">${product.price.toFixed(2)}</p>
         <p className="description">{product.description}</p>
