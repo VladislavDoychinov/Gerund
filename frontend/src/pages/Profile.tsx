@@ -5,13 +5,11 @@ import { api } from "../api";
 interface UserInfo {
   username: string;
   email: string;
-  joinDate: string;
 }
 
 const EXAMPLE_USER: UserInfo = {
   username: "Demo User",
   email: "demo@example.com",
-  joinDate: "March 2024",
 };
 
 export default function Profile() {
@@ -63,15 +61,9 @@ export default function Profile() {
               )}
 
               <div className="flex items-center gap-6 mb-8">
-                <div className="w-24 h-24 bg-cornflowerblue rounded-full flex items-center justify-center">
-                  <span className="text-white text-4xl font-semibold">
-                    {userInfo.username[0].toUpperCase()}
-                  </span>
-                </div>
                 <div>
                   <h2 className="text-2xl font-semibold">{userInfo.username}</h2>
-                  <p className="text-gray-600">{userInfo.email}</p>
-                  <p className="text-sm text-gray-500">Joined {userInfo.joinDate}</p>
+                    <p className="text-gray-600">{userInfo.email}</p>
                 </div>
               </div>
 
@@ -79,10 +71,6 @@ export default function Profile() {
                 <div className="border p-4 rounded-lg">
                   <h3 className="font-semibold mb-2">Account Type</h3>
                   <p className="text-gray-600">Customer</p>
-                </div>
-                <div className="border p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">Member Since</h3>
-                  <p className="text-gray-600">{userInfo.joinDate}</p>
                 </div>
               </div>
 
