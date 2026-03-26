@@ -6,16 +6,15 @@ import StorePage from "./pages/StorePage";
 import ProductPage from "./pages/ProductPage";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
-<<<<<<< HEAD
-=======
 import MainPage from "./pages/Home";
->>>>>>> 04a683131bfc9c15232dcec188e52a2637d57e0a
+import HomePage from "./pages/Home";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/map" element={<Map />} />
