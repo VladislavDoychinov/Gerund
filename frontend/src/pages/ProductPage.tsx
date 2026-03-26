@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ProductPage.css";
 import strawberryImg from "../image/strawberry.jpg";
 import bananaImg from "../image/banana.png";
+import appleImg from "../image/apple.png";
 
 const products = [
-  { id: 1, name: "Apple", price: 1.5, image: "https://via.placeholder.com/400x300?text=Apple", description: "Fresh red apples, perfect for snacking and baking." },
+  { id: 1, name: "Tank", price: 1.5, image: appleImg, description: "Fresh red apples, perfect for snacking and baking." },
   { id: 2, name: "Banana", price: 0.8, image: bananaImg, description: "Sweet yellow bananas full of potassium and energy." },
   { id: 3, name: "Carrot", price: 1.2, image: "https://via.placeholder.com/400x300?text=Carrot", description: "Organic carrots, crunchy and nutritious." },
   { id: 4, name: "Broccoli", price: 2.0, image: "https://via.placeholder.com/400x300?text=Broccoli", description: "Fresh broccoli, great for cooking or salads." },
@@ -15,6 +16,11 @@ const products = [
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
+
   const product = products.find((p) => p.id === Number(id));
 
   if (!product) {
@@ -30,7 +36,6 @@ export default function ProductPage() {
 
   return (
     <div className="product-page">
-      {/* Main Product */}
       <div className="product-card-container">
         <div className="product-image">
           <img src={product.image} alt={product.name} />
@@ -48,7 +53,6 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* Related Products */}
       <div className="related-products">
         <h2>Related Products</h2>
         <div className="related-grid">
