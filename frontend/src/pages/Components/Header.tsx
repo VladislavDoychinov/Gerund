@@ -2,7 +2,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMap } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import logoImg from "../../images/pulsepoint.png";
 import "../Header.css";
 
 export default function Header() {
@@ -13,7 +12,7 @@ export default function Header() {
     <header className="mp-header">
       <div className="mp-logo">
         <div className="mp-logo-icon">
-          <img src={logoImg} alt="PulsePoint Logo" className="mp-logo-img" />
+          <img alt="PulsePoint Logo" className="mp-logo-img" />
         </div>
         <span className="mp-logo-text">PulsePoint</span>
       </div>
