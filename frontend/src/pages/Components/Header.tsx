@@ -5,7 +5,6 @@ import "../Header.css";
 export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const location = useLocation();
   const username = localStorage.getItem("username");
 
   const getButtonClass = (path: string) => {
