@@ -1,5 +1,4 @@
-﻿
-import { useNavigate, useLocation } from "react-router-dom";
+﻿import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
 
 export default function Header() {
@@ -7,8 +6,7 @@ export default function Header() {
   const location = useLocation();
   const username = localStorage.getItem("username");
 
-  const getNavClass = (path: string) =>
-    `mp-nav-btn ${location.pathname === path ? "mp-nav-btn--active" : ""}`.trim();
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <header className="mp-header">
@@ -20,13 +18,22 @@ export default function Header() {
       </div>
 
       <nav className="mp-nav">
-        <button className={getNavClass("/home")} onClick={() => navigate("/home")}> 
+        <button
+          className={`mp-nav-btn ${isActive("/home") ? "mp-nav-btn--active" : ""}`}
+          onClick={() => navigate("/home")}
+        >
           Home
         </button>
-        <button className={getNavClass("/map")} onClick={() => navigate("/map")}> 
+        <button
+          className={`mp-nav-btn ${isActive("/map") ? "mp-nav-btn--active" : ""}`}
+          onClick={() => navigate("/map")}
+        >
           Map
         </button>
-        <button className={getNavClass("/store")} onClick={() => navigate("/store")}> 
+        <button
+          className={`mp-nav-btn ${isActive("/store") ? "mp-nav-btn--active" : ""}`}
+          onClick={() => navigate("/store")}
+        >
           Marketplace
         </button>
       </nav>
