@@ -27,6 +27,13 @@
   line-height: 1;
 }
 
+.mp-logo-img {
+  height: 2.5rem;
+  width: auto;
+  display: block;
+  border-radius: 50px;
+}
+
 .mp-logo-text {
   font-size: 1.125rem;
   font-weight: 700;
