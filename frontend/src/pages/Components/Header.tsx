@@ -1,9 +1,10 @@
-﻿import React from "react";
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Header.css";
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const location = useLocation();
   const username = localStorage.getItem("username");
 
