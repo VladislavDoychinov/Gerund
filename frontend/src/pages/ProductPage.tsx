@@ -5,7 +5,6 @@ import "./ProductPage.css";
 import "./Categories.css";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import Reviews from "./Components/Reviews";
 import ProductDetails from "./Components/ProductDetails";
 import RelatedProducts from "./Components/RelatedProducts";
 
@@ -15,7 +14,8 @@ export interface Product {
   price: number;
   imageUrl: string;
   description: string;
-  quantity: number;
+  quantityValue: number;
+  quantityUnit: string;
   category: string;
   createdByEmail: string;
 }
@@ -24,6 +24,7 @@ export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -47,41 +48,47 @@ export default function ProductPage() {
       } catch (error) {
         console.error("Failed to load product:", error);
         setProduct(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadProduct();
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="product-page">
+        <Header />
+        <div className="product-page-state">
+          <h2>Loading product...</h2>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="product-page">
         <Header />
-        <h2>Product Not Found</h2>
-        <Link to="/store" className="back-link">Back to Store</Link>
+        <div className="product-page-state">
+          <h2>Product Not Found</h2>
+          <Link to="/store" className="back-link">Back to Store</Link>
+        </div>
         <Footer />
       </div>
     );
-  };
+  }
 
   return (
     <div className="product-page">
       <Header />
-
-      <div className="product-layout">
-        <div className="left-column">
-          <ProductDetails product={product} />
-        </div>
-
-        <div className="right-column">
-          <RelatedProducts products={relatedProducts} />
-          <Reviews />
-        </div>
+      <div className="product-page-shell">
+        <ProductDetails product={product} />
+        <RelatedProducts products={relatedProducts} />
       </div>
-
       <Footer />
     </div>
   );
-
-
 }

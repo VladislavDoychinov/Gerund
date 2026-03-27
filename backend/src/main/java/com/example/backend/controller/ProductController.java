@@ -90,7 +90,8 @@ public class ProductController {
             @RequestParam String name,
             @RequestParam double price,
             @RequestParam String description,
-            @RequestParam int quantity,
+            @RequestParam double quantityValue,
+            @RequestParam String quantityUnit,
             @RequestParam String category,
             @RequestParam("image") MultipartFile image,
             HttpSession session
@@ -114,8 +115,12 @@ public class ProductController {
             return ResponseEntity.badRequest().body(Map.of("message", "Category is required"));
         }
 
-        if (quantity < 0) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Quantity cannot be negative"));
+        if (quantityUnit == null || quantityUnit.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Quantity unit is required"));
+        }
+
+        if (quantityValue <= 0) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Quantity must be greater than zero"));
         }
 
         if (price < 0) {
@@ -147,7 +152,8 @@ public class ProductController {
             product.setName(name);
             product.setPrice(price);
             product.setDescription(description);
-            product.setQuantity(quantity);
+            product.setQuantityValue(quantityValue);
+            product.setQuantityUnit(quantityUnit);
             product.setCategory(category);
             product.setImageUrl("/uploads/" + fileName);
             product.setCreatedByUserId(Long.valueOf(userIdObj.toString()));
@@ -172,6 +178,11 @@ public class ProductController {
         return productRepository.findById(id)
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("message", "Product not found")));
+    }
+
+    @GetMapping("/seller/{email}")
+    public ResponseEntity<?> getProductsBySeller(@PathVariable String email) {
+        return ResponseEntity.ok(productRepository.findByCreatedByEmail(email));
     }
 
     @DeleteMapping("/{id}")

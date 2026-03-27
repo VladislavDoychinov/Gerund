@@ -5,13 +5,10 @@ import Map from "./pages/Map/Map";
 import StorePage from "./pages/StorePage";
 import ProductPage from "./pages/ProductPage";
 import Profile from "./pages/Profile";
-import AddProduct from "./pages/AddProduct";
 import HomePage from "./pages/Home";
 import CreateProduct from "./pages/CreateProduct";
 import AccountPage from "./pages/Account";
-import MockStorePage from "./pages/MockStorePage"; // Pointing to the mock version
-import MockProductPage from "./pages/MockProductPage"; // Pointing to the mock version
-
+import SellerProfilePage from "./pages/SellerProfilePage";
 function App() {
   return (
     <BrowserRouter>
@@ -24,12 +21,10 @@ function App() {
         <Route path="/store" element={<StorePage />} />
         <Route path="/marketplace" element={<Navigate to="/store" replace />} />
         <Route path="/product/:id" element={<ProductPage />} />
-        <Route path="/account/:accountname" element={<AccountPage />} />
+        <Route path="/account/:email" element={<AccountPage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/addproduct" element={<AddProduct />} />
         <Route path="/create-product" element={<CreateProduct />} />
-        <Route path="/store-mock" element={<MockStorePage />} />
-        <Route path="/product-mock/:id" element={<MockProductPage />} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -23,7 +23,8 @@ interface ProductRecord {
   price: number;
   imageUrl: string;
   description: string;
-  quantity: number;
+  quantityValue: number;
+  quantityUnit: string;
   category: string;
   createdByUserId?: number;
   createdByEmail?: string;
@@ -32,10 +33,11 @@ interface ProductRecord {
 const DEFAULT_DESCRIPTION = "This user has not added a profile description yet.";
 
 export default function AccountPage() {
-  const { accountname } = useParams<{ accountname: string }>();
+  const { email } = useParams<{ email: string }>();
+
   const accountKey = useMemo(
-    () => decodeURIComponent(accountname ?? "").trim().toLowerCase(),
-    [accountname],
+    () => decodeURIComponent(email ?? "").trim().toLowerCase(),
+    [email]
   );
 
   const [loading, setLoading] = useState(true);
@@ -56,32 +58,43 @@ export default function AccountPage() {
         ]);
 
         const users: UserRecord[] = Array.isArray(usersResponse.data) ? usersResponse.data : [];
-
-        const foundUser = users.find((user) => {
-          const username = (user.username ?? "").toLowerCase();
-          const name = (user.name ?? "").toLowerCase();
-          const email = (user.email ?? "").toLowerCase();
-          return username === accountKey || name === accountKey || email === accountKey;
-        }) ?? null;
-
-        setAccountUser(foundUser);
-        setCurrentUser(meResponse.data as CurrentUser | null);
-
         const allProducts: ProductRecord[] = Array.isArray(productsResponse.data)
           ? productsResponse.data
           : [];
+
+        const foundUser =
+          users.find((user) => {
+            const username = (user.username ?? "").toLowerCase();
+            const name = (user.name ?? "").toLowerCase();
+            const userEmail = (user.email ?? "").toLowerCase();
+
+            return (
+              username === accountKey ||
+              name === accountKey ||
+              userEmail === accountKey
+            );
+          }) ?? null;
+
+        setAccountUser(foundUser);
+        setCurrentUser(meResponse.data as CurrentUser | null);
 
         if (foundUser) {
           const userProducts = allProducts.filter((product) => {
             if (typeof product.createdByUserId === "number") {
               return product.createdByUserId === foundUser.id;
             }
-            return (product.createdByEmail ?? "").toLowerCase() === foundUser.email.toLowerCase();
+            return (
+              (product.createdByEmail ?? "").toLowerCase() ===
+              foundUser.email.toLowerCase()
+            );
           });
+
           setProducts(userProducts);
 
           const descriptionStorageKey = `account-description:${foundUser.email.toLowerCase()}`;
-          const savedDescription = localStorage.getItem(descriptionStorageKey) || DEFAULT_DESCRIPTION;
+          const savedDescription =
+            localStorage.getItem(descriptionStorageKey) || DEFAULT_DESCRIPTION;
+
           setDescription(savedDescription);
           setDescriptionDraft(savedDescription);
         } else {
@@ -89,6 +102,11 @@ export default function AccountPage() {
           setDescription(DEFAULT_DESCRIPTION);
           setDescriptionDraft(DEFAULT_DESCRIPTION);
         }
+      } catch (error) {
+        console.error("Failed to load account page:", error);
+        setAccountUser(null);
+        setCurrentUser(null);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -98,15 +116,17 @@ export default function AccountPage() {
   }, [accountKey]);
 
   const isOwnAccount = !!(
-    accountUser && currentUser && accountUser.email.toLowerCase() === currentUser.email.toLowerCase()
+    accountUser &&
+    currentUser &&
+    accountUser.email.toLowerCase() === currentUser.email.toLowerCase()
   );
 
   const saveDescription = () => {
-    if (!accountUser) {
-      return;
-    }
+    if (!accountUser) return;
+
     const nextDescription = descriptionDraft.trim() || DEFAULT_DESCRIPTION;
     const descriptionStorageKey = `account-description:${accountUser.email.toLowerCase()}`;
+
     localStorage.setItem(descriptionStorageKey, nextDescription);
     setDescription(nextDescription);
     setDescriptionDraft(nextDescription);
@@ -123,8 +143,10 @@ export default function AccountPage() {
         {!loading && !accountUser && (
           <section className="account-card">
             <h1>Account not found</h1>
-            <p className="account-subtitle">No user matched: {accountname}</p>
-            <Link to="/store" className="account-back-link">Back to marketplace</Link>
+            <p className="account-subtitle">No user matched: {email}</p>
+            <Link to="/store" className="account-back-link">
+              Back to marketplace
+            </Link>
           </section>
         )}
 
@@ -136,6 +158,7 @@ export default function AccountPage() {
                   <h1>{accountUser.username || accountUser.name || accountUser.email}</h1>
                   <p className="account-subtitle">User account</p>
                 </div>
+
                 <div className="account-avatar" aria-hidden="true">
                   {(accountUser.username || accountUser.email).charAt(0).toUpperCase()}
                 </div>
@@ -144,8 +167,11 @@ export default function AccountPage() {
               <div className="account-info-grid">
                 <div className="account-info-item">
                   <span className="account-info-label">Display Name</span>
-                  <span className="account-info-value">{accountUser.username || accountUser.name || "Not set"}</span>
+                  <span className="account-info-value">
+                    {accountUser.username || accountUser.name || "Not set"}
+                  </span>
                 </div>
+
                 <div className="account-info-item">
                   <span className="account-info-label">Contact Info</span>
                   <span className="account-info-value">{accountUser.email}</span>
@@ -155,6 +181,7 @@ export default function AccountPage() {
               <div className="account-description-section">
                 <div className="account-description-header">
                   <h2>Description</h2>
+
                   {isOwnAccount && !isEditingDescription && (
                     <button
                       type="button"
@@ -175,9 +202,14 @@ export default function AccountPage() {
                       rows={4}
                     />
                     <div className="account-action-row">
-                      <button type="button" className="account-inline-button save" onClick={saveDescription}>
+                      <button
+                        type="button"
+                        className="account-inline-button save"
+                        onClick={saveDescription}
+                      >
                         Save
                       </button>
+
                       <button
                         type="button"
                         className="account-inline-button"
@@ -198,6 +230,7 @@ export default function AccountPage() {
 
             <section className="account-card">
               <h2>Products by this user</h2>
+
               {products.length === 0 ? (
                 <p className="account-subtitle">No products listed yet.</p>
               ) : (
@@ -205,16 +238,28 @@ export default function AccountPage() {
                   {products.map((product) => (
                     <article key={product.id} className="account-product-card">
                       <img
-                        src={`http://localhost:8080${product.imageUrl}`}
+                        src={
+                          product.imageUrl.startsWith("http")
+                            ? product.imageUrl
+                            : `http://localhost:8080${product.imageUrl}`
+                        }
                         alt={product.name}
                         className="account-product-image"
                       />
+
                       <div className="account-product-body">
                         <h3>{product.name}</h3>
                         <p className="account-product-category">{product.category}</p>
                         <p className="account-product-price">${product.price.toFixed(2)}</p>
                         <p className="account-product-description">{product.description}</p>
-                        <Link className="account-product-link" to={`/product/${product.id}`}>
+                        <p className="account-product-description">
+                          Quantity: {product.quantityValue} {product.quantityUnit}
+                        </p>
+
+                        <Link
+                          className="account-product-link"
+                          to={`/product/${product.id}`}
+                        >
                           View product
                         </Link>
                       </div>
