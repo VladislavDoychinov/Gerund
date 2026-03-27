@@ -5,6 +5,7 @@ import "./ProductPage.css";
 import "./Categories.css";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+import Reviews from "./Components/Reviews";
 import ProductDetails from "./Components/ProductDetails";
 import RelatedProducts from "./Components/RelatedProducts";
 
@@ -61,14 +62,26 @@ export default function ProductPage() {
         <Footer />
       </div>
     );
-  }
+  };
 
   return (
     <div className="product-page">
       <Header />
-      <ProductDetails product={product} />
-      <RelatedProducts products={relatedProducts} />
+
+      <div className="product-layout">
+        <div className="left-column">
+          <ProductDetails product={product} />
+        </div>
+
+        <div className="right-column">
+          <RelatedProducts products={relatedProducts} />
+          <Reviews />
+        </div>
+      </div>
+
       <Footer />
     </div>
   );
+
+
 }
