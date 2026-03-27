@@ -1,114 +1,127 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { api } from "../api";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Profile.css";
 
-interface UserInfo {
-  username: string;
+interface CurrentUser {
+  userId: number;
   email: string;
-  password: string;
 }
 
-const EXAMPLE_USER: UserInfo = {
-  username: "Demo User",
-  email: "demo@example.com",
-  password: "",
-};
+interface NotificationItem {
+  id: number;
+  productName: string;
+  buyerEmail: string;
+}
 
 export default function Profile() {
-  const [userInfo, setUserInfo] = useState<UserInfo>(EXAMPLE_USER);
-  const [editingField, setEditingField] = useState<"username" | "email" | null>(null);
-  const [draftValue, setDraftValue] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await api.get("/api/user");
-        setUserInfo({
-          ...EXAMPLE_USER,
-          ...response.data,
-        });
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.log("Not logged in, showing example user");
-        setUserInfo(EXAMPLE_USER);
-        setIsLoggedIn(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserInfo();
+    loadCurrentUser();
   }, []);
 
-  const startEditing = (field: "username" | "email") => {
-    setEditingField(field);
-    setDraftValue(userInfo[field]);
-  };
+  useEffect(() => {
+    if (!currentUser) return;
 
-  const cancelEditing = () => {
-    setEditingField(null);
-    setDraftValue("");
-  };
+    loadNotifications();
 
-  const saveEditing = () => {
-    if (!editingField) {
-      return;
+    const interval = setInterval(() => {
+      loadNotifications();
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, [currentUser]);
+
+  const loadCurrentUser = async () => {
+    try {
+      const result = await axios.get("http://localhost:8080/api/auth/me", {
+        withCredentials: true,
+      });
+      setCurrentUser(result.data);
+    } catch (error) {
+      setCurrentUser(null);
+    } finally {
+      setLoading(false);
     }
-
-    setUserInfo((prev) => ({
-      ...prev,
-      [editingField]: draftValue,
-    }));
-    cancelEditing();
   };
 
-  const openPasswordModal = () => {
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordError("");
-    setShowPasswordModal(true);
-  };
-
-  const closePasswordModal = () => {
-    setShowPasswordModal(false);
-  };
-
-  const handlePasswordChange = () => {
-    if (!oldPassword) {
-      setPasswordError("Please enter your current password.");
-      return;
+  const loadNotifications = async () => {
+    try {
+      const result = await axios.get("http://localhost:8080/api/notifications", {
+        withCredentials: true,
+      });
+      setNotifications(result.data);
+    } catch (error) {
+      setNotifications([]);
     }
-    if (newPassword.length < 6) {
-      setPasswordError("New password must be at least 6 characters.");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordError("New passwords do not match.");
-      return;
-    }
-    setUserInfo((prev) => ({ ...prev, password: newPassword }));
-    setShowPasswordModal(false);
   };
 
-  const PencilIcon = () => (
-    <svg
-      className="pencil-icon"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d="M16.86 3.49a1.75 1.75 0 0 1 2.48 0l1.17 1.17a1.75 1.75 0 0 1 0 2.48l-11.7 11.7-3.85.7.7-3.85 11.2-11.2Zm1.06 1.41-1.06 1.06 1.17 1.17 1.06-1.06-1.17-1.17ZM15.8 7.37 6.68 16.5l-.32 1.76 1.76-.32 9.12-9.12-1.44-1.45Z" />
-    </svg>
-  );
+  const dismissNotification = async (id: number) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/notifications/${id}/seen`,
+        {},
+        { withCredentials: true }
+      );
+
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    } catch (error) {
+      console.error("Failed to dismiss notification", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8080/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("Logout failed", error);
+    } finally {
+      navigate("/login");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="profile-container">
+        <div className="profile-card">
+          <h2>Loading profile...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="profile-container">
+        <div className="profile-card">
+          <header className="profile-header">
+            <h1>Profile</h1>
+            <Link to="/home" className="back-button">
+              ← Back
+            </Link>
+          </header>
+
+          <main className="profile-content">
+            <div className="debug-banner">
+              You are not logged in.
+            </div>
+            <button className="settings-button" onClick={() => navigate("/login")}>
+              Go to Login
+            </button>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
@@ -121,165 +134,63 @@ export default function Profile() {
         </header>
 
         <main className="profile-content">
-          {loading && (
-            <div className="loading-state">
-              <p>Loading...</p>
+          <div className="user-info-section">
+            <div className="user-avatar">
+              <span>{currentUser.email[0].toUpperCase()}</span>
             </div>
-          )}
 
-          {!loading && (
-            <>
-              {!isLoggedIn && (
-                <div className="debug-banner">
-                  ℹ️ You're not logged in. Showing example user for debugging.
-                </div>
-              )}
+            <div className="user-details">
+              <h2>{currentUser.email}</h2>
+              <p>User ID: {currentUser.userId}</p>
+            </div>
+          </div>
 
-              <div className="user-info-section">
-                <div className="user-avatar">
-                  <span>{userInfo.username[0].toUpperCase()}</span>
-                </div>
-                <div className="user-details">
-                  <h2>{userInfo.username}</h2>
-                  <p>{userInfo.email}</p>
-                </div>
-              </div>
+          <div className="account-type-card">
+            <h3>Account Type</h3>
+            <p>Customer</p>
+          </div>
 
-              <div className="account-edit-card">
-                <h3>Account Details</h3>
+          <div className="account-type-card">
+            <h3>Notifications</h3>
 
-                <div className="editable-field-row">
-                  <div className="field-content">
-                    <span className="field-label">Username</span>
-                    {editingField === "username" ? (
-                      <input
-                        type="text"
-                        className="field-input"
-                        value={draftValue}
-                        onChange={(e) => setDraftValue(e.target.value)}
-                        autoFocus
-                      />
-                    ) : (
-                      <span className="field-value">{userInfo.username}</span>
-                    )}
-                  </div>
-
-                  {editingField === "username" ? (
-                    <div className="field-actions">
-                      <button className="field-action-button save" onClick={saveEditing}>
-                        Save
-                      </button>
-                      <button className="field-action-button" onClick={cancelEditing}>
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
+            {notifications.length === 0 ? (
+              <p>No new notifications.</p>
+            ) : (
+              <div className="settings-buttons">
+                {notifications.map((notification) => (
+                  <div key={notification.id} style={{ marginBottom: "10px" }}>
+                    <p>
+                      {notification.buyerEmail} accepted your offer for{" "}
+                      {notification.productName}
+                    </p>
                     <button
-                      className="edit-icon-button"
-                      onClick={() => startEditing("username")}
-                      aria-label="Edit username"
+                      className="settings-button"
+                      onClick={() => dismissNotification(notification.id)}
                     >
-                      <PencilIcon />
+                      Dismiss
                     </button>
-                  )}
-                </div>
-
-                <div className="editable-field-row">
-                  <div className="field-content">
-                    <span className="field-label">Email</span>
-                    {editingField === "email" ? (
-                      <input
-                        type="email"
-                        className="field-input"
-                        value={draftValue}
-                        onChange={(e) => setDraftValue(e.target.value)}
-                        autoFocus
-                      />
-                    ) : (
-                      <span className="field-value">{userInfo.email}</span>
-                    )}
                   </div>
-
-                  {editingField === "email" ? (
-                    <div className="field-actions">
-                      <button className="field-action-button save" onClick={saveEditing}>
-                        Save
-                      </button>
-                      <button className="field-action-button" onClick={cancelEditing}>
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      className="edit-icon-button"
-                      onClick={() => startEditing("email")}
-                      aria-label="Edit email"
-                    >
-                      <PencilIcon />
-                    </button>
-                  )}
-                </div>
-
-                <div className="editable-field-row">
-                  <div className="field-content">
-                    <span className="field-label">Password</span>
-                    <span className="field-value">••••••••</span>
-                  </div>
-                  <button
-                    className="edit-icon-button"
-                    onClick={openPasswordModal}
-                    aria-label="Change password"
-                  >
-                    <PencilIcon />
-                  </button>
-                </div>
+                ))}
               </div>
+            )}
+          </div>
 
-              <div className="settings-section">
-                <div className="settings-buttons">
-                  <button className="settings-button">
-                    Privacy Settings
-                  </button>
-                  <button className="settings-button logout-button">
-                    Logout
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
+          <div className="settings-section">
+            <h3>Settings</h3>
+            <div className="settings-buttons">
+              <button className="settings-button">Edit Profile</button>
+              <button className="settings-button">Change Password</button>
+              <button className="settings-button">Privacy Settings</button>
+              <button
+                className="settings-button logout-button"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </main>
       </div>
-      {showPasswordModal && (
-        <div className="password-modal-overlay" onClick={closePasswordModal}>
-          <div className="password-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="password-modal-close" onClick={closePasswordModal} aria-label="Close">✕</button>
-            <h2>Change Password</h2>
-            {passwordError && <p className="password-modal-error">{passwordError}</p>}
-            <input
-              type="password"
-              placeholder="Current password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              autoFocus
-            />
-            <input
-              type="password"
-              placeholder="New password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <button className="password-modal-confirm" onClick={handlePasswordChange}>
-              Confirm
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

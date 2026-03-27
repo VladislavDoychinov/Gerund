@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import "./StorePage.css";
 import Header from "./Components/Header";
@@ -8,8 +8,10 @@ import ProductGrid, { Product } from "./Components/ProductGrid";
 export default function StorePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchInput, setSearchInput] = useState("");
-  const [appliedSearch, setAppliedSearch] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
 
   useEffect(() => {
     loadProducts();
@@ -26,75 +28,111 @@ export default function StorePage() {
     }
   };
 
-  const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setAppliedSearch(searchInput.trim().toLowerCase());
-  };
+  const categories = useMemo(() => {
+    const unique = Array.from(new Set(products.map((p) => p.category)));
+    return ["all", ...unique];
+  }, [products]);
 
-  const filteredProducts = appliedSearch
-    ? products.filter((product) => {
-        const searchableText = [
-          product.name,
-          product.description,
-          product.category,
-          product.createdByEmail,
-        ]
-          .join(" ")
-          .toLowerCase();
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
 
-        return searchableText.includes(appliedSearch);
-      })
-    : products;
+    if (search.trim()) {
+      const lower = search.toLowerCase();
+      result = result.filter(
+        (product) =>
+          product.name.toLowerCase().includes(lower) ||
+          product.description.toLowerCase().includes(lower) ||
+          product.createdByEmail.toLowerCase().includes(lower)
+      );
+    }
+
+    if (selectedCategory !== "all") {
+      result = result.filter((product) => product.category === selectedCategory);
+    }
+
+    if (sortBy === "price-low") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price-high") {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sortBy === "name-asc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === "name-desc") {
+      result.sort((a, b) => b.name.localeCompare(a.name));
+    } else {
+      result.sort((a, b) => b.id - a.id);
+    }
+
+    return result;
+  }, [products, search, selectedCategory, sortBy]);
 
   return (
     <div className="store-page">
       <Header />
 
-      <form className="store-search-form" onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          className="store-search-input"
-          placeholder="Search products..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <button type="submit" className="store-search-btn" aria-label="Search">
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <circle
-              cx="11"
-              cy="11"
-              r="7"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-            <line
-              x1="16.65"
-              y1="16.65"
-              x2="21"
-              y2="21"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-        </button>
-      </form>
+      <section className="store-hero">
+        <div className="store-hero__content">
+          <p className="store-hero__eyebrow">Fresh marketplace</p>
+          <h1 className="store-title">Marketplace</h1>
+          <p className="store-hero__text">
+            Browse offers, compare listings, and connect directly with sellers.
+          </p>
+        </div>
+      </section>
 
-      <h1 className="store-title">Marketplace</h1>
+      <section className="store-content">
+        <div className="store-toolbar">
+          <div className="store-toolbar__left">
+            <input
+              type="text"
+              placeholder="Search products, sellers, descriptions..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="store-search"
+            />
 
-      <main className="store-products-slot">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="store-select"
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category === "all"
+                    ? "All Categories"
+                    : category.charAt(0).toUpperCase() + category.slice(1)}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="store-select"
+            >
+              <option value="newest">Newest</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="name-asc">Name: A-Z</option>
+              <option value="name-desc">Name: Z-A</option>
+            </select>
+          </div>
+
+          <div className="store-toolbar__right">
+            <h2>{filteredProducts.length} result{filteredProducts.length !== 1 ? "s" : ""}</h2>
+          </div>
+        </div>
+
         {loading ? (
-          <p>Loading products...</p>
+          <div className="store-loading">Loading products...</div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="store-empty">
+            <h3>No products found</h3>
+            <p>Try changing your search or filters.</p>
+          </div>
         ) : (
           <ProductGrid products={filteredProducts} />
         )}
-      </main>
+      </section>
 
       <Footer />
     </div>

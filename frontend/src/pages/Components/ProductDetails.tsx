@@ -4,13 +4,14 @@ import axios from "axios";
 import "../ProductPage.css";
 import "../Categories.css";
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   price: number;
   imageUrl: string;
   description: string;
-  quantity: number;
+  quantityValue: number;
+  quantityUnit: string;
   category: string;
   createdByEmail: string;
 }
@@ -24,7 +25,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [message, setMessage] = useState("");
-
+  
   useEffect(() => {
     loadCurrentUser();
   }, []);
@@ -80,17 +81,24 @@ export default function ProductDetails({ product }: { product: Product }) {
       </div>
 
       <div className="product-details">
-        <h1>{product.name}</h1>
+        <div className="product-header">
+          <h1>{product.name}</h1>
 
-        <span className={`checkbox-label ${product.category}`}>
-          {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-        </span>
+          <span className={`checkbox-label ${product.category}`}>
+            {product.category}
+          </span>
+        </div>
 
-        <p className="quantity">Quantity: {product.quantity}</p>
         <p className="price">${product.price.toFixed(2)}</p>
+
+        <p className="quantity">
+          Quantity: {product.quantityValue} {product.quantityUnit}
+        </p>
+
         <p className="description">{product.description}</p>
+
         <p className="created-by">
-          Listed by:{" "}
+          Listed by{" "}
           <Link to={`/account/${encodeURIComponent(product.createdByEmail)}`}>
             {product.createdByEmail}
           </Link>
@@ -102,7 +110,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           {isOwner ? (
             <button onClick={handleDelete}>Delete Product</button>
           ) : (
-            <button onClick={handleAcceptOffer}>Accept Offer</button>
+            <button onClick={handleAcceptOffer}>Add to cart</button>
           )}
 
           <Link to="/store">Back to Store</Link>

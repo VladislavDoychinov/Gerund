@@ -16,7 +16,8 @@ public class Product {
     @Column(length = 2000)
     private String description;
 
-    private int quantity;
+    private double quantityValue;
+    private String quantityUnit;
     private String category;
     private String imageUrl;
 
@@ -58,12 +59,20 @@ public class Product {
         this.description = description;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public double getQuantityValue() {
+        return quantityValue;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantityValue(double quantityValue) {
+        this.quantityValue = quantityValue;
+    }
+
+    public String getQuantityUnit() {
+        return quantityUnit;
+    }
+
+    public void setQuantityUnit(String quantityUnit) {
+        this.quantityUnit = quantityUnit;
     }
 
     public String getCategory() {

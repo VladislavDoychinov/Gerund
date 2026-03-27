@@ -26,11 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/pins/*/favourite").permitAll()
+                        .requestMatchers("/api/pins/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/products/create").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/products/*/accept").permitAll()

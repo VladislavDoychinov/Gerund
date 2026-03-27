@@ -1,12 +1,15 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import "./AddProduct.css";
+import "./Categories.css";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+
 
 export default function AddProduct() {
   const [title, setTitle] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [price, setPrice] = useState("0");
+  const [unitMode, setUnitMode] = useState<"unit" | "kg">("unit");
   const [categories, setCategories] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -32,16 +35,18 @@ export default function AddProduct() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!title || !description || !image || categories.length === 0) {
-      alert(
-        "Please fill all fields, select an image, and choose at least one category.",
-      );
+      alert("Please fill all fields, select an image, and choose at least one category.");
       return;
     }
+
+    const computedTotal = (Number(quantity) || 0) * (Number(price) || 0);
 
     const formData = {
       title,
       quantity: Number(quantity),
       price: Number(price),
+      unitMode,
+      total: Number(computedTotal.toFixed(2)),
       categories,
       description,
       image,
@@ -53,6 +58,7 @@ export default function AddProduct() {
     setTitle("");
     setQuantity("1");
     setPrice("0");
+    setUnitMode("unit");
     setCategories([]);
     setDescription("");
     setImage(null);
@@ -60,12 +66,9 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="add-product-page">
-      <header className="add-product-header">
-        <Header />
-      </header>
-
-      <main className="add-product-content">
+    <>
+      <Header />
+      <div className="add-product-page">
         <h1>Add New Product</h1>
         <form className="add-product-form" onSubmit={handleSubmit}>
           <label className="image-upload">
@@ -105,27 +108,90 @@ export default function AddProduct() {
           </div>
 
           <div>
+            <p className="section-text">Sell by</p>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="unitMode"
+                  value="unit"
+                  checked={unitMode === "unit"}
+                  onChange={() => setUnitMode("unit")}
+                />
+                Quantity
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="unitMode"
+                  value="kg"
+                  checked={unitMode === "kg"}
+                  onChange={() => setUnitMode("kg")}
+                />
+                Weight (kg)
+              </label>
+            </div>
+          </div>
+
+          <div>
             <p className="section-text">Quantity</p>
-            <input
-              type="number"
-              placeholder="Quantity"
-              value={quantity}
-              min={1}
-              onChange={(e) => setQuantity(e.target.value)}
-              required
-            />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <input
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                placeholder="Quantity"
+                value={quantity}
+                min={1}
+                onChange={(e) => {
+                  const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                  setQuantity(numericValue === "" ? "" : String(Number(numericValue)));
+                }}
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && !["Backspace", "ArrowLeft", "ArrowRight", "Tab", "Delete"].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                required
+              />
+              {unitMode === "kg" && <span>kg</span>}
+            </div>
           </div>
 
           <div>
             <p className="section-text">Price</p>
             <input
               type="number"
+              inputMode="decimal"
               placeholder="Price ($)"
               value={price}
               min={0}
               step={0.01}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => {
+                const cleaned = e.target.value.replace(/[^0-9.]/g, "");
+                const parts = cleaned.split(".");
+                const normalized = parts.length > 2 ? parts[0] + "." + parts.slice(1).join("") : cleaned;
+                setPrice(normalized);
+              }}
+              onKeyDown={(e) => {
+                const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Tab", "Delete", "."];
+                if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                  e.preventDefault();
+                }
+                if (e.key === "." && price.includes(".")) {
+                  e.preventDefault();
+                }
+              }}
               required
+            />
+          </div>
+
+          <div>
+            <p className="section-text">Total</p>
+            <input
+              type="text"
+              value={`$${((Number(quantity) || 0) * (Number(price) || 0)).toFixed(2)}`}
+              readOnly
             />
           </div>
 
@@ -139,11 +205,8 @@ export default function AddProduct() {
 
           <button type="submit">Add Product</button>
         </form>
-      </main>
-
-      <footer className="add-product-footer">
-        <Footer />
-      </footer>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }

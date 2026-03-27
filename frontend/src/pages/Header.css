@@ -56,6 +56,7 @@
   right: 1.75rem;
   flex: 0 0 auto;
   min-width: fit-content;
+  gap: 0.625rem;
 }
 
 .mp-logo {
@@ -107,7 +108,9 @@
   font-weight: 500;
   color: var(--text-primary);
   cursor: pointer;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 
 .mp-nav-btn:hover {
@@ -138,7 +141,9 @@
   background: transparent;
   border-radius: 3.125rem;
   cursor: pointer;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 
 .mp-user-pill:hover {
@@ -152,6 +157,37 @@
   gap: 0.5rem;
 }
 
+.mp-cart-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    transform var(--transition);
+}
+
+.mp-cart-btn:hover {
+  background: var(--sky-50);
+}
+
+.mp-cart-btn:active {
+  transform: translateY(0.0625rem);
+}
+
+.mp-cart-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+  object-fit: contain;
+}
+
 .mp-account-btn {
   padding: 0.45rem 0.9rem;
   border: 0.094rem solid var(--sky-500);
@@ -161,7 +197,9 @@
   font-weight: 600;
   color: var(--sky-700);
   cursor: pointer;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 
 .mp-account-btn:hover {
@@ -182,7 +220,10 @@
   color: var(--white);
   cursor: pointer;
   box-shadow: 0 0.125rem 0.5rem rgba(34, 197, 94, 0.25);
-  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+  transition:
+    background var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .mp-login-btn:hover {
@@ -247,7 +288,10 @@
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: background var(--transition), color var(--transition), transform var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition),
+    transform var(--transition);
 }
 
 .auth-modal-close:hover {
@@ -284,7 +328,10 @@
   font-size: 0.95rem;
   color: var(--text-primary);
   box-sizing: border-box;
-  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
 }
 
 .auth-modal input::placeholder {
@@ -333,7 +380,10 @@
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 0.625rem 1.5rem rgba(22, 163, 74, 0.24);
-  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    filter var(--transition);
 }
 
 .auth-modal form button[type="submit"]:hover {
@@ -443,6 +493,6 @@
   }
 }
 
-  .auth-modal {
-    padding: 1.5rem;
-  }
+.auth-modal {
+  padding: 1.5rem;
+}

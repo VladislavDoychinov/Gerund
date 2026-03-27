@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import "../Header.css";
-import pulsePointLogo from "../image/pulsepoint.png";
+import cartIcon from "../../image/cart.png";
+import pulsePointLogo from "../../image/pulsepoint.png";
 
 interface CurrentUser {
   userId: number;
@@ -218,17 +219,27 @@ export default function Header() {
             <button className={getButtonClass("/home")} onClick={() => navigate("/home")}>Home</button>
             <button className={getButtonClass("/map")} onClick={() => navigate("/map")}>Map</button>
             <button className={getButtonClass("/store")} onClick={() => navigate("/store")}>Marketplace</button>
-            <button className={getButtonClass("/addproduct")} onClick={() => navigate("/addproduct")}>Listing</button>
+            <button className={getButtonClass("/create-product")} onClick={() => navigate("/create-product")}>Listing</button>
           </nav>
         </div>
 
         <div className="mp-header-right">
+          <button
+            type="button"
+            className="mp-cart-btn"
+            onClick={() => navigate("/cart")}
+            aria-label="Go to cart"
+            title="Cart"
+          >
+            <img src={cartIcon} alt="" className="mp-cart-icon" />
+          </button>
+
           {currentUser ? (
             <div className="mp-user-actions">
               <button
                 type="button"
                 className="mp-account-btn"
-                onClick={() => navigate(`/account/${encodeURIComponent(currentUser.email)}`)}
+                onClick={() => navigate(`/profile`)}
               >
                 My Account
               </button>

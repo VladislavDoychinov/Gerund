@@ -9,7 +9,8 @@ export interface Product {
   price: number;
   imageUrl: string;
   description: string;
-  quantity: number;
+  quantityValue: number;
+  quantityUnit: string;
   category: string;
   createdByEmail: string;
 }
@@ -22,27 +23,31 @@ export default function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="product-grid">
       {products.map((product) => (
-        <Link to={`/product/${product.id}`} key={product.id}>
-          <div className="product-card">
-            <div className="image-container">
-              <img
-                src={`http://localhost:8080${product.imageUrl}`}
-                alt={product.name}
-              />
+        <Link to={`/product/${product.id}`} key={product.id} className="product-card">
+          <div className="image-container">
+            <img
+              src={`http://localhost:8080${product.imageUrl}`}
+              alt={product.name}
+            />
 
-              <div className="product-overlay">
-                <p>{product.description}</p>
-              </div>
+            <div className="product-overlay">
+              <p>{product.description}</p>
+            </div>
+          </div>
+
+          <div className="product-card-body">
+            <div className="product-top">
+              <h3>{product.name}</h3>
+
+              <span className={`checkbox-label ${product.category}`}>
+                {product.category}
+              </span>
             </div>
 
-            <h3>{product.name}</h3>
-
-            <span className={`checkbox-label ${product.category}`}>
-              {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-            </span>
-
-            <p>${product.price.toFixed(2)}</p>
-            <small>By {product.createdByEmail}</small>
+            <div className="product-bottom">
+              <p className="product-price">${product.price.toFixed(2)}</p>
+              <small className="product-owner">By {product.createdByEmail}</small>
+            </div>
           </div>
         </Link>
       ))}
