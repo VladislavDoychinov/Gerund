@@ -12,6 +12,46 @@
   padding: 2rem 1.5rem 3rem;
 }
 
+.product-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+
+  display: grid;
+  grid-template-columns: 1.9fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.right-column {
+  position: sticky;
+  top: 1rem;
+}
+
+.reviews-section {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #dcfce7;
+  border-radius: 22px;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .product-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .right-column {
+    position: static;
+  }
+}
+
 .purchase-page-topbar {
   margin-bottom: 1rem;
 }
