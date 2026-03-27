@@ -696,3 +696,90 @@ textarea.mp-input {
   color: var(--text-muted);
   margin-bottom: 2px;
 }
+
+/* Neutral depth + subtle dark-green accents */
+.mp-sidebar,
+.mp-map-wrapper {
+  border: 1px solid #e3e7ea;
+  box-shadow:
+    0 0.35rem 0.8rem rgba(15, 23, 42, 0.08),
+    0 0.9rem 1.8rem rgba(15, 23, 42, 0.06);
+}
+
+.mp-sidebar {
+  background: #ffffff;
+}
+
+.mp-map-wrapper,
+.mp-map-header {
+  background: #ffffff;
+}
+
+.mp-pin-card {
+  background: #f9fafb;
+  border-left-width: 0.22rem;
+  box-shadow: 0 0.08rem 0.32rem rgba(15, 23, 42, 0.06);
+}
+
+.mp-pin-card--untitled {
+  background: #ffffff;
+}
+
+.mp-info-card {
+  background: #ffffff;
+  border-color: #e3e7ea;
+  box-shadow: 0 0.08rem 0.32rem rgba(15, 23, 42, 0.06);
+}
+
+.mp-map-control-btn {
+  box-shadow:
+    0 0.18rem 0.55rem rgba(0, 0, 0, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.mp-sidebar-title,
+.mp-map-title,
+.mp-pin-card-title,
+.mp-popup-form strong,
+.mp-pin-popup-title,
+.mp-info-value,
+.mp-save-btn,
+.mp-fav-btn,
+.mp-category-btn--active {
+  color: #1f5a43;
+}
+
+/* More rounded surfaces + extra depth for sidebar tabs */
+.mp-sidebar,
+.mp-map-wrapper {
+  border-radius: 1.4rem;
+}
+
+.mp-info-card,
+.mp-pin-card,
+.mp-input,
+.mp-category-btn,
+.mp-map-control-btn {
+  border-radius: 0.9rem;
+}
+
+.mp-side-btn {
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow:
+    0 0.14rem 0.35rem rgba(15, 23, 42, 0.06),
+    0 0.02rem 0.1rem rgba(15, 23, 42, 0.05);
+}
+
+.mp-side-btn:hover {
+  box-shadow:
+    0 0.26rem 0.6rem rgba(15, 23, 42, 0.1),
+    0 0.04rem 0.14rem rgba(15, 23, 42, 0.07);
+}
+
+.mp-side-btn--active {
+  box-shadow:
+    0 0.3rem 0.75rem rgba(15, 23, 42, 0.12),
+    inset 0 0 0 1px rgba(79, 150, 113, 0.2);
+}
