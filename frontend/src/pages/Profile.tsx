@@ -21,6 +21,13 @@ export default function Profile() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
+
   useEffect(() => {
     loadCurrentUser();
   }, []);
@@ -86,6 +93,49 @@ export default function Profile() {
       console.error("Logout failed", error);
     } finally {
       navigate("/login");
+    }
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordMessage("");
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordMessage("Please fill in all password fields.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage("New passwords do not match.");
+      return;
+    }
+
+    try {
+      setChangingPassword(true);
+
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/change-password",
+        {
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      setPasswordMessage(response.data.message || "Password changed successfully.");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setShowPasswordForm(false);
+    } catch (error: any) {
+      setPasswordMessage(
+        error.response?.data?.message || "Failed to change password."
+      );
+    } finally {
+      setChangingPassword(false);
     }
   };
 
@@ -178,9 +228,18 @@ export default function Profile() {
           <div className="settings-section">
             <h3>Settings</h3>
             <div className="settings-buttons">
-              <button className="settings-button">Edit Profile</button>
-              <button className="settings-button">Change Password</button>
-              <button className="settings-button">Privacy Settings</button>
+
+              <button
+                className="settings-button"
+                onClick={() => {
+                  setShowPasswordForm((prev) => !prev);
+                  setPasswordMessage("");
+                }}
+              >
+                Change Password
+              </button>
+
+
               <button
                 className="settings-button logout-button"
                 onClick={handleLogout}
@@ -188,6 +247,51 @@ export default function Profile() {
                 Logout
               </button>
             </div>
+
+            {showPasswordForm && (
+              <form
+                onSubmit={handleChangePassword}
+                style={{
+                  marginTop: "18px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                <input
+                  type="password"
+                  placeholder="Current password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+
+                <input
+                  type="password"
+                  placeholder="New password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+
+                <input
+                  type="password"
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+
+                {passwordMessage && (
+                  <p style={{ margin: 0, fontWeight: 600 }}>{passwordMessage}</p>
+                )}
+
+                <button
+                  type="submit"
+                  className="settings-button"
+                  disabled={changingPassword}
+                >
+                  {changingPassword ? "Saving..." : "Save New Password"}
+                </button>
+              </form>
+            )}
           </div>
         </main>
       </div>
