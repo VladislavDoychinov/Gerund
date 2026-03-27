@@ -22,8 +22,9 @@ public class Pin {
     private String userId;
 
     private String headline;
-
     private String description;
+
+    private String imageUrl;
 
     @ElementCollection
     @CollectionTable(name = "pin_favourites", joinColumns = @JoinColumn(name = "pin_id"))
@@ -56,6 +57,9 @@ public class Pin {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public Set<String> getFavouritedBy() { return favouritedBy; }
     public void setFavouritedBy(Set<String> favouritedBy) { this.favouritedBy = favouritedBy; }

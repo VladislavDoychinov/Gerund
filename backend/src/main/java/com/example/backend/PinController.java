@@ -1,9 +1,14 @@
 package com.example.backend;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.backend.repository.PinRepository;
 import com.example.backend.model.Pin;
@@ -26,8 +31,21 @@ public class PinController {
         return repository.findByUserId(userId);
     }
 
-    @PostMapping
-    public Pin addPin(@RequestBody Pin pin) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public Pin addPin(
+            @RequestPart("pin") Pin pin, 
+            @RequestPart(value = "image", required = false) MultipartFile file) throws IOException {
+        
+        if (file != null && !file.isEmpty()) {
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path path = Paths.get("uploads").toAbsolutePath().normalize();
+            
+            if (!Files.exists(path)) Files.createDirectories(path);
+            
+            Files.write(path.resolve(fileName), file.getBytes());
+            pin.setImageUrl("/uploads/" + fileName);
+        }
+        
         return repository.save(pin);
     }
 

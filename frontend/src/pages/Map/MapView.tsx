@@ -67,6 +67,7 @@ type Pin = {
   favouritedBy: string[];
   color: string;
   category: PinCategory;
+  imageUrl?: string;
 };
 
 type PinFormData = {
@@ -224,6 +225,7 @@ export default function MapView({
   const [allPins, setAllPins] = useState<Pin[]>([]);
   const [myPins, setMyPins] = useState<Pin[]>([]);
   const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<PinFormData>({
     headline: "",
     description: "",
@@ -261,6 +263,7 @@ export default function MapView({
 
   const handleMapClick = (latlng: LatLng) => {
     setDraftPin({ lat: latlng.lat, lng: latlng.lng });
+    setSelectedFile(null);
     setFormData({
       headline: "",
       description: "",
@@ -271,12 +274,27 @@ export default function MapView({
 
   const savePin = async () => {
     if (!draftPin) return;
+
+    const data = new FormData();
+    
+    const pinData = new Blob([JSON.stringify({ 
+      ...draftPin, 
+      userId: currentUser, 
+      ...formData 
+    })], { type: 'application/json' });
+
+    data.append("pin", pinData);
+    
+    if (selectedFile) {
+      data.append("image", selectedFile);
+    }
+
     try {
       const response = await fetch("http://localhost:8080/api/pins", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...draftPin, userId: currentUser, ...formData }),
+        body: data,
       });
+
       if (response.ok) {
         const savedPin: Pin = await response.json();
         const updatedAll = [...allPins, savedPin];
@@ -285,6 +303,7 @@ export default function MapView({
         setMyPins(updatedMy);
         syncStorage(updatedAll, updatedMy);
         setDraftPin(null);
+        setSelectedFile(null);
       }
     } catch (error) {
       console.error("Failed to save pin:", error);
@@ -375,6 +394,14 @@ export default function MapView({
                   }
                 />
 
+                <div className="mp-color-picker-label">Image (optional)</div>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="mp-input mp-file-input"
+                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                />
+
                 <div className="mp-color-picker-label">Category</div>
                 <div className="mp-category-options">
                   {CATEGORY_OPTIONS.map((cat) => (
@@ -408,7 +435,7 @@ export default function MapView({
                   </button>
                   <button
                     className="mp-cancel-btn"
-                    onClick={() => setDraftPin(null)}
+                    onClick={() => { setDraftPin(null); setSelectedFile(null); }}
                   >
                     Cancel
                   </button>
@@ -429,6 +456,14 @@ export default function MapView({
             >
               <Popup>
                 <div className="mp-pin-popup">
+                  {pin.imageUrl && (
+                    <img 
+                      src={`http://localhost:8080${pin.imageUrl}`} 
+                      alt={pin.headline} 
+                      className="mp-pin-image"
+                      style={{ width: "100%", borderRadius: "4px", marginBottom: "8px" }}
+                    />
+                  )}
                   <h4 className="mp-pin-popup-title">{pin.headline || "Untitled Pin"}</h4>
                   {pin.description && (
                     <p className="mp-pin-popup-desc">{pin.description}</p>
