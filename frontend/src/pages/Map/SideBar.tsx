@@ -3,7 +3,7 @@ import { LatLngExpression } from "leaflet";
 
 const SIDE_ITEMS = ["My Locations", "Saved Places", "Settings"];
 
-type PinCategory = "STORE" | "PROBLEM" | "OTHER";
+type PinCategory = "STORE" | "EVENT" | "PROBLEM" | "OTHER";
 
 type Pin = {
   id: number;
@@ -15,6 +15,18 @@ type Pin = {
   favouritedBy: string[];
   color: string;
   category: PinCategory;
+  distance?: number;
+};
+
+const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 };
 
 export default function SideBar({
@@ -25,14 +37,15 @@ export default function SideBar({
   const [active, setActive] = useState("My Locations");
   const [myPins, setMyPins] = useState<Pin[]>([]);
   const [allPins, setAllPins] = useState<Pin[]>([]);
+  const [radius, setRadius] = useState(10);
+  const [searchCategory, setSearchCategory] = useState<string>("ALL");
+  
   const currentUser = localStorage.getItem("username") || "Anonymous";
 
   const refresh = () => {
-    // My Locations tab: pins owned by the current user
     const savedMy = localStorage.getItem("mp-saved-pins");
     setMyPins(savedMy ? JSON.parse(savedMy) : []);
 
-    // Saved Places tab: any pin (including other users') favourited by current user
     const savedAll = localStorage.getItem("mp-all-pins");
     setAllPins(savedAll ? JSON.parse(savedAll) : []);
   };
@@ -43,10 +56,30 @@ export default function SideBar({
     return () => window.removeEventListener("storage-update", refresh);
   }, []);
 
-  // Favourites come from ALL pins, not just the user's own pins
   const favouritePins = allPins.filter((p) =>
     p.favouritedBy?.includes(currentUser),
   );
+
+  const getNearestPins = () => {
+    if (!position) return [];
+
+    const uLat = Array.isArray(position) ? position[0] : (position as any).lat;
+    const uLng = Array.isArray(position) ? position[1] : (position as any).lng;
+
+    return allPins
+      .map(pin => ({
+        ...pin,
+        distance: calculateDistance(uLat, uLng, pin.lat, pin.lng)
+      }))
+      .filter(pin => {
+        const withinRadius = pin.distance <= radius;
+        const matchesCategory = searchCategory === "ALL" || pin.category === searchCategory;
+        return withinRadius && matchesCategory;
+      })
+      .sort((a, b) => (a.distance || 0) - (b.distance || 0));
+  };
+
+  const nearestPins = getNearestPins();
 
   const saveFavourite = async (id: number) => {
     try {
@@ -102,6 +135,11 @@ export default function SideBar({
         <div className="mp-pin-card-coords">
           {pin.lat.toFixed(4)}, {pin.lng.toFixed(4)}
         </div>
+        {pin.distance !== undefined && (
+          <div style={{ fontSize: '0.7rem', color: 'var(--sky-600)', fontWeight: 700, marginTop: '4px' }}>
+            {pin.distance.toFixed(2)} km away
+          </div>
+        )}
       </li>
     );
   };
@@ -148,6 +186,46 @@ export default function SideBar({
             favouritePins.map((pin) => <PinCard key={pin.id} pin={pin} />)
           )}
         </ul>
+      )}
+
+      {active === "Settings" && (
+        <div className="mp-settings-placeholder" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="mp-info-card">
+            <div className="mp-info-label">Search Radius ({radius} km)</div>
+            <input 
+              type="range" 
+              min="1" 
+              max="100" 
+              value={radius} 
+              onChange={(e) => setRadius(parseInt(e.target.value))}
+              style={{ width: '100%', cursor: 'pointer' }}
+            />
+          </div>
+
+          <div className="mp-info-label">Filter Category</div>
+          <div className="mp-category-options">
+            {["ALL", "STORE", "EVENT", "PROBLEM", "OTHER"].map((cat) => (
+              <button
+                key={cat}
+                className={`mp-category-btn ${searchCategory === cat ? "mp-category-btn--active" : ""}`}
+                onClick={() => setSearchCategory(cat)}
+              >
+                {cat.charAt(0) + cat.slice(1).toLowerCase()}
+              </button>
+            ))}
+          </div>
+
+          <h3 className="mp-sidebar-title" style={{ marginTop: '0.5rem', border: 'none' }}>
+            Nearest results ({nearestPins.length})
+          </h3>
+          <ul className="mp-pin-list">
+            {nearestPins.length === 0 ? (
+              <li className="mp-pin-list-empty">No locations found nearby.</li>
+            ) : (
+              nearestPins.map((pin) => <PinCard key={pin.id} pin={pin} />)
+            )}
+          </ul>
+        </div>
       )}
     </aside>
   );
