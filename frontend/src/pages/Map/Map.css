@@ -322,6 +322,212 @@
   flex: 1;
 }
 
+.mp-popup-form,
+.mp-pin-popup {
+  min-width: 14rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: var(--text-primary);
+}
+
+.mp-popup-form strong,
+.mp-pin-popup-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sky-700);
+}
+
+.mp-pin-popup-title {
+  margin: 0;
+}
+
+.mp-input {
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  border: 0.094rem solid var(--sky-200);
+  border-radius: 0.75rem;
+  background: var(--white);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.mp-input:focus {
+  outline: none;
+  border-color: var(--sky-500);
+  box-shadow: 0 0 0 0.1875rem rgba(34, 197, 94, 0.14);
+}
+
+textarea.mp-input {
+  min-height: 5.75rem;
+  resize: vertical;
+}
+
+.mp-color-picker-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.mp-color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mp-color-swatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0.125rem solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.5), 0 0.125rem 0.375rem rgba(15, 23, 42, 0.15);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.mp-color-swatch:hover {
+  transform: scale(1.06);
+}
+
+.mp-color-swatch--active {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 0.1875rem rgba(34, 197, 94, 0.18);
+}
+
+.mp-save-btn,
+.mp-cancel-btn,
+.mp-fav-btn,
+.mp-fav-star,
+.mp-remove-link,
+.mp-category-btn {
+  font-family: inherit;
+}
+
+.mp-save-btn,
+.mp-cancel-btn,
+.mp-fav-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 0.95rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+}
+
+.mp-save-btn {
+  background: linear-gradient(135deg, var(--sky-500), var(--sky-600));
+  color: var(--white);
+  box-shadow: 0 0.375rem 0.875rem rgba(34, 197, 94, 0.28);
+}
+
+.mp-save-btn:hover {
+  transform: translateY(-0.0625rem);
+}
+
+.mp-cancel-btn {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.mp-cancel-btn:hover {
+  background: #e2e8f0;
+}
+
+.mp-pin-popup-owner,
+.mp-pin-popup-desc,
+.mp-pin-card-desc,
+.mp-pin-card-coords {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.mp-pin-popup-owner,
+.mp-pin-card-coords {
+  color: var(--text-muted);
+}
+
+.mp-pin-popup-desc,
+.mp-pin-card-desc {
+  color: var(--text-secondary);
+}
+
+.mp-pin-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+
+.mp-fav-btn {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.mp-fav-btn:hover {
+  background: #dbeafe;
+}
+
+.mp-fav-btn--active {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.mp-fav-star {
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--transition), transform var(--transition);
+}
+
+.mp-fav-star:hover {
+  color: #f59e0b;
+  transform: scale(1.08);
+}
+
+.mp-fav-star--active {
+  color: #f59e0b;
+}
+
+.mp-remove-link {
+  padding: 0;
+  color: #dc2626;
+  border: none;
+  background: none;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.mp-remove-link:hover {
+  color: #991b1b;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 1rem;
+  box-shadow: 0 0.75rem 2rem rgba(13, 77, 44, 0.18);
+}
+
+.leaflet-popup-content {
+  margin: 1rem;
+}
+
+.leaflet-popup-tip {
+  box-shadow: none;
+}
+
 @media (max-width: 48rem) {
   .mp-main {
     grid-template-columns: 1fr;
@@ -337,22 +543,11 @@
   .mp-user-pill span {
     display: none;
   }
-}
 
-.mp-remove-link {
-  display: inline-block;
-  color: #ef4444;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.75rem;
-  margin-top: 4px;
-  text-decoration: underline;
-}
-
-.mp-remove-link:hover {
-  color: #b91c1c;
+  .mp-popup-form,
+  .mp-pin-popup {
+    min-width: 0;
+  }
 }
 
 .mp-info-card {

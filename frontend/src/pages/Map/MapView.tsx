@@ -22,10 +22,10 @@ const PRESET_COLORS = [
 
 type PinCategory = "STORE" | "PROBLEM" | "OTHER";
 
-const CATEGORY_OPTIONS: { value: PinCategory; label: string; emoji: string }[] = [
-  { value: "STORE", label: "Store", emoji: "🏪" },
-  { value: "PROBLEM", label: "Problem", emoji: "⚠️" },
-  { value: "OTHER", label: "Other", emoji: "📌" },
+const CATEGORY_OPTIONS: { value: PinCategory; label: string;}[] = [
+  { value: "STORE", label: "Store" },
+  { value: "PROBLEM", label: "Problem" },
+  { value: "OTHER", label: "Other" },
 ];
 
 function createColoredIcon(color: string) {
@@ -63,7 +63,6 @@ type PinFormData = {
   category: PinCategory;
 };
 
-// --- Sub-components ---
 
 function RecenterMap({ position }: { position: LatLngExpression }) {
   const map = useMap();
@@ -101,8 +100,6 @@ function MapHeader({ pinCount }: { pinCount: number }) {
     </div>
   );
 }
-
-// --- Main Component ---
 
 export default function MapView({ position }: { position: LatLngExpression | null }) {
   const [allPins, setAllPins] = useState<Pin[]>([]);
@@ -242,7 +239,7 @@ export default function MapView({ position }: { position: LatLngExpression | nul
                       className={`mp-category-btn ${formData.category === cat.value ? "mp-category-btn--active" : ""}`}
                       onClick={() => setFormData({ ...formData, category: cat.value })}
                     >
-                      {cat.emoji} {cat.label}
+                      {cat.label}
                     </button>
                   ))}
                 </div>
