@@ -51,9 +51,12 @@ export default function Header() {
 
   const loadNotifications = async () => {
     try {
-      const result = await axios.get("http://localhost:8080/api/notifications", {
-        withCredentials: true,
-      });
+      const result = await axios.get(
+        "http://localhost:8080/api/notifications",
+        {
+          withCredentials: true,
+        },
+      );
       setNotifications(result.data);
     } catch (error) {
       setNotifications([]);
@@ -65,7 +68,7 @@ export default function Header() {
       await axios.put(
         `http://localhost:8080/api/notifications/${id}/seen`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       setNotifications((prev) => prev.filter((n) => n.id !== id));
@@ -83,7 +86,13 @@ export default function Header() {
   return (
     <>
       {notifications.length > 0 && (
-        <div style={{ padding: "10px", background: "#fff3cd", borderBottom: "1px solid #f0d98a" }}>
+        <div
+          style={{
+            padding: "10px",
+            background: "#fff3cd",
+            borderBottom: "1px solid #f0d98a",
+          }}
+        >
           {notifications.map((notification) => (
             <div
               key={notification.id}
@@ -95,7 +104,8 @@ export default function Header() {
               }}
             >
               <span>
-                {notification.buyerEmail} accepted your offer for {notification.productName}
+                {notification.buyerEmail} accepted your offer for{" "}
+                {notification.productName}
               </span>
               <button onClick={() => dismissNotification(notification.id)}>
                 Dismiss
@@ -113,7 +123,11 @@ export default function Header() {
           aria-label="Go to marketplace"
         >
           <div className="mp-logo-icon">
-            <img src={pulsePointLogo} alt="PulsePoint Logo" className="mp-logo-img" />
+            <img
+              src={pulsePointLogo}
+              alt="PulsePoint Logo"
+              className="mp-logo-img"
+            />
           </div>
           <span className="mp-logo-text">PulsePoint</span>
         </button>
@@ -138,10 +152,10 @@ export default function Header() {
             Marketplace
           </button>
           <button
-            className={getButtonClass("/create-product")}
-            onClick={() => navigate("/create-product")}
+            className={getButtonClass("/addproduct")}
+            onClick={() => navigate("/addproduct")}
           >
-            Sell
+            Listing
           </button>
         </nav>
 

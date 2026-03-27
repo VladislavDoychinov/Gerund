@@ -5,4 +5,7 @@
   border-top: 0.094rem solid var(--sky-100, #dcfce7);
   color: var(--text-muted, #7fb3a0);
   font-size: 0.8125rem;
+  width: 100%;
+  margin-top: 2rem;
+  bottom: 0;
 }
