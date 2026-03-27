@@ -201,7 +201,6 @@
   background: var(--sky-500);
 }
 
-/* Info card */
 .mp-info-card {
   margin-top: 0.5rem;
   background: linear-gradient(135deg, var(--sky-100), var(--sky-50));
@@ -217,6 +216,12 @@
   letter-spacing: 0.07em;
   color: var(--text-muted);
   margin-bottom: 0.25rem;
+}
+
+.mp-info-value {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--sky-700);
 }
 
 .mp-pin-card {
