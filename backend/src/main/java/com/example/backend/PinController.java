@@ -1,16 +1,9 @@
 package com.example.backend;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.backend.repository.PinRepository;
 import com.example.backend.model.Pin;
@@ -42,11 +35,18 @@ public class PinController {
     public void deletePin(@PathVariable Long id) {
         repository.deleteById(id);
     }
-
+    
     @PatchMapping("/{id}/favourite")
-    public Pin toggleFavourite(@PathVariable Long id) {
+    public Pin toggleFavourite(@PathVariable Long id, @RequestParam String userId) {
         Pin pin = repository.findById(id).orElseThrow();
-        pin.setFavourite(!pin.getFavourite());
+        Set<String> favourites = pin.getFavouritedBy();
+        
+        if (favourites.contains(userId)) {
+            favourites.remove(userId);
+        } else {
+            favourites.add(userId);
+        }
+        
         return repository.save(pin);
     }
 }

@@ -18,16 +18,13 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await api.post(
-        "/api/auth/login",
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.post("/api/auth/login", { email, password }, { withCredentials: true });
+
+      setMessage(response.data.message);
+
+      localStorage.setItem("username", response.data.email);
+
+      navigate("/home");
 
       setMessage(response.data.message);
       console.log("Logged in user:", response.data);
