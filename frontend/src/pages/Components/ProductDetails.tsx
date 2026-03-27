@@ -81,7 +81,7 @@ export default function ProductDetails({ product }: { product: Product }) {
     <div className="product-card-container">
       <div className="product-image">
         <img
-          src={`http://localhost:8080${product.imageUrl}`}
+          src={normalizedImageUrl}
           alt={product.name}
         />
       </div>
