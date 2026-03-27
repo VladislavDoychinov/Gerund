@@ -24,6 +24,7 @@ export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -47,18 +48,34 @@ export default function ProductPage() {
       } catch (error) {
         console.error("Failed to load product:", error);
         setProduct(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadProduct();
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="product-page">
+        <Header />
+        <div className="product-page-state">
+          <h2>Loading product...</h2>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="product-page">
         <Header />
-        <h2>Product Not Found</h2>
-        <Link to="/store" className="back-link">Back to Store</Link>
+        <div className="product-page-state">
+          <h2>Product Not Found</h2>
+          <Link to="/store" className="back-link">Back to Store</Link>
+        </div>
         <Footer />
       </div>
     );
@@ -67,8 +84,10 @@ export default function ProductPage() {
   return (
     <div className="product-page">
       <Header />
-      <ProductDetails product={product} />
-      <RelatedProducts products={relatedProducts} />
+      <div className="product-page-shell">
+        <ProductDetails product={product} />
+        <RelatedProducts products={relatedProducts} />
+      </div>
       <Footer />
     </div>
   );

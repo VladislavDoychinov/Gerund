@@ -26,6 +26,13 @@ public class Pin {
     @Column(nullable = false)
     private Boolean favourite = false;
 
+    @Column(length = 7, nullable = false)
+    private String color = "#3B82F6";
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PinCategory category = PinCategory.OTHER;
+
     public Pin() {}
 
     public Long getId() { return id; }
@@ -48,4 +55,10 @@ public class Pin {
 
     public Boolean getFavourite() { return favourite; }
     public void setFavourite(Boolean favourite) { this.favourite = favourite; }
+
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+
+    public PinCategory getCategory() { return category; }
+    public void setCategory(PinCategory category) { this.category = category; }
 }

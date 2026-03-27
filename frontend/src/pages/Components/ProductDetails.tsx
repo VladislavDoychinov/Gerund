@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../ProductPage.css";
 import "../Categories.css";
@@ -25,7 +25,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [message, setMessage] = useState("");
-
+  
   useEffect(() => {
     loadCurrentUser();
   }, []);
@@ -81,18 +81,28 @@ export default function ProductDetails({ product }: { product: Product }) {
       </div>
 
       <div className="product-details">
-        <h1>{product.name}</h1>
+        <div className="product-header">
+          <h1>{product.name}</h1>
 
-        <span className={`checkbox-label ${product.category}`}>
-          {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-        </span>
+          <span className={`checkbox-label ${product.category}`}>
+            {product.category}
+          </span>
+        </div>
+
+        <p className="price">${product.price.toFixed(2)}</p>
 
         <p className="quantity">
-            Quantity: {product.quantityValue} {product.quantityUnit}
+          Quantity: {product.quantityValue} {product.quantityUnit}
         </p>
-        <p className="price">${product.price.toFixed(2)}</p>
+
         <p className="description">{product.description}</p>
-        <p className="created-by">Listed by: {product.createdByEmail}</p>
+
+        <p className="created-by">
+          Listed by{" "}
+          <Link to={`/account/${encodeURIComponent(product.createdByEmail)}`}>
+            {product.createdByEmail}
+          </Link>
+        </p>
 
         {message && <p className="status-message">{message}</p>}
 

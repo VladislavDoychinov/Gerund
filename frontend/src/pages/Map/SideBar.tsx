@@ -3,6 +3,14 @@ import { LatLngExpression } from "leaflet";
 
 const SIDE_ITEMS = ["My Locations", "Saved Places", "Settings"];
 
+type PinCategory = "STORE" | "PROBLEM" | "OTHER";
+
+const CATEGORY_EMOJI: Record<PinCategory, string> = {
+  STORE: "🏪",
+  PROBLEM: "⚠️",
+  OTHER: "📌",
+};
+
 type Pin = {
   id: number;
   lat: number;
@@ -11,6 +19,8 @@ type Pin = {
   headline: string;
   description: string;
   favourite: boolean;
+  color: string;
+  category: PinCategory;
 };
 
 export default function SideBar({ position }: { position: LatLngExpression | null }) {
@@ -32,9 +42,7 @@ export default function SideBar({ position }: { position: LatLngExpression | nul
 
   const toggleFavourite = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/pins/${id}/favourite`, {
-        method: "PATCH",
-      });
+      const response = await fetch(`http://localhost:8080/api/pins/${id}/favourite`, { method: "PATCH" });
       if (response.ok) {
         const updatedPin: Pin = await response.json();
         const updated = myPins.map((p) => (p.id === id ? updatedPin : p));
@@ -50,6 +58,30 @@ export default function SideBar({ position }: { position: LatLngExpression | nul
   const lat = position && Array.isArray(position) ? (position as number[])[0] : null;
   const lng = position && Array.isArray(position) ? (position as number[])[1] : null;
 
+  const PinCard = ({ pin }: { pin: Pin }) => (
+    <li
+      className={`mp-pin-card ${pin.favourite ? "mp-pin-card--fav" : ""}`}
+      style={{ borderLeftColor: pin.color || "#3B82F6" }}
+    >
+      <div className="mp-pin-card-header">
+        <span className="mp-pin-color-dot" style={{ background: pin.color || "#3B82F6" }} />
+        <span className="mp-pin-category-badge">
+          {CATEGORY_EMOJI[pin.category ?? "OTHER"] ?? "📌"} {(pin.category ?? "OTHER").charAt(0) + (pin.category ?? "OTHER").slice(1).toLowerCase()}
+        </span>
+        <span className="mp-pin-card-title">{pin.headline || "Untitled Pin"}</span>
+        <button
+          className={`mp-fav-star ${pin.favourite ? "mp-fav-star--active" : ""}`}
+          onClick={() => toggleFavourite(pin.id)}
+          title={pin.favourite ? "Remove from favourites" : "Add to favourites"}
+        >
+          {pin.favourite ? "★" : "☆"}
+        </button>
+      </div>
+      {pin.description && <div className="mp-pin-card-desc">{pin.description}</div>}
+      <div className="mp-pin-card-coords">{pin.lat.toFixed(4)}, {pin.lng.toFixed(4)}</div>
+    </li>
+  );
+
   return (
     <aside className="mp-sidebar">
       <h2 className="mp-sidebar-title">Navigation</h2>
@@ -57,11 +89,8 @@ export default function SideBar({ position }: { position: LatLngExpression | nul
       <ul className="mp-sidebar-list">
         {SIDE_ITEMS.map((item) => {
           const badge =
-            item === "My Locations"
-              ? myPins.length
-              : item === "Saved Places"
-              ? favouritePins.length
-              : null;
+            item === "My Locations" ? myPins.length :
+            item === "Saved Places" ? favouritePins.length : null;
           return (
             <li key={item}>
               <button
@@ -78,73 +107,25 @@ export default function SideBar({ position }: { position: LatLngExpression | nul
 
       {active === "My Locations" && (
         <ul className="mp-pin-list">
-          {myPins.length === 0 ? (
-            <li className="mp-pin-list-empty">
-            </li>
-          ) : (
-            myPins.map((pin) => (
-              <li key={pin.id} className="mp-pin-card">
-                <div className="mp-pin-card-header">
-                  <span className="mp-pin-card-title">
-                    📍 {pin.headline || "Untitled Pin"}
-                  </span>
-                  <button
-                    className={`mp-fav-star ${pin.favourite ? "mp-fav-star--active" : ""}`}
-                    onClick={() => toggleFavourite(pin.id)}
-                    title={pin.favourite ? "Remove from favourites" : "Add to favourites"}
-                  >
-                    {pin.favourite ? "★" : "☆"}
-                  </button>
-                </div>
-                {pin.description && (
-                  <div className="mp-pin-card-desc">{pin.description}</div>
-                )}
-                <div className="mp-pin-card-coords">
-                  {pin.lat.toFixed(4)}, {pin.lng.toFixed(4)}
-                </div>
-              </li>
-            ))
-          )}
+          {myPins.length === 0
+            ? <li className="mp-pin-list-empty">No pins yet — click the map to add one.</li>
+            : myPins.map((pin) => <PinCard key={pin.id} pin={pin} />)
+          }
         </ul>
       )}
 
       {active === "Saved Places" && (
         <ul className="mp-pin-list">
-          {favouritePins.length === 0 ? (
-            <li className="mp-pin-list-empty">
-              No favourites yet — tap ☆ on any of your pins to save it here.
-            </li>
-          ) : (
-            favouritePins.map((pin) => (
-              <li key={pin.id} className="mp-pin-card mp-pin-card--fav">
-                <div className="mp-pin-card-header">
-                  <span className="mp-pin-card-title">
-                    ★ {pin.headline || "Untitled Pin"}
-                  </span>
-                  <button
-                    className="mp-fav-star mp-fav-star--active"
-                    onClick={() => toggleFavourite(pin.id)}
-                    title="Remove from favourites"
-                  >
-                    ★
-                  </button>
-                </div>
-                {pin.description && (
-                  <div className="mp-pin-card-desc">{pin.description}</div>
-                )}
-                <div className="mp-pin-card-coords">
-                  {pin.lat.toFixed(4)}, {pin.lng.toFixed(4)}
-                </div>
-              </li>
-            ))
-          )}
+          {favouritePins.length === 0
+            ? <li className="mp-pin-list-empty">No favourites yet — tap ☆ on any pin.</li>
+            : favouritePins.map((pin) => <PinCard key={pin.id} pin={pin} />)
+          }
         </ul>
       )}
+
       {active === "Settings" && (
         <div className="mp-settings-placeholder">
-          <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-            Settings coming soon.
-          </p>
+          <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Settings coming soon.</p>
         </div>
       )}
 

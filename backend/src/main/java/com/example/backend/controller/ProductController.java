@@ -180,6 +180,11 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("message", "Product not found")));
     }
 
+    @GetMapping("/seller/{email}")
+    public ResponseEntity<?> getProductsBySeller(@PathVariable String email) {
+        return ResponseEntity.ok(productRepository.findByCreatedByEmail(email));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id, HttpSession session) {
         Object userIdObj = session.getAttribute("userId");
