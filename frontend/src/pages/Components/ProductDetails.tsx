@@ -110,7 +110,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           {isOwner ? (
             <button onClick={handleDelete}>Delete Product</button>
           ) : (
-            <button onClick={handleAcceptOffer}>Accept Offer</button>
+            <button onClick={handleAcceptOffer}>Add to cart</button>
           )}
 
           <Link to="/store">Back to Store</Link>
