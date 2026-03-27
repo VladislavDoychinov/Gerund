@@ -6,6 +6,6 @@
   color: var(--text-muted, #7fb3a0);
   font-size: 0.8125rem;
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 0;
   bottom: 0;
 }
