@@ -207,7 +207,11 @@ export default function Header() {
             aria-label="Go to marketplace"
           >
             <div className="mp-logo-icon">
-              <img src={pulsePointLogo} alt="PulsePoint Logo" className="mp-logo-img" />
+              <img
+                src={pulsePointLogo}
+                alt="PulsePoint Logo"
+                className="mp-logo-img"
+              />
             </div>
             <span className="mp-logo-text">PulsePoint</span>
           </button>
@@ -215,10 +219,30 @@ export default function Header() {
 
         <div className="mp-header-center">
           <nav className="mp-nav">
-            <button className={getButtonClass("/home")} onClick={() => navigate("/home")}>Home</button>
-            <button className={getButtonClass("/map")} onClick={() => navigate("/map")}>Map</button>
-            <button className={getButtonClass("/store")} onClick={() => navigate("/store")}>Marketplace</button>
-            <button className={getButtonClass("/addproduct")} onClick={() => navigate("/addproduct")}>Listing</button>
+            <button
+              className={getButtonClass("/home")}
+              onClick={() => navigate("/home")}
+            >
+              Home
+            </button>
+            <button
+              className={getButtonClass("/map")}
+              onClick={() => navigate("/map")}
+            >
+              Map
+            </button>
+            <button
+              className={getButtonClass("/store")}
+              onClick={() => navigate("/store")}
+            >
+              Marketplace
+            </button>
+            <button
+              className={getButtonClass("/addproduct")}
+              onClick={() => navigate("/addproduct")}
+            >
+              Listing
+            </button>
           </nav>
         </div>
 
@@ -228,7 +252,9 @@ export default function Header() {
               <button
                 type="button"
                 className="mp-account-btn"
-                onClick={() => navigate(`/account/${encodeURIComponent(currentUser.email)}`)}
+                onClick={() =>
+                  navigate(`/account/${encodeURIComponent(currentUser.email)}`)
+                }
               >
                 My Account
               </button>
@@ -240,18 +266,31 @@ export default function Header() {
               </div>
             </div>
           ) : (
-            <button className="mp-login-btn" onClick={openLoginModal}>Login</button>
+            <button className="mp-login-btn" onClick={openLoginModal}>
+              Login
+            </button>
           )}
         </div>
       </header>
 
       {/* Login Modal */}
       {showLoginModal && (
-        <div className="auth-modal-overlay" onClick={() => setShowLoginModal(false)}>
+        <div
+          className="auth-modal-overlay"
+          onClick={() => setShowLoginModal(false)}
+        >
           <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="auth-modal-close" onClick={() => setShowLoginModal(false)} aria-label="Close">✕</button>
+            <button
+              className="auth-modal-close"
+              onClick={() => setShowLoginModal(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
             <h2>Log in to Your Profile</h2>
-            {loginMessage && <p className="auth-modal-message">{loginMessage}</p>}
+            {loginMessage && (
+              <p className="auth-modal-message">{loginMessage}</p>
+            )}
             <form onSubmit={handleLogin}>
               <input
                 type="email"
@@ -282,9 +321,18 @@ export default function Header() {
 
       {/* Register Modal */}
       {showRegisterModal && (
-        <div className="auth-modal-overlay" onClick={() => setShowRegisterModal(false)}>
+        <div
+          className="auth-modal-overlay"
+          onClick={() => setShowRegisterModal(false)}
+        >
           <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="auth-modal-close" onClick={() => setShowRegisterModal(false)} aria-label="Close">✕</button>
+            <button
+              className="auth-modal-close"
+              onClick={() => setShowRegisterModal(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
             <h2>Create an Account</h2>
             {regMessage && <p className="auth-modal-message">{regMessage}</p>}
             <form onSubmit={handleRegister}>
@@ -309,8 +357,13 @@ export default function Header() {
                   onChange={(e) => setRegPassword(e.target.value)}
                   required
                 />
-                <span className="auth-eye" onClick={() => setShowRegPassword(!showRegPassword)}>
-                  <FontAwesomeIcon icon={showRegPassword ? faEyeSlash : faEye} />
+                <span
+                  className="auth-eye"
+                  onClick={() => setShowRegPassword(!showRegPassword)}
+                >
+                  <FontAwesomeIcon
+                    icon={showRegPassword ? faEyeSlash : faEye}
+                  />
                 </span>
               </div>
               <button type="submit">Register</button>
