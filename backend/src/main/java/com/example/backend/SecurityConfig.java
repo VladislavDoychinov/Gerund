@@ -3,7 +3,6 @@ package com.example.backend;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,14 +22,22 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/pins/**").permitAll()
-                        .requestMatchers("/api/notifications/**").permitAll()
+
+                        .requestMatchers("/api/products").permitAll()
                         .requestMatchers("/api/products/**").permitAll()
+
+                        .requestMatchers("/api/reviews").permitAll()
                         .requestMatchers("/api/reviews/**").permitAll()
+
+                        .requestMatchers("/api/notifications").permitAll()
+                        .requestMatchers("/api/notifications/**").permitAll()
+
+                        .requestMatchers("/api/pins").permitAll()
+                        .requestMatchers("/api/pins/**").permitAll()
 
                         .anyRequest().permitAll()
                 );
