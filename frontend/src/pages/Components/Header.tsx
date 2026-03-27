@@ -199,61 +199,50 @@ export default function Header() {
       )}
 
       <header className="mp-header">
-        <button
-          type="button"
-          className="mp-logo"
-          onClick={() => navigate("/store")}
-          aria-label="Go to marketplace"
-        >
-          <div className="mp-logo-icon">
-            <img
-              src={pulsePointLogo}
-              alt="PulsePoint Logo"
-              className="mp-logo-img"
-            />
-          </div>
-          <span className="mp-logo-text">PulsePoint</span>
-        </button>
-
-        <nav className="mp-nav">
+        <div className="mp-header-left">
           <button
-            className={getButtonClass("/home")}
-            onClick={() => navigate("/home")}
-          >
-            Home
-          </button>
-          <button
-            className={getButtonClass("/map")}
-            onClick={() => navigate("/map")}
-          >
-            Map
-          </button>
-          <button
-            className={getButtonClass("/store")}
+            type="button"
+            className="mp-logo"
             onClick={() => navigate("/store")}
+            aria-label="Go to marketplace"
           >
-            Marketplace
-          </button>
-          <button
-            className={getButtonClass("/addproduct")}
-            onClick={() => navigate("/addproduct")}
-          >
-            Listing
-          </button>
-        </nav>
-
-        {currentUser ? (
-          <div className="mp-user-pill">
-            <div className="mp-avatar">
-              {currentUser.email.charAt(0).toUpperCase()}
+            <div className="mp-logo-icon">
+              <img src={pulsePointLogo} alt="PulsePoint Logo" className="mp-logo-img" />
             </div>
-            <span>{currentUser.email}</span>
-          </div>
-        ) : (
-          <button className="mp-login-btn" onClick={openLoginModal}>
-            Login
+            <span className="mp-logo-text">PulsePoint</span>
           </button>
-        )}
+        </div>
+
+        <div className="mp-header-center">
+          <nav className="mp-nav">
+            <button className={getButtonClass("/home")} onClick={() => navigate("/home")}>Home</button>
+            <button className={getButtonClass("/map")} onClick={() => navigate("/map")}>Map</button>
+            <button className={getButtonClass("/store")} onClick={() => navigate("/store")}>Marketplace</button>
+            <button className={getButtonClass("/addproduct")} onClick={() => navigate("/addproduct")}>Listing</button>
+          </nav>
+        </div>
+
+        <div className="mp-header-right">
+          {currentUser ? (
+            <div className="mp-user-actions">
+              <button
+                type="button"
+                className="mp-account-btn"
+                onClick={() => navigate(`/account/${encodeURIComponent(currentUser.email)}`)}
+              >
+                My Account
+              </button>
+              <div className="mp-user-pill">
+                <div className="mp-avatar">
+                  {currentUser.email.charAt(0).toUpperCase()}
+                </div>
+                <span>{currentUser.email}</span>
+              </div>
+            </div>
+          ) : (
+            <button className="mp-login-btn" onClick={openLoginModal}>Login</button>
+          )}
+        </div>
       </header>
 
       {/* Login Modal */}
