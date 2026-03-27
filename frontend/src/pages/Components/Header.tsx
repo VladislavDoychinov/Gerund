@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import "../Header.css";
-import pulsePointLogo from "../image/pulsepoint.png";
+import cartIcon from "../../image/cart.png";
+import pulsePointLogo from "../../image/pulsepoint.png";
 
 interface CurrentUser {
   userId: number;
@@ -247,6 +248,16 @@ export default function Header() {
         </div>
 
         <div className="mp-header-right">
+          <button
+            type="button"
+            className="mp-cart-btn"
+            onClick={() => navigate("/cart")}
+            aria-label="Go to cart"
+            title="Cart"
+          >
+            <img src={cartIcon} alt="" className="mp-cart-icon" />
+          </button>
+
           {currentUser ? (
             <div className="mp-user-actions">
               <button
