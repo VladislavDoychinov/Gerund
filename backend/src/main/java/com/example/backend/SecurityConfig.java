@@ -21,17 +21,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth -> auth                        
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
+                        
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/uploads/**").permitAll() // Allow image access
-                        .requestMatchers(HttpMethod.GET, "/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/pins/*/favourite").permitAll()
-                        .anyRequest().authenticated()
+                        
+                        .requestMatchers("/api/pins/**").permitAll()
+                    
+                        .requestMatchers("/api/notifications/**").permitAll()
+                        
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/reviews/**").permitAll()
+                        
+                        .anyRequest().permitAll() 
                 );
 
         return http.build();
@@ -40,7 +44,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

@@ -9,7 +9,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.example.backend.repository.PinRepository;
 import com.example.backend.model.Pin;
 
@@ -25,8 +24,8 @@ public class PinController {
     public List<Pin> getAllPins() {
         return repository.findAll();
     }
-
-    @GetMapping("/user/{userId}")
+    
+    @GetMapping("/user/{userId:.+}")
     public List<Pin> getPinsByUser(@PathVariable String userId) {
         return repository.findByUserId(userId);
     }

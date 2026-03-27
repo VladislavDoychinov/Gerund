@@ -276,7 +276,6 @@ export default function MapView({
     if (!draftPin) return;
 
     const data = new FormData();
-    
     const pinData = new Blob([JSON.stringify({ 
       ...draftPin, 
       userId: currentUser, 
@@ -296,20 +295,17 @@ export default function MapView({
       });
 
       if (response.ok) {
-        const savedPin: Pin = await response.json();
-        const updatedAll = [...allPins, savedPin];
-        const updatedMy = [...myPins, savedPin];
-        setAllPins(updatedAll);
-        setMyPins(updatedMy);
-        syncStorage(updatedAll, updatedMy);
+        const savedPin = await response.json();
+        setAllPins((prev) => [...prev, savedPin]);
         setDraftPin(null);
         setSelectedFile(null);
+      } else {
+        console.error("Server responded with error:", response.status);
       }
     } catch (error) {
       console.error("Failed to save pin:", error);
     }
   };
-
   const removePin = async (id: number) => {
     try {
       const response = await fetch(`http://localhost:8080/api/pins/${id}`, {
