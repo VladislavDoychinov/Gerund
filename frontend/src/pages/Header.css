@@ -157,37 +157,6 @@
   gap: 0.5rem;
 }
 
-.mp-cart-btn {
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    background var(--transition),
-    transform var(--transition);
-}
-
-.mp-cart-btn:hover {
-  background: var(--sky-50);
-}
-
-.mp-cart-btn:active {
-  transform: translateY(0.0625rem);
-}
-
-.mp-cart-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  display: block;
-  object-fit: contain;
-}
-
 .mp-account-btn {
   padding: 0.45rem 0.9rem;
   border: 0.094rem solid var(--sky-500);

@@ -36,7 +36,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         withCredentials: true,
       });
       setCurrentUser(result.data);
-    } catch (error) {
+    } catch {
       setCurrentUser(null);
     }
   };
@@ -46,7 +46,6 @@ export default function ProductDetails({ product }: { product: Product }) {
       await axios.delete(`http://localhost:8080/api/products/${product.id}`, {
         withCredentials: true,
       });
-
       navigate("/store");
     } catch (error: any) {
       setMessage(error.response?.data?.message || "Failed to delete product");
@@ -71,22 +70,23 @@ export default function ProductDetails({ product }: { product: Product }) {
 
   const isOwner = currentUser?.email === product.createdByEmail;
 
+  const imageUrl = product.imageUrl.startsWith("http")
+    ? product.imageUrl
+    : `http://localhost:8080${product.imageUrl}`;
+
   return (
     <div className="product-card-container">
       <div className="product-image">
-        <img
-          src={`http://localhost:8080${product.imageUrl}`}
-          alt={product.name}
-        />
+        <img src={imageUrl} alt={product.name} />
       </div>
 
       <div className="product-details">
         <div className="product-header">
           <h1>{product.name}</h1>
-
-          <span className={`checkbox-label ${product.category}`}>
-            {product.category}
-          </span>
+          <label className={`checkbox-label ${product.category.toLowerCase()}`}>
+            <input type="checkbox" checked readOnly />
+            <span>{product.category}</span>
+          </label>
         </div>
 
         <p className="price">${product.price.toFixed(2)}</p>
@@ -101,19 +101,25 @@ export default function ProductDetails({ product }: { product: Product }) {
           Listed by{" "}
           <Link to={`/seller/${encodeURIComponent(product.createdByEmail)}`}>
             {product.createdByEmail}
-           </Link>
+          </Link>
         </p>
 
         {message && <p className="status-message">{message}</p>}
 
         <div className="product-buttons">
           {isOwner ? (
-            <button onClick={handleDelete}>Delete Product</button>
+            <button className="btn-action delete-btn" onClick={handleDelete}>
+              Delete Product
+            </button>
           ) : (
-            <button onClick={handleAcceptOffer}>Accept Offer</button>
+            <button className="btn-action accept-btn" onClick={handleAcceptOffer}>
+              Accept Offer
+            </button>
           )}
 
-          <Link to="/store">Back to Store</Link>
+          <Link className="btn-back" to="/store">
+            Back to Store
+          </Link>
         </div>
       </div>
     </div>

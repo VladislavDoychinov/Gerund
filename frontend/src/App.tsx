@@ -9,6 +9,7 @@ import HomePage from "./pages/Home";
 import CreateProduct from "./pages/CreateProduct";
 import AccountPage from "./pages/Account";
 import SellerProfilePage from "./pages/SellerProfilePage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -23,8 +24,7 @@ function App() {
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/seller/:email" element={<SellerProfilePage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/create-product" element={<CreateProduct />} />
-
+        <Route path="/create-product" element={<CreateProduct />}/>
       </Routes>
     </BrowserRouter>
   );
