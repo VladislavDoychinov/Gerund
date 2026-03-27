@@ -26,7 +26,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-<<<<<<< HEAD
                         .requestMatchers("/api/pins/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/products/create").permitAll()
@@ -37,13 +36,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reviews/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").permitAll()
-=======
                         .requestMatchers("/uploads/**").permitAll() // Allow image access
                         .requestMatchers(HttpMethod.GET, "/api/pins/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pins/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/pins/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/pins/*/favourite").permitAll()
->>>>>>> ebcc8c088b6c4f0d8fb917eabb656245f7e4894c
                         .anyRequest().authenticated()
                 );
 
