@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import "./ProductPage.css";
 import "./Categories.css";
 import Header from "./Components/Header";
@@ -60,11 +59,13 @@ export default function ProductPage() {
       <div className="product-layout">
         <div className="left-column">
           <ProductDetails product={product} />
+          <div className="reviews-section">
+            <Reviews />
+          </div>
         </div>
 
         <div className="right-column">
           <RelatedProducts products={relatedProducts} />
-          <Reviews />
         </div>
       </div>
 

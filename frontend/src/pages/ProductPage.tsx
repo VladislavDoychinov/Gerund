@@ -71,11 +71,13 @@ export default function ProductPage() {
       <div className="product-layout">
         <div className="left-column">
           <ProductDetails product={product} />
+          <div className="reviews-section">
+            <Reviews />
+          </div>
         </div>
 
         <div className="right-column">
           <RelatedProducts products={relatedProducts} />
-          <Reviews />
         </div>
       </div>
 
