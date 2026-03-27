@@ -23,30 +23,26 @@ export default function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="product-grid">
       {products.map((product) => (
-        <Link to={`/product/${product.id}`} key={product.id} className="product-card">
+        <Link
+          to={`/product/${product.id}`}
+          key={product.id}
+          className="product-card"
+        >
           <div className="image-container">
             <img
-              src={`http://localhost:8080${product.imageUrl}`}
+              src={product.imageUrl.startsWith("http") ? product.imageUrl : `http://localhost:8080${product.imageUrl}`}
               alt={product.name}
             />
-
-            <div className="product-overlay">
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h4>{product.name}</h4>
-                  <p>{product.description}</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="product-card-body">
             <div className="product-top">
               <h3>{product.name}</h3>
 
-              <span className={`checkbox-label ${product.category}`}>
-                {product.category}
-              </span>
+              <label className={`checkbox-label ${product.category.toLowerCase()}`}>
+                <input type="checkbox" checked readOnly />
+                <span>{product.category}</span>
+              </label>
             </div>
 
             <div className="product-description">
