@@ -1,8 +1,11 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.OfferAcceptance;
+import com.example.backend.model.Pin;
+import com.example.backend.model.PinCategory;
 import com.example.backend.model.Product;
 import com.example.backend.repository.OfferAcceptanceRepository;
+import com.example.backend.repository.PinRepository;
 import com.example.backend.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,14 +30,17 @@ public class ProductController {
 
     private final ProductRepository productRepository;
     private final OfferAcceptanceRepository offerAcceptanceRepository;
+    private final PinRepository pinRepository;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
     public ProductController(ProductRepository productRepository,
-                             OfferAcceptanceRepository offerAcceptanceRepository) {
+                             OfferAcceptanceRepository offerAcceptanceRepository,
+                             PinRepository pinRepository) {
         this.productRepository = productRepository;
         this.offerAcceptanceRepository = offerAcceptanceRepository;
+        this.pinRepository = pinRepository;
     }
 
     @PostMapping("/{id}/accept")
@@ -94,6 +100,8 @@ public class ProductController {
             @RequestParam String quantityUnit,
             @RequestParam String category,
             @RequestParam("image") MultipartFile image,
+            @RequestParam double latitude,
+            @RequestParam double longitude,
             HttpSession session
     ) {
         Object userIdObj = session.getAttribute("userId");
@@ -148,6 +156,8 @@ public class ProductController {
 
             Files.copy(image.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
+            String imageUrl = "/uploads/" + fileName;
+
             Product product = new Product();
             product.setName(name);
             product.setPrice(price);
@@ -155,11 +165,24 @@ public class ProductController {
             product.setQuantityValue(quantityValue);
             product.setQuantityUnit(quantityUnit);
             product.setCategory(category);
-            product.setImageUrl("/uploads/" + fileName);
+            product.setImageUrl(imageUrl);
+            product.setLatitude(latitude);
+            product.setLongitude(longitude);
             product.setCreatedByUserId(Long.valueOf(userIdObj.toString()));
             product.setCreatedByEmail(userEmailObj.toString());
 
             productRepository.save(product);
+
+            Pin pin = new Pin();
+            pin.setHeadline(name);
+            pin.setDescription(description);
+            pin.setLat(latitude);
+            pin.setLng(longitude);
+            pin.setImageUrl(imageUrl);
+            pin.setUserId(userEmailObj.toString());
+            pin.setCategory(PinCategory.STORE);
+
+            pinRepository.save(pin);
 
             return ResponseEntity.ok(product);
 
@@ -211,5 +234,4 @@ public class ProductController {
 
         return ResponseEntity.ok(Map.of("message", "Product deleted successfully"));
     }
-
 }

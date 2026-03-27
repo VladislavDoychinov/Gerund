@@ -24,6 +24,10 @@ export default function CreateProduct() {
   const [quantityValue, setQuantityValue] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  
+  // New state for coordinates
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [message, setMessage] = useState("");
@@ -70,6 +74,9 @@ export default function CreateProduct() {
     formData.append("quantityUnit", quantityUnit);
     formData.append("category", category);
     formData.append("image", image);
+    // Append coordinates to form data
+    formData.append("latitude", latitude);
+    formData.append("longitude", longitude);
 
     try {
       setLoading(true);
@@ -186,6 +193,40 @@ export default function CreateProduct() {
                 </div>
               </div>
 
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Latitude</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 40.7128"
+                    value={latitude}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^-?\d*\.?\d*$/.test(value)) {
+                        setLatitude(value);
+                      }
+                    }}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Longitude</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. -74.0060"
+                    value={longitude}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^-?\d*\.?\d*$/.test(value)) {
+                        setLongitude(value);
+                      }
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
               <div className="form-group">
                 <label>Description</label>
                 <textarea
@@ -235,6 +276,11 @@ export default function CreateProduct() {
                 {quantityValue
                   ? `Quantity: ${quantityValue} ${quantityUnit}`
                   : "Quantity will appear here"}
+              </p>
+              <p className="preview-location">
+                {latitude && longitude 
+                  ? `Location: ${latitude}, ${longitude}` 
+                  : "Location not set"}
               </p>
               <p className="preview-description">
                 {description || "Your description will appear here."}
