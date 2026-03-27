@@ -37,11 +37,14 @@ export default function HomePage() {
 
       <main className="home-content">
         <section className="home-hero">
-          <p className="home-kicker">...</p>
+          <p className="home-kicker">PulsePoint, Powered by React</p>
           <h1 className="home-title">
             Welcome{currentUser ? `, ${currentUser.email}` : " to PulsePoint"}
           </h1>
-          <p className="home-subtitle">...</p>
+          <p className="home-subtitle">
+            PulsePoint helps you track recent events nearby, spot local issues,
+            and buy or sell goods with people around you.
+          </p>
 
           <div className="home-hero-actions">
             <button
@@ -64,7 +67,10 @@ export default function HomePage() {
         <section className="home-links" aria-label="Website navigation">
           <article className="home-link-card">
             <h2>Map</h2>
-            <p>...</p>
+            <p>
+              View recent events and reported problems in areas near your
+              location in real time.
+            </p>
             <button type="button" onClick={() => navigate("/map")}>
               Go to Map
             </button>
@@ -72,7 +78,10 @@ export default function HomePage() {
 
           <article className="home-link-card">
             <h2>Marketplace</h2>
-            <p>...</p>
+            <p>
+              Buy and sell goods with anyone in the community through the
+              PulsePoint marketplace.
+            </p>
             <button type="button" onClick={() => navigate("/store")}>
               Go to Store
             </button>
@@ -80,7 +89,10 @@ export default function HomePage() {
 
           <article className="home-link-card">
             <h2>Profile</h2>
-            <p>...</p>
+            <p>
+              Manage your account, your activity, and the listings or markers
+              you have posted.
+            </p>
             <button type="button" onClick={() => navigate("/profile")}>
               Go to Profile
             </button>
@@ -97,12 +109,15 @@ export default function HomePage() {
 
         <section className="home-about">
           <h2>About this website</h2>
-          <p>...</p>
+          <p>
+            PulsePoint is a local-first web app that combines community event
+            awareness with a simple person-to-person marketplace.
+          </p>
           <ol>
-            <li>...</li>
-            <li>...</li>
-            <li>...</li>
-            <li>...</li>
+            <li>See recent events happening near your area.</li>
+            <li>Track nearby problems and location-based updates.</li>
+            <li>Buy goods from other users in your community.</li>
+            <li>Sell your own products to anyone on PulsePoint.</li>
           </ol>
         </section>
       </main>
