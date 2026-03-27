@@ -29,7 +29,13 @@ export default function StorePage() {
       <Header />
       <h1 className="store-title">Marketplace</h1>
 
-      {loading ? <p>Loading products...</p> : <ProductGrid products={products} />}
+      <main className="store-products-slot">
+        {loading ? (
+          <p>Loading products...</p>
+        ) : (
+          <ProductGrid products={products} />
+        )}
+      </main>
 
       <Footer />
     </div>
