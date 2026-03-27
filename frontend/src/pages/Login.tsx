@@ -51,6 +51,22 @@ export default function Login() {
 
   return (
     <div className="acc_modal">
+      <button
+        type="button"
+        className="acc-back-home-btn"
+        title="Back to Home"
+        aria-label="Back to Home"
+        onClick={() => navigate("/home")}
+      >
+        <svg
+          className="acc-back-home-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M14.7 5.3a1 1 0 0 1 0 1.4L10.41 11H20a1 1 0 1 1 0 2h-9.59l4.3 4.3a1 1 0 1 1-1.42 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.41 0Z" />
+        </svg>
+      </button>
       <form onSubmit={handleSubmit}>
         <h1>Log in to Your profile</h1>
 
@@ -78,12 +94,6 @@ export default function Login() {
 
       <p>
         Don't have an account? <Link to="/register">Click here to sign up</Link>
-      </p>
-
-      <p>
-        <Link to="/store" className="text-blue-500 underline">
-          Fruits & Vegetables Store
-        </Link>
       </p>
     </div>
   );

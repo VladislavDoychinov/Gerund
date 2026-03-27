@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { api } from "../../api";
 import "../Header.css";
 import pulsePointLogo from "../image/pulsepoint.png";
 
@@ -21,6 +24,22 @@ export default function Header() {
 
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  // Auth modals
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+  // Login form
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
+
+  // Register form
+  const [regUsername, setRegUsername] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [showRegPassword, setShowRegPassword] = useState(false);
+  const [regMessage, setRegMessage] = useState("");
 
   useEffect(() => {
     loadCurrentUser();
@@ -74,6 +93,70 @@ export default function Header() {
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (error) {
       console.error("Failed to dismiss notification", error);
+    }
+  };
+
+  const openLoginModal = () => {
+    setLoginEmail("");
+    setLoginPassword("");
+    setLoginMessage("");
+    setShowRegisterModal(false);
+    setShowLoginModal(true);
+  };
+
+  const openRegisterModal = () => {
+    setRegUsername("");
+    setRegEmail("");
+    setRegPassword("");
+    setRegMessage("");
+    setShowLoginModal(false);
+    setShowRegisterModal(true);
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await api.post(
+        "/api/auth/login",
+        { email: loginEmail, password: loginPassword },
+        { withCredentials: true },
+      );
+      setLoginMessage(response.data.message);
+      setShowLoginModal(false);
+      loadCurrentUser();
+    } catch (error: any) {
+      if (error.response) {
+        setLoginMessage(
+          "Error: " +
+            (typeof error.response.data === "string"
+              ? error.response.data
+              : error.response.data.message || "Login failed"),
+        );
+      } else {
+        setLoginMessage("Error: " + error.message);
+      }
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: regEmail, password: regPassword }),
+      });
+      const text = await response.text();
+      if (response.ok) {
+        setRegMessage("Success: " + text);
+        setRegEmail("");
+        setRegPassword("");
+        setRegUsername("");
+      } else {
+        setRegMessage("Error: " + text);
+      }
+    } catch (err) {
+      setRegMessage("Could not connect to the server.");
     }
   };
 
@@ -167,11 +250,91 @@ export default function Header() {
             <span>{currentUser.email}</span>
           </div>
         ) : (
-          <button className="mp-login-btn" onClick={() => navigate("/login")}>
+          <button className="mp-login-btn" onClick={openLoginModal}>
             Login
           </button>
         )}
       </header>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="auth-modal-overlay" onClick={() => setShowLoginModal(false)}>
+          <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="auth-modal-close" onClick={() => setShowLoginModal(false)} aria-label="Close">✕</button>
+            <h2>Log in to Your Profile</h2>
+            {loginMessage && <p className="auth-modal-message">{loginMessage}</p>}
+            <form onSubmit={handleLogin}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                required
+                autoFocus
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                required
+              />
+              <button type="submit">Login</button>
+            </form>
+            <p>
+              Don't have an account?{" "}
+              <span className="auth-modal-switch" onClick={openRegisterModal}>
+                Sign up
+              </span>
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Register Modal */}
+      {showRegisterModal && (
+        <div className="auth-modal-overlay" onClick={() => setShowRegisterModal(false)}>
+          <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="auth-modal-close" onClick={() => setShowRegisterModal(false)} aria-label="Close">✕</button>
+            <h2>Create an Account</h2>
+            {regMessage && <p className="auth-modal-message">{regMessage}</p>}
+            <form onSubmit={handleRegister}>
+              <input
+                type="text"
+                placeholder="Username (Optional)"
+                value={regUsername}
+                onChange={(e) => setRegUsername(e.target.value)}
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                required
+              />
+              <div className="auth-password-field">
+                <input
+                  type={showRegPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={regPassword}
+                  onChange={(e) => setRegPassword(e.target.value)}
+                  required
+                />
+                <span className="auth-eye" onClick={() => setShowRegPassword(!showRegPassword)}>
+                  <FontAwesomeIcon icon={showRegPassword ? faEyeSlash : faEye} />
+                </span>
+              </div>
+              <button type="submit">Register</button>
+            </form>
+            <p>
+              Already have an account?{" "}
+              <span className="auth-modal-switch" onClick={openLoginModal}>
+                Log in
+              </span>
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
