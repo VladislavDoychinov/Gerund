@@ -71,6 +71,12 @@ export default function ProductDetails({ product }: { product: Product }) {
 
   const isOwner = currentUser?.email === product.createdByEmail;
 
+  const normalizedImageUrl = product.imageUrl
+    ? product.imageUrl.startsWith("http")
+      ? product.imageUrl
+      : `http://localhost:8080${product.imageUrl}`
+    : "/placeholder.png";
+
   return (
     <div className="product-card-container">
       <div className="product-image">

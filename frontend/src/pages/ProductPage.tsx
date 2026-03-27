@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ProductPage.css";
 import "./Categories.css";
@@ -22,33 +22,59 @@ export interface Product {
 }
 
 export default function ProductPage() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     const loadProduct = async () => {
-      try {
-        const productResponse = await axios.get(
-          `http://localhost:8080/api/products/${id}`
-        );
+      if (!id) {
+        setError("Invalid product ID");
+        setLoading(false);
+        return;
+      }
 
+      setLoading(true);
+      setError(null);
+
+      try {
+        const productResponse = await axios.get(`http://localhost:8080/api/products/${id}`);
         const currentProduct = productResponse.data;
+
+        if (!currentProduct) {
+          setError("Product not found");
+          setProduct(null);
+          setRelatedProducts([]);
+          return;
+        }
+
         setProduct(currentProduct);
 
-        const allProductsResponse = await axios.get(
-          "http://localhost:8080/api/products"
-        );
+        const allProductsResponse = await axios.get("http://localhost:8080/api/products");
+        const allProducts = Array.isArray(allProductsResponse.data) ? allProductsResponse.data : [];
 
         setRelatedProducts(
-          allProductsResponse.data.filter((p: Product) => p.id !== currentProduct.id)
+          allProducts
+            .filter((p: Product) => p.id !== currentProduct.id && p.category === currentProduct.category)
+            .slice(0, 6)
         );
-      } catch (error) {
-        console.error("Failed to load product:", error);
-        setProduct(null);
+      } catch (err: any) {
+        console.error("Failed to load product:", err);
+
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+          setError("Product not found");
+          setProduct(null);
+        } else {
+          setError("Error loading product data. Please try again.");
+          setProduct(null);
+        }
+
+        setRelatedProducts([]);
       } finally {
         setLoading(false);
       }
@@ -74,7 +100,7 @@ export default function ProductPage() {
       <div className="product-page">
         <Header />
         <div className="product-page-state">
-          <h2>Product Not Found</h2>
+          <h2>{error || "Product Not Found"}</h2>
           <Link to="/store" className="back-link">Back to Store</Link>
         </div>
         <Footer />
@@ -85,24 +111,25 @@ export default function ProductPage() {
   return (
     <div className="product-page">
       <Header />
-      <div className="product-page-shell">
-        <div className="purchase-page-topbar">
-          <Link to="/store" className="back-link">Back to Store</Link>
-        </div>
-
-        <div className="purchase-layout">
-          <div className="left-pane">
-            <ProductDetails product={product} />
-            <section className="reviews-panel" aria-label="Comments and reviews">
-              <Reviews />
-            </section>
+        <div className="product-page-shell">
+          <div className="purchase-page-topbar">
+            <Link to="/store" className="back-link">Back to Store</Link>
           </div>
 
-          <aside className="right-pane">
-            <RelatedProducts products={relatedProducts} />
-          </aside>
+          <div className="product-layout">
+            <div className="left-column">
+              <ProductDetails product={product} />
+
+              <div className="reviews-section">
+                <Reviews />
+              </div>
+            </div>
+
+            <div className="right-column">
+              <RelatedProducts products={relatedProducts} />
+            </div>
+          </div>
         </div>
-      </div>
       <Footer />
     </div>
   );
