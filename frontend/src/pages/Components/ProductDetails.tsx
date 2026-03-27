@@ -89,7 +89,12 @@ export default function ProductDetails({ product }: { product: Product }) {
         <p className="quantity">Quantity: {product.quantity}</p>
         <p className="price">${product.price.toFixed(2)}</p>
         <p className="description">{product.description}</p>
-        <p className="created-by">Listed by: {product.createdByEmail}</p>
+        <p className="created-by">
+          Listed by:{" "}
+          <Link to={`/account/${encodeURIComponent(product.createdByEmail)}`}>
+            {product.createdByEmail}
+          </Link>
+        </p>
 
         {message && <p className="status-message">{message}</p>}
 

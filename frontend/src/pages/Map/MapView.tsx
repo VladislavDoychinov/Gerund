@@ -61,7 +61,7 @@ function MapClickHandler({
   return null;
 }
 
-function MapHeader({ pinCount }: { pinCount: number }) {
+function MapHeader({ pinCount, myPinCount }: { pinCount: number; myPinCount: number }) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -77,6 +77,7 @@ function MapHeader({ pinCount }: { pinCount: number }) {
   return (
     <div className="mp-map-header">
       <h2 className="mp-map-title">Interactive Map ({pinCount})</h2>
+      <span className="mp-map-badge">My Pins: {myPinCount}</span>
       <span
         className={`mp-map-badge ${isOnline ? "mp-badge-online" : "mp-badge-offline"}`}
       >
@@ -116,7 +117,7 @@ export default function MapView({
         window.dispatchEvent(new Event("storage-update"));
       })
       .catch((err) => console.error("Error loading my pins:", err));
-  }, []);
+  }, [currentUser]);
 
   const handleMapClick = (latlng: LatLng) => {
     setDraftPin({ lat: latlng.lat, lng: latlng.lng });
@@ -201,7 +202,7 @@ export default function MapView({
 
   return (
     <div className="mp-map-wrapper">
-      <MapHeader pinCount={allPins.length} />
+      <MapHeader pinCount={allPins.length} myPinCount={myPins.length} />
       <MapContainer
         center={position || [0, 0]}
         zoom={position ? 13 : 2}

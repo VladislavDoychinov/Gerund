@@ -128,6 +128,29 @@
   color: var(--sky-700);
 }
 
+.mp-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mp-account-btn {
+  padding: 0.45rem 0.9rem;
+  border: 0.094rem solid var(--sky-500);
+  background: var(--white);
+  border-radius: 3.125rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sky-700);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.mp-account-btn:hover {
+  background: var(--sky-50);
+  color: var(--sky-700);
+}
+
 /* Original styles for the buttons */
 .mp-header-buttons {
   display: flex;
