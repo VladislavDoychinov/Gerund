@@ -7,6 +7,7 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import ProductDetails from "./Components/ProductDetails";
 import RelatedProducts from "./Components/RelatedProducts";
+import Reviews from "./Components/Reviews";
 
 export interface Product {
   id: number;
@@ -85,8 +86,22 @@ export default function ProductPage() {
     <div className="product-page">
       <Header />
       <div className="product-page-shell">
-        <ProductDetails product={product} />
-        <RelatedProducts products={relatedProducts} />
+        <div className="purchase-page-topbar">
+          <Link to="/store" className="back-link">Back to Store</Link>
+        </div>
+
+        <div className="purchase-layout">
+          <div className="left-pane">
+            <ProductDetails product={product} />
+            <section className="reviews-panel" aria-label="Comments and reviews">
+              <Reviews />
+            </section>
+          </div>
+
+          <aside className="right-pane">
+            <RelatedProducts products={relatedProducts} />
+          </aside>
+        </div>
       </div>
       <Footer />
     </div>

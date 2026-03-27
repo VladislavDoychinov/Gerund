@@ -1,6 +1,8 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "pins")
@@ -23,8 +25,10 @@ public class Pin {
 
     private String description;
 
-    @Column(nullable = false)
-    private Boolean favourite = false;
+    @ElementCollection
+    @CollectionTable(name = "pin_favourites", joinColumns = @JoinColumn(name = "pin_id"))
+    @Column(name = "username")
+    private Set<String> favouritedBy = new HashSet<>();
 
     @Column(length = 7, nullable = false)
     private String color = "#3B82F6";
@@ -53,8 +57,8 @@ public class Pin {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Boolean getFavourite() { return favourite; }
-    public void setFavourite(Boolean favourite) { this.favourite = favourite; }
+    public Set<String> getFavouritedBy() { return favouritedBy; }
+    public void setFavouritedBy(Set<String> favouritedBy) { this.favouritedBy = favouritedBy; }
 
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }

@@ -64,7 +64,7 @@ type Pin = {
   userId: string;
   headline: string;
   description: string;
-  favourite: boolean;
+  favouritedBy: string[];
   color: string;
   category: PinCategory;
 };
@@ -133,7 +133,6 @@ function MapOverlayControls({
 
   useEffect(() => {
     if (!controlsRef.current) return;
-
     L.DomEvent.disableClickPropagation(controlsRef.current);
     L.DomEvent.disableScrollPropagation(controlsRef.current);
   }, []);
@@ -151,10 +150,7 @@ function MapOverlayControls({
       map.flyTo([mostRecentPin.lat, mostRecentPin.lng], 15);
       return;
     }
-
-    if (position) {
-      map.setView(position, 13);
-    }
+    if (position) map.setView(position, 13);
   };
 
   const handleResetView = () => {
@@ -165,12 +161,10 @@ function MapOverlayControls({
       map.fitBounds(bounds, { padding: [35, 35] });
       return;
     }
-
     if (position) {
       map.setView(position, 13);
       return;
     }
-
     map.setView([20, 0], 2);
   };
 
@@ -185,10 +179,7 @@ function MapOverlayControls({
       <button
         type="button"
         className="mp-map-control-btn"
-        onClick={(e) => {
-          swallowEvent(e);
-          handleGoToMostRecentMark();
-        }}
+        onClick={(e) => { swallowEvent(e); handleGoToMostRecentMark(); }}
         title="Go to most recent mark"
         aria-label="Go to most recent mark"
       >
@@ -197,10 +188,7 @@ function MapOverlayControls({
       <button
         type="button"
         className="mp-map-control-btn"
-        onClick={(e) => {
-          swallowEvent(e);
-          map.zoomIn();
-        }}
+        onClick={(e) => { swallowEvent(e); map.zoomIn(); }}
         title="Zoom in"
         aria-label="Zoom in"
       >
@@ -209,10 +197,7 @@ function MapOverlayControls({
       <button
         type="button"
         className="mp-map-control-btn"
-        onClick={(e) => {
-          swallowEvent(e);
-          map.zoomOut();
-        }}
+        onClick={(e) => { swallowEvent(e); map.zoomOut(); }}
         title="Zoom out"
         aria-label="Zoom out"
       >
@@ -221,10 +206,7 @@ function MapOverlayControls({
       <button
         type="button"
         className="mp-map-control-btn"
-        onClick={(e) => {
-          swallowEvent(e);
-          handleResetView();
-        }}
+        onClick={(e) => { swallowEvent(e); handleResetView(); }}
         title="Reset map view"
         aria-label="Reset map view"
       >
@@ -241,9 +223,7 @@ export default function MapView({
 }) {
   const [allPins, setAllPins] = useState<Pin[]>([]);
   const [myPins, setMyPins] = useState<Pin[]>([]);
-  const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(
-    null,
-  );
+  const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(null);
   const [formData, setFormData] = useState<PinFormData>({
     headline: "",
     description: "",
@@ -253,10 +233,20 @@ export default function MapView({
 
   const currentUser = localStorage.getItem("username") || "Anonymous";
 
+  const syncStorage = (updatedAllPins: Pin[], updatedMyPins: Pin[]) => {
+    localStorage.setItem("mp-all-pins", JSON.stringify(updatedAllPins));
+    localStorage.setItem("mp-saved-pins", JSON.stringify(updatedMyPins));
+    window.dispatchEvent(new Event("storage-update"));
+  };
+
   useEffect(() => {
     fetch("http://localhost:8080/api/pins")
       .then((res) => res.json())
-      .then((data: Pin[]) => setAllPins(data))
+      .then((data: Pin[]) => {
+        setAllPins(data);
+        localStorage.setItem("mp-all-pins", JSON.stringify(data));
+        window.dispatchEvent(new Event("storage-update"));
+      })
       .catch((err) => console.error("Error loading all pins:", err));
 
     fetch(`http://localhost:8080/api/pins/user/${currentUser}`)
@@ -285,22 +275,16 @@ export default function MapView({
       const response = await fetch("http://localhost:8080/api/pins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...draftPin,
-          userId: currentUser,
-          ...formData,
-        }),
+        body: JSON.stringify({ ...draftPin, userId: currentUser, ...formData }),
       });
       if (response.ok) {
         const savedPin: Pin = await response.json();
-        setAllPins((prev) => [...prev, savedPin]);
-        setMyPins((prev) => {
-          const updated = [...prev, savedPin];
-          localStorage.setItem("mp-saved-pins", JSON.stringify(updated));
-          return updated;
-        });
+        const updatedAll = [...allPins, savedPin];
+        const updatedMy = [...myPins, savedPin];
+        setAllPins(updatedAll);
+        setMyPins(updatedMy);
+        syncStorage(updatedAll, updatedMy);
         setDraftPin(null);
-        window.dispatchEvent(new Event("storage-update"));
       }
     } catch (error) {
       console.error("Failed to save pin:", error);
@@ -313,37 +297,33 @@ export default function MapView({
         method: "DELETE",
       });
       if (response.ok) {
-        setAllPins((prev) => prev.filter((p) => p.id !== id));
-        setMyPins((prev) => {
-          const updated = prev.filter((p) => p.id !== id);
-          localStorage.setItem("mp-saved-pins", JSON.stringify(updated));
-          return updated;
-        });
-        window.dispatchEvent(new Event("storage-update"));
+        const updatedAll = allPins.filter((p) => p.id !== id);
+        const updatedMy = myPins.filter((p) => p.id !== id);
+        setAllPins(updatedAll);
+        setMyPins(updatedMy);
+        syncStorage(updatedAll, updatedMy);
       }
     } catch (error) {
       console.error("Failed to delete pin:", error);
     }
   };
 
-  const toggleFavourite = async (id: number) => {
+  const saveFavourite = async (id: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/pins/${id}/favourite`,
+        `http://localhost:8080/api/pins/${id}/favourite?userId=${currentUser}`,
         { method: "PATCH" },
       );
       if (response.ok) {
         const updatedPin: Pin = await response.json();
-        setAllPins((prev) => prev.map((p) => (p.id === id ? updatedPin : p)));
-        setMyPins((prev) => {
-          const updated = prev.map((p) => (p.id === id ? updatedPin : p));
-          localStorage.setItem("mp-saved-pins", JSON.stringify(updated));
-          return updated;
-        });
-        window.dispatchEvent(new Event("storage-update"));
+        const updatedAll = allPins.map((p) => (p.id === id ? updatedPin : p));
+        const updatedMy = myPins.map((p) => (p.id === id ? updatedPin : p));
+        setAllPins(updatedAll);
+        setMyPins(updatedMy);
+        syncStorage(updatedAll, updatedMy);
       }
     } catch (error) {
-      console.error("Failed to toggle favourite:", error);
+      console.error("Failed to save favourite:", error);
     }
   };
 
@@ -440,6 +420,7 @@ export default function MapView({
 
         {allPins.map((pin) => {
           const isOwner = pin.userId === currentUser;
+          const isFavourited = pin.favouritedBy?.includes(currentUser);
           return (
             <Marker
               key={pin.id}
@@ -448,34 +429,24 @@ export default function MapView({
             >
               <Popup>
                 <div className="mp-pin-popup">
-                  <h4 className="mp-pin-popup-title">
-                    {pin.headline || "Untitled Pin"}
-                  </h4>
-                  {!isOwner && (
-                    <p className="mp-pin-popup-owner">
-                      📌 Added by {pin.userId}
-                    </p>
-                  )}
+                  <h4 className="mp-pin-popup-title">{pin.headline || "Untitled Pin"}</h4>
                   {pin.description && (
                     <p className="mp-pin-popup-desc">{pin.description}</p>
                   )}
-
                   <div className="mp-pin-popup-actions">
+                    <button
+                      className={`mp-fav-btn ${isFavourited ? "mp-fav-btn--active" : ""}`}
+                      onClick={() => saveFavourite(pin.id)}
+                    >
+                      {isFavourited ? "★ Unfavourite" : "☆ Save as Favourite"}
+                    </button>
                     {isOwner && (
-                      <>
-                        <button
-                          className={`mp-fav-btn ${pin.favourite ? "mp-fav-btn--active" : ""}`}
-                          onClick={() => toggleFavourite(pin.id)}
-                        >
-                          {pin.favourite ? "★ Favourited" : "☆ Favourite"}
-                        </button>
-                        <button
-                          onClick={() => removePin(pin.id)}
-                          className="mp-remove-link"
-                        >
-                          Remove
-                        </button>
-                      </>
+                      <button
+                        onClick={() => removePin(pin.id)}
+                        className="mp-remove-link"
+                      >
+                        Remove
+                      </button>
                     )}
                   </div>
                 </div>
