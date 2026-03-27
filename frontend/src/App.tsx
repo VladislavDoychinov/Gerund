@@ -21,7 +21,7 @@ function App() {
         <Route path="/store" element={<StorePage />} />
         <Route path="/marketplace" element={<Navigate to="/store" replace />} />
         <Route path="/product/:id" element={<ProductPage />} />
-        <Route path="/account/:email" element={<AccountPage />} />
+        <Route path="/seller/:email" element={<SellerProfilePage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-product" element={<CreateProduct />} />
 

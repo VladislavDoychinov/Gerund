@@ -4,8 +4,10 @@ import com.example.backend.exception.UserNotFoundException;
 //import com.asp5640.fullstack_backend.model.User;
 //import com.asp5640.fullstack_backend.repository.UserRepository;
 import com.example.backend.model.User;
+import com.example.backend.repository.ProductRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +15,13 @@ import java.util.List;
 @RestController
 @CrossOrigin("http://localhost:3000")
 public class UserController {
-
+    private final ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+
+    public UserController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @PostMapping("/user")
     User newUser(@RequestBody User newUser) {
@@ -52,4 +58,5 @@ public class UserController {
         userRepository.deleteById(id);
         return  "User with id "+id+" has been deleted success.";
     }
+
 }

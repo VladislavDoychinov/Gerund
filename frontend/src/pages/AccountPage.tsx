@@ -5,13 +5,6 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import "./AccountPage.css";
 
-interface UserRecord {
-  id: number;
-  username?: string | null;
-  name?: string | null;
-  email: string;
-}
-
 interface CurrentUser {
   userId: number;
   email: string;
@@ -35,13 +28,11 @@ const DEFAULT_DESCRIPTION = "This user has not added a profile description yet."
 export default function AccountPage() {
   const { email } = useParams<{ email: string }>();
 
-  const accountKey = useMemo(
-    () => decodeURIComponent(email ?? "").trim().toLowerCase(),
-    [email]
-  );
+  const sellerEmail = useMemo(() => {
+    return decodeURIComponent(email ?? "").trim();
+  }, [email]);
 
   const [loading, setLoading] = useState(true);
-  const [accountUser, setAccountUser] = useState<UserRecord | null>(null);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [products, setProducts] = useState<ProductRecord[]>([]);
   const [description, setDescription] = useState(DEFAULT_DESCRIPTION);
@@ -50,82 +41,61 @@ export default function AccountPage() {
 
   useEffect(() => {
     const loadData = async () => {
+      if (!sellerEmail) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+
       try {
-        const [usersResponse, productsResponse, meResponse] = await Promise.all([
-          api.get("/users"),
-          api.get("/api/products"),
-          api.get("/api/auth/me", { withCredentials: true }).catch(() => ({ data: null })),
+        const [productsResponse, meResponse] = await Promise.all([
+          api.get(`/api/products/seller/${encodeURIComponent(sellerEmail)}`),
+          api
+            .get("/api/auth/me", { withCredentials: true })
+            .catch(() => ({ data: null })),
         ]);
 
-        const users: UserRecord[] = Array.isArray(usersResponse.data) ? usersResponse.data : [];
-        const allProducts: ProductRecord[] = Array.isArray(productsResponse.data)
+        const sellerProducts: ProductRecord[] = Array.isArray(productsResponse.data)
           ? productsResponse.data
           : [];
 
-        const foundUser =
-          users.find((user) => {
-            const username = (user.username ?? "").toLowerCase();
-            const name = (user.name ?? "").toLowerCase();
-            const userEmail = (user.email ?? "").toLowerCase();
-
-            return (
-              username === accountKey ||
-              name === accountKey ||
-              userEmail === accountKey
-            );
-          }) ?? null;
-
-        setAccountUser(foundUser);
+        setProducts(sellerProducts);
         setCurrentUser(meResponse.data as CurrentUser | null);
 
-        if (foundUser) {
-          const userProducts = allProducts.filter((product) => {
-            if (typeof product.createdByUserId === "number") {
-              return product.createdByUserId === foundUser.id;
-            }
-            return (
-              (product.createdByEmail ?? "").toLowerCase() ===
-              foundUser.email.toLowerCase()
-            );
-          });
+        const descriptionStorageKey = `account-description:${sellerEmail.toLowerCase()}`;
+        const savedDescription =
+          localStorage.getItem(descriptionStorageKey) || DEFAULT_DESCRIPTION;
 
-          setProducts(userProducts);
-
-          const descriptionStorageKey = `account-description:${foundUser.email.toLowerCase()}`;
-          const savedDescription =
-            localStorage.getItem(descriptionStorageKey) || DEFAULT_DESCRIPTION;
-
-          setDescription(savedDescription);
-          setDescriptionDraft(savedDescription);
-        } else {
-          setProducts([]);
-          setDescription(DEFAULT_DESCRIPTION);
-          setDescriptionDraft(DEFAULT_DESCRIPTION);
-        }
+        setDescription(savedDescription);
+        setDescriptionDraft(savedDescription);
       } catch (error) {
-        console.error("Failed to load account page:", error);
-        setAccountUser(null);
-        setCurrentUser(null);
+        console.error("Failed to load seller page:", error);
         setProducts([]);
+        setCurrentUser(null);
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, [accountKey]);
+  }, [sellerEmail]);
 
-  const isOwnAccount = !!(
-    accountUser &&
-    currentUser &&
-    accountUser.email.toLowerCase() === currentUser.email.toLowerCase()
-  );
+  const isOwnAccount =
+    !!currentUser &&
+    !!sellerEmail &&
+    currentUser.email.toLowerCase() === sellerEmail.toLowerCase();
+
+  const displayName = useMemo(() => {
+    if (!sellerEmail) return "Unknown Seller";
+    const localPart = sellerEmail.split("@")[0];
+    return localPart || sellerEmail;
+  }, [sellerEmail]);
 
   const saveDescription = () => {
-    if (!accountUser) return;
+    if (!sellerEmail) return;
 
     const nextDescription = descriptionDraft.trim() || DEFAULT_DESCRIPTION;
-    const descriptionStorageKey = `account-description:${accountUser.email.toLowerCase()}`;
+    const descriptionStorageKey = `account-description:${sellerEmail.toLowerCase()}`;
 
     localStorage.setItem(descriptionStorageKey, nextDescription);
     setDescription(nextDescription);
@@ -140,41 +110,39 @@ export default function AccountPage() {
       <main className="account-main">
         {loading && <p className="account-loading">Loading account...</p>}
 
-        {!loading && !accountUser && (
+        {!loading && !sellerEmail && (
           <section className="account-card">
             <h1>Account not found</h1>
-            <p className="account-subtitle">No user matched: {email}</p>
+            <p className="account-subtitle">Missing seller email.</p>
             <Link to="/store" className="account-back-link">
               Back to marketplace
             </Link>
           </section>
         )}
 
-        {!loading && accountUser && (
+        {!loading && sellerEmail && (
           <>
             <section className="account-card">
               <div className="account-header-row">
                 <div>
-                  <h1>{accountUser.username || accountUser.name || accountUser.email}</h1>
-                  <p className="account-subtitle">User account</p>
+                  <h1>{displayName}</h1>
+                  <p className="account-subtitle">Seller account</p>
                 </div>
 
                 <div className="account-avatar" aria-hidden="true">
-                  {(accountUser.username || accountUser.email).charAt(0).toUpperCase()}
+                  {displayName.charAt(0).toUpperCase()}
                 </div>
               </div>
 
               <div className="account-info-grid">
                 <div className="account-info-item">
                   <span className="account-info-label">Display Name</span>
-                  <span className="account-info-value">
-                    {accountUser.username || accountUser.name || "Not set"}
-                  </span>
+                  <span className="account-info-value">{displayName}</span>
                 </div>
 
                 <div className="account-info-item">
                   <span className="account-info-label">Contact Info</span>
-                  <span className="account-info-value">{accountUser.email}</span>
+                  <span className="account-info-value">{sellerEmail}</span>
                 </div>
               </div>
 
@@ -229,7 +197,7 @@ export default function AccountPage() {
             </section>
 
             <section className="account-card">
-              <h2>Products by this user</h2>
+              <h2>Products by this seller</h2>
 
               {products.length === 0 ? (
                 <p className="account-subtitle">No products listed yet.</p>
@@ -250,8 +218,12 @@ export default function AccountPage() {
                       <div className="account-product-body">
                         <h3>{product.name}</h3>
                         <p className="account-product-category">{product.category}</p>
-                        <p className="account-product-price">${product.price.toFixed(2)}</p>
-                        <p className="account-product-description">{product.description}</p>
+                        <p className="account-product-price">
+                          ${product.price.toFixed(2)}
+                        </p>
+                        <p className="account-product-description">
+                          {product.description}
+                        </p>
                         <p className="account-product-description">
                           Quantity: {product.quantityValue} {product.quantityUnit}
                         </p>

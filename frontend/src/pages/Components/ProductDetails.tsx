@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../ProductPage.css";
 import "../Categories.css";
@@ -25,7 +25,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [message, setMessage] = useState("");
-  
+
   useEffect(() => {
     loadCurrentUser();
   }, []);
@@ -99,9 +99,9 @@ export default function ProductDetails({ product }: { product: Product }) {
 
         <p className="created-by">
           Listed by{" "}
-          <Link to={`/account/${encodeURIComponent(product.createdByEmail)}`}>
+          <Link to={`/seller/${encodeURIComponent(product.createdByEmail)}`}>
             {product.createdByEmail}
-          </Link>
+           </Link>
         </p>
 
         {message && <p className="status-message">{message}</p>}
@@ -110,7 +110,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           {isOwner ? (
             <button onClick={handleDelete}>Delete Product</button>
           ) : (
-            <button onClick={handleAcceptOffer}>Add to cart</button>
+            <button onClick={handleAcceptOffer}>Accept Offer</button>
           )}
 
           <Link to="/store">Back to Store</Link>
