@@ -1,9 +1,14 @@
+// ProductGrid.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "../StorePage.css";
 import "../Categories.css";
 
-export interface Product {
+export interface ProductGridProps {
+  products: ProductRecord[]; // change here
+}
+
+export interface ProductRecord {
   id: number;
   name: string;
   price: number;
@@ -13,10 +18,6 @@ export interface Product {
   quantityUnit: string;
   category: string;
   createdByEmail: string;
-}
-
-interface ProductGridProps {
-  products: Product[];
 }
 
 export default function ProductGrid({ products }: ProductGridProps) {
@@ -30,7 +31,11 @@ export default function ProductGrid({ products }: ProductGridProps) {
         >
           <div className="image-container">
             <img
-              src={product.imageUrl.startsWith("http") ? product.imageUrl : `http://localhost:8080${product.imageUrl}`}
+              src={
+                product.imageUrl.startsWith("http")
+                  ? product.imageUrl
+                  : `http://localhost:8080${product.imageUrl}`
+              }
               alt={product.name}
             />
           </div>
