@@ -112,6 +112,8 @@
 
 .product-grid {
   display: grid;
+  max-width: 30rem;
+  margin: 0 auto; /* 👈 */
   grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
   gap: 1.5rem;
 }
