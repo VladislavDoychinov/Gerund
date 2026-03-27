@@ -8,9 +8,14 @@
   color: #166534;
 }
 
-.checkbox-label.weapon {
-  background-color: #6e1313;
-  color: #991b1b;
+.checkbox-label.drinks {
+  background-color: #38bdf8;
+  color: #075985;
+}
+
+.checkbox-label.bakery {
+  background-color: #f59e0b;
+  color: #78350f;
 }
 
 .checkbox-label.meat {
@@ -21,6 +26,11 @@
 .checkbox-label.dairy {
   background-color: #bac0c5;
   color: #0369a1;
+}
+
+.checkbox-label.other {
+  background-color: #9ca3af;
+  color: #111827;
 }
 
 .checkbox-label:hover {
