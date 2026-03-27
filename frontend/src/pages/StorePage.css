@@ -209,6 +209,21 @@
   color: #111827;
 }
 
+.product-description {
+  margin: 8px 0;
+}
+
+.product-description p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #4b5563;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
 .product-bottom {
   display: flex;
   justify-content: space-between;

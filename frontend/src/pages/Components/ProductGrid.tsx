@@ -31,7 +31,12 @@ export default function ProductGrid({ products }: ProductGridProps) {
             />
 
             <div className="product-overlay">
-              <p>{product.description}</p>
+              <div className="product-overlay">
+                <div className="overlay-content">
+                  <h4>{product.name}</h4>
+                  <p>{product.description}</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -42,6 +47,10 @@ export default function ProductGrid({ products }: ProductGridProps) {
               <span className={`checkbox-label ${product.category}`}>
                 {product.category}
               </span>
+            </div>
+
+            <div className="product-description">
+              <p>{product.description}</p>
             </div>
 
             <div className="product-bottom">
