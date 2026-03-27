@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import { LatLngExpression, LatLng } from "leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -64,12 +71,33 @@ function RecenterMap({ position }: { position: LatLngExpression }) {
   return null;
 }
 
+<<<<<<< HEAD
 function MapClickHandler({ onMapClick }: { onMapClick: (pos: LatLng) => void }) {
   useMapEvents({ click(e) { onMapClick(e.latlng); } });
+=======
+function InvalidateSize() {
+  const map = useMap();
+  useEffect(() => {
+    map.invalidateSize();
+  }, [map]);
   return null;
 }
 
-function MapHeader({ pinCount }: { pinCount: number }) {
+function MapClickHandler({
+  onMapClick,
+}: {
+  onMapClick: (pos: LatLng) => void;
+}) {
+  useMapEvents({
+    click(e) {
+      onMapClick(e.latlng);
+    },
+  });
+>>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
+  return null;
+}
+
+function MapHeader({ pinCount, myPinCount }: { pinCount: number; myPinCount: number }) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   useEffect(() => {
     const handle = () => setIsOnline(navigator.onLine);
@@ -80,16 +108,24 @@ function MapHeader({ pinCount }: { pinCount: number }) {
   return (
     <div className="mp-map-header">
       <h2 className="mp-map-title">Interactive Map ({pinCount})</h2>
-      <span className={`mp-map-badge ${isOnline ? "mp-badge-online" : "mp-badge-offline"}`}>
+      <span className="mp-map-badge">My Pins: {myPinCount}</span>
+      <span
+        className={`mp-map-badge ${isOnline ? "mp-badge-online" : "mp-badge-offline"}`}
+      >
         {isOnline ? "Online" : "Offline"}
       </span>
     </div>
   );
 }
 
-export default function MapView({ position }: { position: LatLngExpression | null }) {
+export default function MapView({
+  position,
+}: {
+  position: LatLngExpression | null;
+}) {
   const [allPins, setAllPins] = useState<Pin[]>([]);
   const [myPins, setMyPins] = useState<Pin[]>([]);
+<<<<<<< HEAD
   const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(null);
   const [formData, setFormData] = useState({
     headline: "",
@@ -97,6 +133,12 @@ export default function MapView({ position }: { position: LatLngExpression | nul
     color: PRESET_COLORS[0],
     category: "OTHER" as PinCategory,
   });
+=======
+  const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(
+    null,
+  );
+  const [formData, setFormData] = useState({ headline: "", description: "" });
+>>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
 
   const currentUser = localStorage.getItem("username") || "Anonymous";
 
@@ -114,7 +156,7 @@ export default function MapView({ position }: { position: LatLngExpression | nul
         window.dispatchEvent(new Event("storage-update"));
       })
       .catch((err) => console.error("Error loading my pins:", err));
-  }, []);
+  }, [currentUser]);
 
   const handleMapClick = (latlng: LatLng) => {
     setDraftPin({ lat: latlng.lat, lng: latlng.lng });
@@ -172,7 +214,16 @@ export default function MapView({ position }: { position: LatLngExpression | nul
 
   const toggleFavourite = async (id: number) => {
     try {
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:8080/api/pins/${id}/favourite`, { method: "PATCH" });
+=======
+      const response = await fetch(
+        `http://localhost:8080/api/pins/${id}/favourite`,
+        {
+          method: "PATCH",
+        },
+      );
+>>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
       if (response.ok) {
         const updatedPin: Pin = await response.json();
         setAllPins((prev) => prev.map((p) => (p.id === id ? updatedPin : p)));
@@ -190,9 +241,19 @@ export default function MapView({ position }: { position: LatLngExpression | nul
 
   return (
     <div className="mp-map-wrapper">
+<<<<<<< HEAD
       <MapHeader pinCount={allPins.length} />
       <MapContainer center={position || [0, 0]} zoom={position ? 13 : 2} className="mp-map">
+=======
+      <MapHeader pinCount={allPins.length} myPinCount={myPins.length} />
+      <MapContainer
+        center={position || [0, 0]}
+        zoom={position ? 13 : 2}
+        className="mp-map"
+      >
+>>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <InvalidateSize />
 
         {position && (
           <>
@@ -212,13 +273,17 @@ export default function MapView({ position }: { position: LatLngExpression | nul
                   className="mp-input"
                   placeholder="Headline"
                   value={formData.headline}
-                  onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, headline: e.target.value })
+                  }
                 />
                 <textarea
                   className="mp-input"
                   placeholder="Description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                 />
 
                 {/* Category */}
@@ -257,8 +322,15 @@ export default function MapView({ position }: { position: LatLngExpression | nul
                 </div>
 
                 <div style={{ display: "flex", gap: "5px" }}>
-                  <button className="mp-save-btn" onClick={savePin}>Save</button>
-                  <button className="mp-cancel-btn" onClick={() => setDraftPin(null)}>Cancel</button>
+                  <button className="mp-save-btn" onClick={savePin}>
+                    Save
+                  </button>
+                  <button
+                    className="mp-cancel-btn"
+                    onClick={() => setDraftPin(null)}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </Popup>
@@ -271,22 +343,53 @@ export default function MapView({ position }: { position: LatLngExpression | nul
             <Marker key={pin.id} position={[pin.lat, pin.lng]} icon={createColoredIcon(pin.color || "#3B82F6")}>
               <Popup>
                 <div className="mp-pin-popup">
+<<<<<<< HEAD
                   <div className="mp-pin-popup-category">
                     {(pin.category ?? "OTHER").charAt(0) + (pin.category ?? "OTHER").slice(1).toLowerCase()}
                   </div>
                   <h4 className="mp-pin-popup-title">{pin.headline || "Untitled Pin"}</h4>
                   {!isOwner && <p className="mp-pin-popup-owner">📌 Added by {pin.userId}</p>}
                   {pin.description && <p className="mp-pin-popup-desc">{pin.description}</p>}
+=======
+                  <h4 className="mp-pin-popup-title">
+                    {pin.headline || "Untitled Pin"}
+                  </h4>
+                  {!isOwner && (
+                    <p className="mp-pin-popup-owner">
+                      📌 Added by {pin.userId}
+                    </p>
+                  )}
+                  {pin.description && (
+                    <p className="mp-pin-popup-desc">{pin.description}</p>
+                  )}
+>>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
                   <div className="mp-pin-popup-actions">
                     {isOwner && (
                       <>
                         <button
                           className={`mp-fav-btn ${pin.favourite ? "mp-fav-btn--active" : ""}`}
                           onClick={() => toggleFavourite(pin.id)}
+<<<<<<< HEAD
                         >
                           {pin.favourite ? "★ Favourited" : "☆ Favourite"}
                         </button>
                         <button onClick={() => removePin(pin.id)} className="mp-remove-link">Remove</button>
+=======
+                          title={
+                            pin.favourite
+                              ? "Remove from favourites"
+                              : "Add to favourites"
+                          }
+                        >
+                          {pin.favourite ? "★ Favourited" : "☆ Favourite"}
+                        </button>
+                        <button
+                          onClick={() => removePin(pin.id)}
+                          className="mp-remove-link"
+                        >
+                          Remove
+                        </button>
+>>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
                       </>
                     )}
                   </div>

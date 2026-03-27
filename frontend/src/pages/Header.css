@@ -128,6 +128,29 @@
   color: var(--sky-700);
 }
 
+.mp-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mp-account-btn {
+  padding: 0.45rem 0.9rem;
+  border: 0.094rem solid var(--sky-500);
+  background: var(--white);
+  border-radius: 3.125rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sky-700);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.mp-account-btn:hover {
+  background: var(--sky-50);
+  color: var(--sky-700);
+}
+
 /* Original styles for the buttons */
 .mp-header-buttons {
   display: flex;
@@ -194,4 +217,195 @@
 
 .mp-login-btn:hover {
   background: var(--sky-600);
+}
+
+/* Auth buttons group */
+.mp-auth-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.mp-register-btn {
+  padding: 0.5rem 1.25rem;
+  border: 0.094rem solid var(--sky-500);
+  background: transparent;
+  border-radius: 3.125rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--sky-600);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.mp-register-btn:hover {
+  background: var(--sky-50);
+  color: var(--sky-700);
+}
+
+/* Auth modals */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: authFadeIn 0.2s ease;
+}
+
+@keyframes authFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.auth-modal {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  width: min(28rem, 92vw);
+  box-shadow: 0 0.625rem 2.5rem rgba(34, 197, 94, 0.35);
+  position: relative;
+  animation: authSlideUp 0.25s ease-out;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes authSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-modal h2 {
+  margin: 0 0 1.75rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  color: #1f2937;
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #6b7280;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.auth-modal-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.auth-modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-modal input {
+  display: block;
+  width: 100%;
+  background-color: white;
+  margin-bottom: 1rem;
+  padding: 0.625rem;
+  border: 0.125rem solid darkgray;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.auth-modal input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 0.0625rem #22c55e;
+}
+
+.auth-modal input::placeholder {
+  opacity: 0.6;
+}
+
+.auth-modal button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.auth-modal button[type="submit"]:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(34, 197, 94, 0.4);
+}
+
+.auth-modal p {
+  margin-top: 1.25rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.auth-modal-switch {
+  color: cornflowerblue;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.auth-modal-switch:hover {
+  text-decoration: underline;
+}
+
+.auth-modal-message {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: #ef4444;
+}
+
+.auth-password-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.auth-password-field input {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.auth-eye {
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1rem;
+  color: #6b7280;
+  transition: opacity 0.2s ease;
+}
+
+.auth-eye:hover {
+  opacity: 0.7;
 }

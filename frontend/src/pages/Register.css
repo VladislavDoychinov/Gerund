@@ -28,6 +28,52 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.acc_modal button.acc-back-home-btn {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  background: #22c55e;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.25rem;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.acc-back-home-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: currentColor;
+  display: block;
+}
+
+.acc_modal button.acc-back-home-btn:hover {
+  color: #ffffff;
+  background: #16a34a;
+  box-shadow: none;
+  transform: none;
+}
+
+.acc_modal button.acc-back-home-btn:focus,
+.acc_modal button.acc-back-home-btn:focus-visible,
+.acc_modal button.acc-back-home-btn:active {
+  outline: none;
+  border: none;
+  background: #22c55e;
+  box-shadow: none;
+}
+
 @media (max-width: 600px) {
   .acc_modal {
     width: min(17.5rem, 88vw);
