@@ -19,8 +19,15 @@ export default function RelatedProducts({ products }: { products: any[] }) {
           return (
             <Link key={p.id} to={`/product/${p.id}`} className="related-card">
               <img src={relatedImg} alt={p.name || "related product"} />
-              <h3>{p.name || "Unnamed Product"}</h3>
-              <p className="price">${price.toFixed(2)}</p>
+
+              <div className="related-content">
+                <h3>{p.name || "Unnamed Product"}</h3>
+                <p className="price">${price.toFixed(2)}</p>
+
+                <p className="description-hover">
+                  {p.description || "No description available"}
+                </p>
+              </div>
             </Link>
           );
         })}
