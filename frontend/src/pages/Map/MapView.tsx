@@ -63,6 +63,13 @@ type Pin = {
   category: PinCategory;
 };
 
+type PinFormData = {
+  headline: string;
+  description: string;
+  color: string;
+  category: PinCategory;
+};
+
 function RecenterMap({ position }: { position: LatLngExpression }) {
   const map = useMap();
   useEffect(() => {
@@ -71,10 +78,6 @@ function RecenterMap({ position }: { position: LatLngExpression }) {
   return null;
 }
 
-<<<<<<< HEAD
-function MapClickHandler({ onMapClick }: { onMapClick: (pos: LatLng) => void }) {
-  useMapEvents({ click(e) { onMapClick(e.latlng); } });
-=======
 function InvalidateSize() {
   const map = useMap();
   useEffect(() => {
@@ -93,7 +96,6 @@ function MapClickHandler({
       onMapClick(e.latlng);
     },
   });
->>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
   return null;
 }
 
@@ -125,20 +127,15 @@ export default function MapView({
 }) {
   const [allPins, setAllPins] = useState<Pin[]>([]);
   const [myPins, setMyPins] = useState<Pin[]>([]);
-<<<<<<< HEAD
-  const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(null);
-  const [formData, setFormData] = useState({
-    headline: "",
-    description: "",
-    color: PRESET_COLORS[0],
-    category: "OTHER" as PinCategory,
-  });
-=======
   const [draftPin, setDraftPin] = useState<{ lat: number; lng: number } | null>(
     null,
   );
-  const [formData, setFormData] = useState({ headline: "", description: "" });
->>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
+  const [formData, setFormData] = useState<PinFormData>({
+    headline: "",
+    description: "",
+    color: PRESET_COLORS[0],
+    category: "OTHER",
+  });
 
   const currentUser = localStorage.getItem("username") || "Anonymous";
 
@@ -214,16 +211,12 @@ export default function MapView({
 
   const toggleFavourite = async (id: number) => {
     try {
-<<<<<<< HEAD
-      const response = await fetch(`http://localhost:8080/api/pins/${id}/favourite`, { method: "PATCH" });
-=======
       const response = await fetch(
         `http://localhost:8080/api/pins/${id}/favourite`,
         {
           method: "PATCH",
         },
       );
->>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
       if (response.ok) {
         const updatedPin: Pin = await response.json();
         setAllPins((prev) => prev.map((p) => (p.id === id ? updatedPin : p)));
@@ -241,17 +234,12 @@ export default function MapView({
 
   return (
     <div className="mp-map-wrapper">
-<<<<<<< HEAD
-      <MapHeader pinCount={allPins.length} />
-      <MapContainer center={position || [0, 0]} zoom={position ? 13 : 2} className="mp-map">
-=======
       <MapHeader pinCount={allPins.length} myPinCount={myPins.length} />
       <MapContainer
         center={position || [0, 0]}
         zoom={position ? 13 : 2}
         className="mp-map"
       >
->>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <InvalidateSize />
 
@@ -343,14 +331,6 @@ export default function MapView({
             <Marker key={pin.id} position={[pin.lat, pin.lng]} icon={createColoredIcon(pin.color || "#3B82F6")}>
               <Popup>
                 <div className="mp-pin-popup">
-<<<<<<< HEAD
-                  <div className="mp-pin-popup-category">
-                    {(pin.category ?? "OTHER").charAt(0) + (pin.category ?? "OTHER").slice(1).toLowerCase()}
-                  </div>
-                  <h4 className="mp-pin-popup-title">{pin.headline || "Untitled Pin"}</h4>
-                  {!isOwner && <p className="mp-pin-popup-owner">📌 Added by {pin.userId}</p>}
-                  {pin.description && <p className="mp-pin-popup-desc">{pin.description}</p>}
-=======
                   <h4 className="mp-pin-popup-title">
                     {pin.headline || "Untitled Pin"}
                   </h4>
@@ -362,19 +342,12 @@ export default function MapView({
                   {pin.description && (
                     <p className="mp-pin-popup-desc">{pin.description}</p>
                   )}
->>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
                   <div className="mp-pin-popup-actions">
                     {isOwner && (
                       <>
                         <button
                           className={`mp-fav-btn ${pin.favourite ? "mp-fav-btn--active" : ""}`}
                           onClick={() => toggleFavourite(pin.id)}
-<<<<<<< HEAD
-                        >
-                          {pin.favourite ? "★ Favourited" : "☆ Favourite"}
-                        </button>
-                        <button onClick={() => removePin(pin.id)} className="mp-remove-link">Remove</button>
-=======
                           title={
                             pin.favourite
                               ? "Remove from favourites"
@@ -389,7 +362,6 @@ export default function MapView({
                         >
                           Remove
                         </button>
->>>>>>> 95214c1c4dafdf01ea979ac01ebdc139e3631c4e
                       </>
                     )}
                   </div>
