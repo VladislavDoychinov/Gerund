@@ -146,12 +146,14 @@ export default function Header() {
         </nav>
 
         {currentUser ? (
+          <button className="mp-profile-btn" onClick={()=>navigate("/profile")}>
           <div className="mp-user-pill">
             <div className="mp-avatar">
               {currentUser.email.charAt(0).toUpperCase()}
             </div>
             <span>{currentUser.email}</span>
           </div>
+          </button>
         ) : (
           <button className="mp-login-btn" onClick={() => navigate("/login")}>
             Login

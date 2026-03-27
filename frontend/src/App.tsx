@@ -5,7 +5,6 @@ import Map from "./pages/Map/Map";
 import StorePage from "./pages/StorePage";
 import ProductPage from "./pages/ProductPage";
 import Profile from "./pages/Profile";
-import AddProduct from "./pages/AddProduct";
 import HomePage from "./pages/Home";
 import CreateProduct from "./pages/CreateProduct";
 
@@ -22,7 +21,6 @@ function App() {
         <Route path="/marketplace" element={<Navigate to="/store" replace />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/addproduct" element={<AddProduct />} />
         <Route path="/create-product" element={<CreateProduct />} />
       </Routes>
     </BrowserRouter>

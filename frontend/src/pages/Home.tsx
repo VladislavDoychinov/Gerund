@@ -89,7 +89,7 @@ export default function HomePage() {
           <article className="home-link-card">
             <h2>Add Product</h2>
             <p>Create a new listing so others can discover what you offer.</p>
-            <button type="button" onClick={() => navigate("/addproduct")}>
+            <button type="button" onClick={() => navigate("/create-product")}>
               Create Listing
             </button>
           </article>

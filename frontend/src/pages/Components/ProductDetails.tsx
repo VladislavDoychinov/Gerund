@@ -4,13 +4,14 @@ import axios from "axios";
 import "../ProductPage.css";
 import "../Categories.css";
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   price: number;
   imageUrl: string;
   description: string;
-  quantity: number;
+  quantityValue: number;
+  quantityUnit: string;
   category: string;
   createdByEmail: string;
 }
@@ -86,7 +87,9 @@ export default function ProductDetails({ product }: { product: Product }) {
           {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
         </span>
 
-        <p className="quantity">Quantity: {product.quantity}</p>
+        <p className="quantity">
+            Quantity: {product.quantityValue} {product.quantityUnit}
+        </p>
         <p className="price">${product.price.toFixed(2)}</p>
         <p className="description">{product.description}</p>
         <p className="created-by">Listed by: {product.createdByEmail}</p>
