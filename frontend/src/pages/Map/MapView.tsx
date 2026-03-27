@@ -33,10 +33,11 @@ const PRESET_COLORS = [
   "#F97316",
 ];
 
-type PinCategory = "STORE" | "PROBLEM" | "OTHER";
+type PinCategory = "STORE" | "EVENT" | "PROBLEM" | "OTHER";
 
 const CATEGORY_OPTIONS: { value: PinCategory; label: string }[] = [
   { value: "STORE", label: "Store" },
+  { value: "EVENT", label: "Event" },
   { value: "PROBLEM", label: "Problem" },
   { value: "OTHER", label: "Other" },
 ];
