@@ -9,7 +9,7 @@ export default function RelatedProducts({ products }: { products: any[] }) {
       <div className="related-grid">
         {products.map((p) => (
           <Link key={p.id} to={`/product/${p.id}`} className="related-card">
-            <img src={p.image} alt={p.name} />
+            <img src={p.imageUrl || p.image} alt={p.name} />
             <h3>{p.name}</h3>
             <p className="price">${p.price.toFixed(2)}</p>
           </Link>
