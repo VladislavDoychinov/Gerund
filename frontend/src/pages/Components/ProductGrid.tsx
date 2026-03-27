@@ -1,14 +1,9 @@
-// ProductGrid.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "../StorePage.css";
 import "../Categories.css";
 
-export interface ProductGridProps {
-  products: ProductRecord[]; // change here
-}
-
-export interface ProductRecord {
+export interface Product {
   id: number;
   name: string;
   price: number;
@@ -20,38 +15,33 @@ export interface ProductRecord {
   createdByEmail: string;
 }
 
+interface ProductGridProps {
+  products: Product[];
+}
+
 export default function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="product-grid">
       {products.map((product) => (
-        <Link
-          to={`/product/${product.id}`}
-          key={product.id}
-          className="product-card"
-        >
+        <Link to={`/product/${product.id}`} key={product.id} className="product-card">
           <div className="image-container">
             <img
-              src={
-                product.imageUrl.startsWith("http")
-                  ? product.imageUrl
-                  : `http://localhost:8080${product.imageUrl}`
-              }
+              src={`http://localhost:8080${product.imageUrl}`}
               alt={product.name}
             />
+
+            <div className="product-overlay">
+              <p>{product.description}</p>
+            </div>
           </div>
 
           <div className="product-card-body">
             <div className="product-top">
               <h3>{product.name}</h3>
 
-              <label className={`checkbox-label ${product.category.toLowerCase()}`}>
-                <input type="checkbox" checked readOnly />
-                <span>{product.category}</span>
-              </label>
-            </div>
-
-            <div className="product-description">
-              <p>{product.description}</p>
+              <span className={`checkbox-label ${product.category}`}>
+                {product.category}
+              </span>
             </div>
 
             <div className="product-bottom">
