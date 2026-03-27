@@ -17,10 +17,15 @@ const EXAMPLE_USER: UserInfo = {
 
 export default function Profile() {
   const [userInfo, setUserInfo] = useState<UserInfo>(EXAMPLE_USER);
-  const [editingField, setEditingField] = useState<"username" | "email" | "password" | null>(null);
+  const [editingField, setEditingField] = useState<"username" | "email" | null>(null);
   const [draftValue, setDraftValue] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -43,7 +48,7 @@ export default function Profile() {
     fetchUserInfo();
   }, []);
 
-  const startEditing = (field: "username" | "email" | "password") => {
+  const startEditing = (field: "username" | "email") => {
     setEditingField(field);
     setDraftValue(userInfo[field]);
   };
@@ -63,6 +68,35 @@ export default function Profile() {
       [editingField]: draftValue,
     }));
     cancelEditing();
+  };
+
+  const openPasswordModal = () => {
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setPasswordError("");
+    setShowPasswordModal(true);
+  };
+
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+  };
+
+  const handlePasswordChange = () => {
+    if (!oldPassword) {
+      setPasswordError("Please enter your current password.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setPasswordError("New password must be at least 6 characters.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New passwords do not match.");
+      return;
+    }
+    setUserInfo((prev) => ({ ...prev, password: newPassword }));
+    setShowPasswordModal(false);
   };
 
   const PencilIcon = () => (
@@ -189,38 +223,15 @@ export default function Profile() {
                 <div className="editable-field-row">
                   <div className="field-content">
                     <span className="field-label">Password</span>
-                    {editingField === "password" ? (
-                      <input
-                        type="password"
-                        className="field-input"
-                        value={draftValue}
-                        onChange={(e) => setDraftValue(e.target.value)}
-                        placeholder="Enter new password"
-                        autoFocus
-                      />
-                    ) : (
-                      <span className="field-value">******</span>
-                    )}
+                    <span className="field-value">••••••••</span>
                   </div>
-
-                  {editingField === "password" ? (
-                    <div className="field-actions">
-                      <button className="field-action-button save" onClick={saveEditing}>
-                        Save
-                      </button>
-                      <button className="field-action-button" onClick={cancelEditing}>
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      className="edit-icon-button"
-                      onClick={() => startEditing("password")}
-                      aria-label="Edit password"
-                    >
-                      <PencilIcon />
-                    </button>
-                  )}
+                  <button
+                    className="edit-icon-button"
+                    onClick={openPasswordModal}
+                    aria-label="Change password"
+                  >
+                    <PencilIcon />
+                  </button>
                 </div>
               </div>
 
@@ -238,6 +249,37 @@ export default function Profile() {
           )}
         </main>
       </div>
+      {showPasswordModal && (
+        <div className="password-modal-overlay" onClick={closePasswordModal}>
+          <div className="password-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="password-modal-close" onClick={closePasswordModal} aria-label="Close">✕</button>
+            <h2>Change Password</h2>
+            {passwordError && <p className="password-modal-error">{passwordError}</p>}
+            <input
+              type="password"
+              placeholder="Current password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              autoFocus
+            />
+            <input
+              type="password"
+              placeholder="New password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Confirm new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <button className="password-modal-confirm" onClick={handlePasswordChange}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
