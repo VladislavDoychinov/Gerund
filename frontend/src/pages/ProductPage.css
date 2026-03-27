@@ -68,6 +68,24 @@
     transition: opacity 0.3s ease;
 }
 
+.product-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .product-card:hover .product-overlay {
     opacity: 1;
 }
