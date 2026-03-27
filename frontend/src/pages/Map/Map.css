@@ -327,6 +327,46 @@
   flex: 1;
 }
 
+.mp-map-controls {
+  position: absolute;
+  top: 50%;
+  right: 0.65rem;
+  transform: translateY(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mp-map-control-btn {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: rgba(15, 15, 15, 0.92);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 0.2rem 0.65rem rgba(0, 0, 0, 0.28);
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+}
+
+.mp-map-control-btn:hover {
+  background: #000000;
+  transform: translateY(-1px);
+}
+
+.mp-map-control-btn:active {
+  transform: translateY(0);
+}
+
 .mp-pin-list {
   list-style: none;
   display: flex;
