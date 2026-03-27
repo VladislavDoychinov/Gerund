@@ -9,6 +9,8 @@ import AddProduct from "./pages/AddProduct";
 import HomePage from "./pages/Home";
 import CreateProduct from "./pages/CreateProduct";
 import AccountPage from "./pages/Account";
+import MockStorePage from "./pages/MockStorePage"; // Pointing to the mock version
+import MockProductPage from "./pages/MockProductPage"; // Pointing to the mock version
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/addproduct" element={<AddProduct />} />
         <Route path="/create-product" element={<CreateProduct />} />
+        <Route path="/store-mock" element={<MockStorePage />} />
+        <Route path="/product-mock/:id" element={<MockProductPage />} />
       </Routes>
     </BrowserRouter>
   );
