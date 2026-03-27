@@ -26,13 +26,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/pins/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/products/create").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/products/*/accept").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/notifications").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/notifications/**").permitAll()
+                        .requestMatchers("/uploads/**").permitAll() // Allow image access
+                        .requestMatchers(HttpMethod.GET, "/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/pins/*/favourite").permitAll()
                         .anyRequest().authenticated()
                 );
 
