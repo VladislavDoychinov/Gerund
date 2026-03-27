@@ -24,10 +24,17 @@ export default function ProductGrid({ products }: ProductGridProps) {
       {products.map((product) => (
         <Link to={`/product/${product.id}`} key={product.id}>
           <div className="product-card">
-            <img
-              src={`http://localhost:8080${product.imageUrl}`}
-              alt={product.name}
-            />
+            <div className="image-container">
+              <img
+                src={`http://localhost:8080${product.imageUrl}`}
+                alt={product.name}
+              />
+
+              <div className="product-overlay">
+                <p>{product.description}</p>
+              </div>
+            </div>
+
             <h3>{product.name}</h3>
 
             <span className={`checkbox-label ${product.category}`}>
