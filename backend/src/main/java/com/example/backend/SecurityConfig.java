@@ -35,7 +35,23 @@ public class SecurityConfig {
                         .requestMatchers("/api/products/**").permitAll()
                         .requestMatchers("/api/reviews/**").permitAll()
                         
-                        .anyRequest().permitAll() 
+                        .anyRequest().permitAll()                        
+                        .requestMatchers("/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/create").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/*/accept").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/notifications").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/notifications/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/reviews/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").permitAll()
+                        .requestMatchers("/uploads/**").permitAll() // Allow image access
+                        .requestMatchers(HttpMethod.GET, "/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/pins/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/pins/*/favourite").permitAll()
+                        .anyRequest().authenticated()
                 );
 
         return http.build();

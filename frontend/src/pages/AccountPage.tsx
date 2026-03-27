@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+import ProductGrid from "./Components/ProductGrid";
 import "./AccountPage.css";
 
 interface CurrentUser {
@@ -202,42 +203,19 @@ export default function AccountPage() {
               {products.length === 0 ? (
                 <p className="account-subtitle">No products listed yet.</p>
               ) : (
-                <div className="account-products-grid">
-                  {products.map((product) => (
-                    <article key={product.id} className="account-product-card">
-                      <img
-                        src={
-                          product.imageUrl.startsWith("http")
-                            ? product.imageUrl
-                            : `http://localhost:8080${product.imageUrl}`
-                        }
-                        alt={product.name}
-                        className="account-product-image"
-                      />
-
-                      <div className="account-product-body">
-                        <h3>{product.name}</h3>
-                        <p className="account-product-category">{product.category}</p>
-                        <p className="account-product-price">
-                          ${product.price.toFixed(2)}
-                        </p>
-                        <p className="account-product-description">
-                          {product.description}
-                        </p>
-                        <p className="account-product-description">
-                          Quantity: {product.quantityValue} {product.quantityUnit}
-                        </p>
-
-                        <Link
-                          className="account-product-link"
-                          to={`/product/${product.id}`}
-                        >
-                          View product
-                        </Link>
-                      </div>
-                    </article>
-                  ))}
-                </div>
+                <ProductGrid
+                  products={products.map((p) => ({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    imageUrl: p.imageUrl,
+                    description: p.description,
+                    quantityValue: p.quantityValue,
+                    quantityUnit: p.quantityUnit,
+                    category: p.category,
+                    createdByEmail: p.createdByEmail || "",
+                  }))}
+                />
               )}
             </section>
           </>

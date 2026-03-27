@@ -22,7 +22,21 @@ interface ProductRecord {
   createdByEmail?: string;
 }
 
+interface ReviewItem {
+  id: number;
+  productId: number;
+  authorEmail: string;
+  text: string;
+  rating: number;
+  createdAt: string;
+}
+
 const DEFAULT_DESCRIPTION = "This seller has not added a profile description yet.";
+
+function renderStars(rating: number) {
+  const rounded = Math.round(rating);
+  return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+}
 
 export default function SellerProfilePage() {
   const { email } = useParams<{ email: string }>();
@@ -34,6 +48,7 @@ export default function SellerProfilePage() {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [products, setProducts] = useState<ProductRecord[]>([]);
+  const [reviews, setReviews] = useState<ReviewItem[]>([]);
   const [description, setDescription] = useState(DEFAULT_DESCRIPTION);
   const [descriptionDraft, setDescriptionDraft] = useState(DEFAULT_DESCRIPTION);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -42,6 +57,7 @@ export default function SellerProfilePage() {
     const loadData = async () => {
       if (!sellerEmail) {
         setProducts([]);
+        setReviews([]);
         setLoading(false);
         return;
       }
@@ -67,9 +83,25 @@ export default function SellerProfilePage() {
 
         setDescription(savedDescription);
         setDescriptionDraft(savedDescription);
+
+        if (sellerProducts.length > 0) {
+          const reviewRequests = sellerProducts.map((product) =>
+            api
+              .get(`/api/reviews/${product.id}`)
+              .then((res) => (Array.isArray(res.data) ? res.data : []))
+              .catch(() => [])
+          );
+
+          const reviewResults = await Promise.all(reviewRequests);
+          const allReviews = reviewResults.flat();
+          setReviews(allReviews);
+        } else {
+          setReviews([]);
+        }
       } catch (error) {
         console.error("Failed to load seller profile:", error);
         setProducts([]);
+        setReviews([]);
         setCurrentUser(null);
       } finally {
         setLoading(false);
@@ -89,6 +121,22 @@ export default function SellerProfilePage() {
     const localPart = sellerEmail.split("@")[0];
     return localPart || sellerEmail;
   }, [sellerEmail]);
+
+  const averageRating = useMemo(() => {
+    if (reviews.length === 0) return null;
+    return (
+      reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    ).toFixed(1);
+  }, [reviews]);
+
+  const recentReviews = useMemo(() => {
+    return [...reviews]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .slice(0, 5);
+  }, [reviews]);
 
   const saveDescription = () => {
     if (!sellerEmail) return;
@@ -145,6 +193,25 @@ export default function SellerProfilePage() {
                 </div>
               </div>
 
+              <div className="account-info-grid seller-stats-grid">
+                <div className="account-info-item">
+                  <span className="account-info-label">Listings</span>
+                  <span className="account-info-value">{products.length}</span>
+                </div>
+
+                <div className="account-info-item">
+                  <span className="account-info-label">Average Rating</span>
+                  <span className="account-info-value">
+                    {averageRating ? `${averageRating} ${renderStars(Number(averageRating))}` : "No ratings yet"}
+                  </span>
+                </div>
+
+                <div className="account-info-item">
+                  <span className="account-info-label">Total Reviews</span>
+                  <span className="account-info-value">{reviews.length}</span>
+                </div>
+              </div>
+
               <div className="account-description-section">
                 <div className="account-description-header">
                   <h2>Description</h2>
@@ -193,6 +260,27 @@ export default function SellerProfilePage() {
                   <p className="account-description-text">{description}</p>
                 )}
               </div>
+            </section>
+
+            <section className="account-card">
+              <h2>Recent Reviews</h2>
+
+              {recentReviews.length === 0 ? (
+                <p className="account-subtitle">No reviews yet.</p>
+              ) : (
+                <div className="seller-reviews-list">
+                  {recentReviews.map((review) => (
+                    <article key={review.id} className="seller-review-card">
+                      <div className="seller-review-top">
+                        <strong>{review.authorEmail}</strong>
+                        <span>{renderStars(review.rating)}</span>
+                      </div>
+                      <p>{review.text}</p>
+                      <small>{new Date(review.createdAt).toLocaleString()}</small>
+                    </article>
+                  ))}
+                </div>
+              )}
             </section>
 
             <section className="account-card">

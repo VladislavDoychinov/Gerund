@@ -72,7 +72,10 @@ export default function ProductPage() {
         <div className="product-layout">
           <div className="left-column">
             <ProductDetails product={product} />
-            <Reviews />
+
+            <section className="reviews-panel" aria-label="Comments and reviews">
+              <Reviews productId={product.id} productName={product.name} />
+            </section>
           </div>
 
           <div className="right-column">
